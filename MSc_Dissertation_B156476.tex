@@ -1,5 +1,4 @@
-% CEG - Computational Evolutionary Biology
-% Asgard Report
+% MSc Dissertation on pattern expression in Ovarian Cancer
 
 \documentclass[tikz, 12pt,a4paper,oneside,fleqn]{article}
 \usepackage[margin=2cm]{geometry}
@@ -10,8 +9,7 @@
 \usepackage{fancyvrb}
 \usepackage{setspace}
 \usepackage{enumitem}
-% \setlist[description]{leftmargin=\parindent,labelindent=\parindent}
-% \usepackage{marginnote}
+\setlist[description]{leftmargin=\parindent,labelindent=\parindent}
 
 \usepackage{caption}
 \captionsetup[figure]{labelfont=bf,format=hang,font={stretch=1.2, small}}
@@ -258,9 +256,9 @@ Survival analysis was caried out stratified by prediced subtype.
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.6]{talhouk_figure_1_part.png}
+\includegraphics[scale=0.35]{talhouk_figure_1_part.png}
 \end{center}
-\caption{HGSOC subtype prediction by expression analysis of a focussed gene set and concensus across two independent pipelines.  From \cite{Talhouk2020}}
+\caption{HGSOC subtype prediction by expression analysis of a focussed gene set and concensus across two independent pipelines.  From \cite{Talhouk2020}.}
 \label{fig-talhouk_figure_1_part.png}
 \end{figure}
 
@@ -424,14 +422,14 @@ Initial investigation on the N=80 AOCS dataset showed very poor coherence, even 
 
 \subsection{Survival analysis}
 
-Survival analysis was performed to investigate whether the selected metagene factors correlated with patient survival.  Overall  survival (OS) data is available for both the TCGA and AOCS datsets.  Additionally, progression free survival (PFS) data is available for AOCS.   As discussed in section \ref{sec-clustering-method}, metagenes were obtained by factorization on the TCGA dataset only.  Application to TCGA (for OS) thus represents an in-sample test, while application to AOCS (for OS and PFS) is a more exacting out-of-sample test.
+Survival analysis was performed to investigate whether the selected metagene factors correlated with patient survival.  Overall  survival (OS) data is available for both the TCGA and AOCS datsets.  Additionally, progression free survival (PFS) data is available for AOCS.   As discussed in section \ref{sec-clustering-method}, metagenes were obtained by factorization on the TCGA dataset only.  Application to TCGA (for OS) thus represents an in-sample test, while application to AOCS (for OS and PFS) is a more exacting out-of-sample test. There are thus three analyses to consider: 1) TCGA$\rightarrow$TCGA (OS), 2) TCGA$\rightarrow$OACS (OS) and 3) TCGA$\rightarrow$OACS (PFS).
 
-Analysis was performed using the Python {\tt Lifelines} package \cite{Davidson-Pilon2020}.  Metasamples ($H$ matrices) were calculated from the metagenes and expression matrix as explained in the following sub-section.  Metasample values were binariased to 0, 1 by thresholding at the median value.   Kaplan-Meier plots for made in respect of derived metasample for each application -- making $11 \times 3$ plots each with two survival curves (with 95\% confidence intervals).  A hazard ratio (HR)
+Analysis was performed using the Python {\tt Lifelines} package \cite{Davidson-Pilon2020}.  Metasamples ($H$ matrices) were calculated from the metagenes and expression matrix as explained in section \ref{sec-transfer-to-novel} below.  Metasample values were binariased to 0, 1 by thresholding at the median value.   Kaplan-Meier plots were made in respect of derived metasample for each of the three analysis -- making $11 \times 3$ plots each with two survival curves (with 95\% confidence intervals).  A hazard ratio (HR)
 \comment{Do I need to explain the definition and meaning of HR?} 
 was calculated for each plot by fitting Cox's proportional hazards model with p-value relating to the hypothesis that HR is significantly different to 1.0.
 
-
 \subsection{Transfer of learned factors to novel a dataset}
+\label{sec-transfer-to-novel}
 
 \newcommand{\trainset}{\mathcal{T}}
 \newcommand{\validset}{\mathcal{V}}
@@ -529,6 +527,31 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 
 \subsection{Survival analysis results}
 
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_os_TCGA_TCGA.pdf}} 
+\caption{Kaplan-Meier plots for each metasample component, stratified at the median value, for the TCGA $\rightarrow$ TCGA for overall survival (OS) case.  Hazard ratio and p-value is shown for each case.  The final plot (bottom right) is unstratified overall survival}
+\label{fig-kaplan-meier-os-TCGA-TCGA}
+\end{center}
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_os_TCGA_AOCS.pdf}} 
+\caption{Kaplan-Meier for the TCGA $\rightarrow$ TCGA for overall survival (OS) case.}
+\label{fig-kaplan-meier-os-TCGA-OACS}
+\end{center}
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_pfs_TCGA_AOCS.pdf}} 
+\caption{Kaplan-Meier for the TCGA $\rightarrow$ TCGA for progression free survival (PFS) case.  }
+\label{fig-kaplan-meier-pfs-TCGA-OACS}
+\end{center}
+\end{figure}
 
 
 \begin{table}
@@ -538,9 +561,8 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 \input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/SurvivalAnalysis/survival_analysis_table_os_TCGA_TCGA.tex}
 \end{center}
 \caption{Survival analysis (overall survival) for TCGA stratified at the median of each of the selected components}
-\label{tab-survival-hr}
+\label{tab-survival-os_TCGA_TCGA}
 \end{table}
-
 
 
 \begin{table}
@@ -550,7 +572,7 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 \input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/SurvivalAnalysis/survival_analysis_table_os_TCGA_AOCS.tex}
 \end{center}
 \caption{Survival analysis (overall survival) for OACS stratified at the median of each of the selected components}
-\label{tab-survival-hr}
+\label{tab-survival-os_TCGA_AOCS}
 \end{table}
 
 
@@ -558,10 +580,10 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 \begin{center}
 \small
 % \renewcommand{\arraystretch}{0.75}
-\input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/SurvivalAnalysis/survival_analysis_table_os_TCGA_AOCS.tex}
+\input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/SurvivalAnalysis/survival_analysis_table_pfs_TCGA_AOCS.tex}
 \end{center}
 \caption{Survival analysis (progression free survival) for OACS stratified at the median of each of the selected components}
-\label{tab-survival-hr}
+\label{tab-survival-hr_pfs_TCGA_AOCS}
 \end{table}
 
 
