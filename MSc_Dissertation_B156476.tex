@@ -22,7 +22,7 @@
 \usepackage{graphicx}
 
 
-\graphicspath{{/home/ipoole/Dropbox/MSc_SSB/Disertation_Ovarian_Cancer/images/}}
+\graphicspath{{/home/ipoole/Documents/gitrepos/MScDissertation/images/}}  % trailin '/' is required!
 
 
 \newcommand{\plotspath}[1]{{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/#1}}
@@ -530,7 +530,7 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 \begin{figure}
 \begin{center}
 \includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_os_TCGA_TCGA.pdf}} 
-\caption{Kaplan-Meier plots for each metasample component, stratified at the median value, for the TCGA $\rightarrow$ TCGA for overall survival (OS) case.  Hazard ratio and p-value is shown for each case.  The final plot (bottom right) is unstratified overall survival}
+\caption{Kaplan-Meier plots for each metasample component, stratified at the median value, for TCGA $\rightarrow$ TCGA for overall survival (OS) case.  Hazard ratio and p-value is shown for each case.  The final plot (bottom right) is unstratified overall survival}
 \label{fig-kaplan-meier-os-TCGA-TCGA}
 \end{center}
 \end{figure}
@@ -539,7 +539,7 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 \begin{figure}
 \begin{center}
 \includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_os_TCGA_AOCS.pdf}} 
-\caption{Kaplan-Meier for the TCGA $\rightarrow$ TCGA for overall survival (OS) case.}
+\caption{Kaplan-Meier plots for TCGA $\rightarrow$ TCGA for overall survival (OS) case.}
 \label{fig-kaplan-meier-os-TCGA-OACS}
 \end{center}
 \end{figure}
@@ -548,10 +548,22 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 \begin{figure}
 \begin{center}
 \includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_pfs_TCGA_AOCS.pdf}} 
-\caption{Kaplan-Meier for the TCGA $\rightarrow$ TCGA for progression free survival (PFS) case.  }
+\caption{Kaplan-Meier for TCGA $\rightarrow$ TCGA for progression free survival (PFS) case.  }
 \label{fig-kaplan-meier-pfs-TCGA-OACS}
 \end{center}
 \end{figure}
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.5]{\plotspath{/SurvivalAnalysis/survival_summary_barplots_NMF.pdf}} \\
+\includegraphics[scale=0.5]{\plotspath{/SurvivalAnalysis/survival_summary_barplots_ICA.pdf}} \\
+\includegraphics[scale=0.5]{\plotspath{/SurvivalAnalysis/survival_summary_barplots_PCA.pdf}} \\
+\caption{Visual summary of survival analysis as applied to TCGA(OS), AOCS(OS) and AOCS(PFS).  Plots are divided by factorization method.  Bar heights show $\log_2(HR)$ with p-value also shown.  For a component to have robust correlation with survival we expect all three of the analysis bars to pass a significance threshold {\em and} for the $\log{HR}$ to to be {\em in the same sense\/}.  None achieve this.}
+\label{fig-summary-survival-plots}
+\end{center}
+\end{figure}
+
 
 
 \begin{table}
