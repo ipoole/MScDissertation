@@ -473,7 +473,7 @@ Since in this work we wish to evaluate the efficacy of the three factorization m
 
 \subsection{Codebase}
 
-The described method was implemented in Python, except for the KEGG gene enrichment analysis which was implemented in R.  All code is availailable a github repository: \url{https://github.com/ipoole/HgsocTromics}.  Good software engineering practice has been followed, with an object-oriented design, frequent commits and unit testing.  Unit tests are based on 
+The described method was implemented in Python, except for the KEGG gene enrichment analysis which was implemented in R.  All code is available in a github repository: \url{https://github.com/ipoole/HgsocTromics}.  Good software engineering practice has been followed, with an object-oriented design, frequent commits and unit testing.  Unit tests are based on tiny expression matrices, just 100 genes by 10 patients, so that the whole test suite executes in around 10 seconds.  These tests are particularly valuable when re-factoring code by providing a rapid means of detecting errors.  All plots are generated in vector graphics pdf format to ensure smooth scaling to any resolution. 
 
 
 
@@ -481,11 +481,13 @@ The described method was implemented in Python, except for the KEGG gene enrichm
 
 \section{Results}
 
+Results of the above described methodology are explained and presented here.   Deeper interpretation and discussion is deferred to the following section.  Throughout, consistent colours of \textcolor{blue}{blue}, \textcolor{orange}{orange} and \textcolor{green}{green} are used for results relating to NMF, ICA and PCA respectively.
+
 \subsection{Investigation of optimal parameters}
 
 \subsection{Cluster coherence analysis results}
 
-Figure \ref{fig-AOCS-ica-fixed-vs-bootstrap} demonstrates that resampling error on a small N=80 dataset makes metagene extraction highly unstable, effectively un-usable.  These figures show results for ICA only in the interest of space, but a very similar effect is observable for PCA and NMF.   For this reason it was decided to perform all metagene extraction on the larger N=374 TCGA dataset, in which the impact of sampling error is not so severe -- see figure \ref{fig-TCGA-ica-fixed-vs-bootstrap}.  
+Figure \ref{fig-AOCS-ica-fixed-vs-bootstrap} demonstrates that resampling error on a small N=80 dataset makes metagene extraction highly unstable, effectively un-usable.  For brevity only results for ICA are shown, but a very similar effect is observable for PCA and NMF.   For this reason it was decided to perform all metagene extraction on the larger N=374 TCGA dataset, in which the impact of sampling error is not so severe -- see figure \ref{fig-TCGA-ica-fixed-vs-bootstrap}.  
 
 The critical decision of the choosing the facorization rank for each method -- $K_{\mbox{\tiny NMF}}$, $K_{\mbox{\tiny ICA}}$ and $K_{\mbox{\tiny PCA}}$ -- is based on figure \ref{fig-TCGA-all-bootstrap}.   On this bases, considering both the t-SNE plots and silhouette scores, for following choices were made:
 $K_{\mbox{\tiny NMF}}  =  3,
@@ -565,38 +567,37 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 \end{figure}
 
 
-
-\begin{table}
-\begin{center}
-\small
-% \renewcommand{\arraystretch}{0.75}
-\input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/SurvivalAnalysis/survival_analysis_table_os_TCGA_TCGA.tex}
-\end{center}
-\caption{Survival analysis (overall survival) for TCGA stratified at the median of each of the selected components}
-\label{tab-survival-os_TCGA_TCGA}
-\end{table}
-
-
-\begin{table}
-\begin{center}
-\small
-% \renewcommand{\arraystretch}{0.75}
-\input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/SurvivalAnalysis/survival_analysis_table_os_TCGA_AOCS.tex}
-\end{center}
-\caption{Survival analysis (overall survival) for OACS stratified at the median of each of the selected components}
-\label{tab-survival-os_TCGA_AOCS}
-\end{table}
-
-
-\begin{table}
-\begin{center}
-\small
-% \renewcommand{\arraystretch}{0.75}
-\input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/SurvivalAnalysis/survival_analysis_table_pfs_TCGA_AOCS.tex}
-\end{center}
-\caption{Survival analysis (progression free survival) for OACS stratified at the median of each of the selected components}
-\label{tab-survival-hr_pfs_TCGA_AOCS}
-\end{table}
+%\begin{table}
+%\begin{center}
+%\small
+%% \renewcommand{\arraystretch}{0.75}
+%\input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/SurvivalAnalysis/survival_analysis_table_os_TCGA_TCGA.tex}
+%\end{center}
+%\caption{Survival analysis (overall survival) for TCGA stratified at the median of each of the selected components}
+%\label{tab-survival-os_TCGA_TCGA}
+%\end{table}
+%
+%
+%\begin{table}
+%\begin{center}
+%\small
+%% \renewcommand{\arraystretch}{0.75}
+%\input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/SurvivalAnalysis/survival_analysis_table_os_TCGA_AOCS.tex}
+%\end{center}
+%\caption{Survival analysis (overall survival) for OACS stratified at the median of each of the selected components}
+%\label{tab-survival-os_TCGA_AOCS}
+%\end{table}
+%
+%
+%\begin{table}
+%\begin{center}
+%\small
+%% \renewcommand{\arraystretch}{0.75}
+%\input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/SurvivalAnalysis/survival_analysis_table_pfs_TCGA_AOCS.tex}
+%\end{center}
+%\caption{Survival analysis (progression free survival) for OACS stratified at the median of each of the selected components}
+%\label{tab-survival-hr_pfs_TCGA_AOCS}
+%\end{table}
 
 
 \section{Discussion}
