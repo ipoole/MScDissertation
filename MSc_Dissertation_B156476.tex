@@ -1,7 +1,7 @@
 % MSc Dissertation on pattern expression in Ovarian Cancer
 
-\documentclass[draft, tikz, 12pt,a4paper,oneside,fleqn]{article}
-\usepackage[margin=2cm]{geometry}
+\documentclass[tikz, 12pt,a4paper,oneside,fleqn]{article}
+\usepackage[margin=1.5cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -17,16 +17,22 @@
 \usepackage{graphicx}
 \usepackage{rotating}
 \usepackage{setspace}
+\usepackage{afterpage}
 
 \usepackage[linewidth=1pt]{mdframed}
-
 
 
 \graphicspath{{/home/ipoole/Documents/gitrepos/MScDissertation/images/}}  % trailin '/' is required!
 \newcommand{\plotspath}[1]{{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/#1}}
 
-
+\definecolor{darkblue}{rgb}{0.0, 0.0, 0.55}
 \usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkblue,
+    filecolor=blue,      
+    urlcolor=darkblue,
+}
 \usepackage{subfig}
 \usepackage{booktabs}  % Needed for pandas to_latex() output
 \usetikzlibrary{positioning}
@@ -39,6 +45,9 @@
 % This sets Arial font (bit ugly!)
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{1em}
+\renewcommand{\baselinestretch}{1.5}
 
 %\usepackage{titlesec}
 %\titleformat{\subsubsection}
@@ -196,8 +205,8 @@ There are three matrix factorization methods of potential interest to this proje
 
 \subsubsection{Independent Component Analysis (ICA)}
 
-The most commonly used matrix notation for ICA, (independent of any -omics applications) is:
-
+The most commonly used matrix notation for ICA, (independent of
+ -omics applications) is:
 \begin{equation}
 X \approx S A
 \end{equation}
@@ -249,7 +258,7 @@ Two approaches were followed by different teams.  ``All Array": used expression 
 
 "All Array" had the advantage of more data but needed attention to batch effects. A final classifier took a consensus of the two methods based on a minimal gene set (order 40 genes), validated by a leave-one-out (patient level) approach.
 
-Survival analysis was caried out stratified by prediced subtype.
+Survival analysis was carried out stratified by predicted subtype.
 
 
 \begin{figure}
@@ -365,8 +374,8 @@ Some of the key algorithm hyper parameters of each method were investigated and 
 
 \end{description}
 
-\subsection{Factor selection by cluster coherence}
-
+\subsection{Metagene selection by cluster coherence}
+\label{sec-metagene-selection}
 As outlined in the discussion, deciding the number of components (metagenes) to extract is key.  Taking more components results in more accurate representation of the observed expression matrix and provides more avenues to explore the underlying biology.  However, it is important that the metagenes are \emph{stable}, that is likely to have reliable meaning when transfered to other datasets.   There are two sources of variation or instability to consider.
 
 NMF and ICA are inherently stochastic algorithms, sensitive to their starting state, so repeated runs give different results.
@@ -444,15 +453,8 @@ Multiple hypothesis significance testing used the false discovery rate (FDR) met
 
 The result of this analysis, per metagene, is a list of enriched (or depleted) GO terms, each with an associated list of involved genes and a FDR significance level.   This list can be inspected directly for insights, but that misses the point of the GO, which is to organise the terms hierarchically by 'is a' relationships.   Thus, the enriched terms were rendered graphically to show them in the context of their parent terms.   For some metagenes, additional filtering was required to reduce to plot to a manageable size; this is explained in the results section.
 
-\subsection{Survival analysis}
 
-Survival analysis was performed to investigate whether the selected metagene factors correlated with patient survival.  Overall  survival (OS) data is available for both the TCGA and AOCS datsets.  Additionally, progression free survival (PFS) data is available for AOCS.   As discussed in section \ref{sec-clustering-method}, metagenes were obtained by factorization on the TCGA dataset only.  Application to TCGA (for OS) thus represents an in-sample test, while application to AOCS (for OS and PFS) is a more exacting out-of-sample test. There are thus three analyses to consider: 1) TCGA$\rightarrow$TCGA (OS), 2) TCGA$\rightarrow$OACS (OS) and 3) TCGA$\rightarrow$OACS (PFS).
-
-Analysis was performed using the Python {\tt Lifelines} package \cite{Davidson-Pilon2020}.  Metasamples ($H$ matrices) were calculated from the metagenes and expression matrix as explained in section \ref{sec-transfer-to-novel} below.  Metasample values were binariased to 0, 1 by thresholding at the median value.   Kaplan-Meier plots were made in respect of derived metasample for each of the three analysis -- making $11 \times 3$ plots each with two survival curves (with 95\% confidence intervals).  A hazard ratio (HR)
-\comment{Do I need to explain the definition and meaning of HR?} 
-was calculated for each plot by fitting Cox's proportional hazards model with p-value relating to the hypothesis that HR is significantly different to 1.0.
-
-\subsection{Transfer of learned factors to novel a dataset}
+\subsection{Transfer of learned metagenes to novel a dataset}
 \label{sec-transfer-to-novel}
 
 \newcommand{\trainset}{\mathcal{T}}
@@ -491,9 +493,25 @@ The end result of the analysis the $H_\validset$ matrix of shape $(k, n_\validse
 
 Since in this work we wish to evaluate the efficacy of the three factorization methods -- NMF, ICA and PCA -- we in fact take forward three different $H$ matrices, having not necessarily the same rank $k$.
 
-\subsection{Survival analysis on novel dataset}
+\subsection{Reconciling computed metasamples and metadata}
+\label{sec-reconciling-metasamples-metadata}
 
-\subsection{Study of biological significance of predictive factors}
+To carry out the patient level analysis -- survival analysis, heatmaps and boxplot -- as described in the following sections, it was necessary to compile tables (Panda DataFrames) which bring together per-patient metasamples relating to each of the chosen metagenes, with associated metadata -- such as celluarity and survival information.   The metagenes always derive from the TCGA dataset (because of its larger size as explained in section \ref{sec-metagene-selection}), but we wish to apply these metagenes to the expression data and associated metadata of either the TCGA or AOCS datasets.   The mathematics of transferring metagenes across datasets has been described above.  Care was required to ensure that expression matrices aligned correctly with metagenes with respect to their genes (rows), and with the metadata with respect to patient identifiers in the columns.
+
+% \subsection{Study of biological significance of predictive factors}
+
+\subsection{Survival analysis}
+
+Survival analysis was performed to investigate whether the selected metagene factors correlated with patient survival.  Overall  survival (OS) data is available for both the TCGA and AOCS datsets.  Additionally, progression free survival (PFS) data is available for AOCS.   As discussed in section \ref{sec-clustering-method}, metagenes were obtained by factorization on the TCGA dataset only.  Application to TCGA (for OS) thus represents an in-sample test, while application to AOCS (for OS and PFS) is a more exacting out-of-sample test. There are thus three analyses to consider: 1) TCGA$\rightarrow$TCGA (OS), 2) TCGA$\rightarrow$OACS (OS) and 3) TCGA$\rightarrow$OACS (PFS).
+
+Analysis was performed using the Python {\tt Lifelines} package \cite{Davidson-Pilon2020}.  Metasamples ($H$ matrices) were calculated from the metagenes and expression matrix as explained in section \ref{sec-transfer-to-novel} below.  Metasample values were binariased to 0, 1 by thresholding at the median value.   Kaplan-Meier plots were made in respect of derived metasample for each of the three analysis -- making $11 \times 3$ plots each with two survival curves (with 95\% confidence intervals).  A hazard ratio (HR)
+\comment{Do I need to explain the definition and meaning of HR?} 
+was calculated for each plot by fitting Cox's proportional hazards model with p-value relating to the hypothesis that HR is significantly different to 1.0.
+
+
+\subsection{Metasample heatmap analysis}
+
+To further investigate the relationship between selected metasamples and to available metadata of patients, clustered heatmaps were generated using the \href{https://seaborn.pydata.org/generated/seaborn.clustermap.html}{Seaborn {\tt clustermap()}} function using the reconciled metasamples and metadata (section \ref{sec-reconciling-metasamples-metadata}).  Heatmaps were generated for TCGA and AOCS datasets (\emph{Should say something about stratifying the metadata, when I figure it out}).
 
 \subsection{Codebase}
 
@@ -502,23 +520,24 @@ The described method was implemented in Python, except for the KEGG gene enrichm
 
 
 %%%%%%%%%%% RESULTS %%%%%%%%%%%%%
+% \afterpage{\clearpage}
 
 \section{Results}
 
 Results of the above described methodology are explained and presented here.   Deeper interpretation and discussion is deferred to the following section.  Throughout, consistent colours of \textcolor{blue}{blue}, \textcolor{orange}{orange} and \textcolor{green}{green} are used for results relating to NMF, ICA and PCA respectively.
 
-\subsection{Investigation of optimal parameters}
+% \subsection{Investigation of optimal parameters}
 
 \subsection{Cluster coherence analysis results}
 
 Figure \ref{fig-AOCS-ica-fixed-vs-bootstrap} demonstrates that resampling error on a small N=80 dataset makes metagene extraction highly unstable, effectively un-usable.  For brevity only results for ICA are shown, but a very similar effect is observable for PCA and NMF.   For this reason it was decided to perform all metagene extraction on the larger N=374 TCGA dataset, in which the impact of sampling error is not so severe -- see figure \ref{fig-TCGA-ica-fixed-vs-bootstrap}.  
 
-The critical decision of the choosing the facorization rank for each method -- $K_{\mbox{\tiny NMF}}$, $K_{\mbox{\tiny ICA}}$ and $K_{\mbox{\tiny PCA}}$ -- is based on figure \ref{fig-TCGA-all-bootstrap}.   On this bases, considering both the t-SNE plots and silhouette scores, for following choices were made:
+The critical decision of the choosing the factorization rank for each method -- $K_{\mbox{\tiny NMF}}$, $K_{\mbox{\tiny ICA}}$ and $K_{\mbox{\tiny PCA}}$ -- is based on figure \ref{fig-TCGA-all-bootstrap}.   On this bases, considering both the t-SNE plots and silhouette scores, for following choices were made:
 $K_{\mbox{\tiny NMF}}  =  3,
 K_{\mbox{\tiny ICA}}  =  5,
 K_{\mbox{\tiny PCA}}  =  3$.
 
-The rationalle for these choices is that, firstly $k>2$ is desirable to have sufficient information to work with.  NMF cluster coherence seems to deteriorate after $k=3$.   Looking at the graph of silhouette scores, ICA appears to have a sweet spot at $k=5$.  For PCA, $k = 3$ or $4$ both seem reasonable, $k=3$ is safe.
+The rationale for these choices is that, firstly $k>2$ is desirable to have sufficient information to work with.  NMF cluster coherence seems to deteriorate after $k=3$.   Looking at the graph of silhouette scores (figure \ref{fig-TCGA-all-bootstrap}, bottom), ICA appears to have a sweet spot at $k=5$.  For PCA, $k = 3$ or $4$ both seem reasonable; $k=3$ was selected.
 
 \def\S{0.4}
 \begin{figure}
@@ -544,15 +563,29 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 \includegraphics[scale=\S]{\plotspath{TCGA_OV_VST/FactorClustering/multiple_single_factors_scatter_TCGA_NMF_2_3_5_10_bootstrap.pdf}} \\
 \includegraphics[scale=\S]{\plotspath{TCGA_OV_VST/FactorClustering/multiple_single_factors_scatter_TCGA_ICA_2_3_5_10_bootstrap.pdf}} \\
 \includegraphics[scale=\S]{\plotspath{TCGA_OV_VST/FactorClustering/multiple_single_factors_scatter_TCGA_PCA_2_3_5_10_bootstrap.pdf}} \\
-\includegraphics[scale=0.45]{\plotspath{/TCGA_OV_VST/FactorClustering/silhouette_plots_TCGA_2_3_4_5_6_7_8_9_10_bootstrap.pdf}} 
+\includegraphics[scale=0.55]{\plotspath{/TCGA_OV_VST/FactorClustering/silhouette_plots_TCGA_2_3_4_5_6_7_8_9_10_bootstrap.pdf}} 
 \caption{Metagene clustering for all three methods applied to the N=374 TCGA dataset with bootstrap sampling, over a range of factorization ranks.  The silhoutte scores are also plotted (bottom).  It is on the basis of this figure that the factorization ranks for each method were selected.}
 \label{fig-TCGA-all-bootstrap}
 \end{center}
 \end{figure}
 
-\subsection{Gene Enrichment Results}
+\afterpage{\clearpage}
 
-\begin{figure}
+\subsection{Gene Enrichment (against GO) Results}
+
+Gene enrichment analysis against the GO results for, each of the 11 metagenes, in a table of GO terms with a list of the candidate genes which have an annotated association with that term.   
+To take full advantage of the hierarchical nature of the GO, results are presented as lineage maps in figures \ref{fig-NMF-go-lineage} to \ref{fig-PCA-1-3-go-lineage}.  
+The contributing candidate genes for all significantly enriched terms are shown beneath each figure.  
+(Ideally, the specific genes would be listed alongside each term, but this is difficult to achieve graphically).   
+High-level terms at depth less than 3 were removed.   
+One component -- ICA 4 of 5 -- was problematic in that it 49 GO terms (with depth $\geq 3$) were identified as significant.  
+For this component it was necessary to limit the graphic to the 12 terms having the largest number of associated candidate genes.   
+The full table of terms for this component is available in appendix \ref{tab-ica-4-of-5-enrichment-table}.  
+
+The four components NMF-3-of-3, ICA-1-of-5, ICA-2-of-5 and PCA-2-of-3 yielded no significant enriched terms (for FDR $\leq$ 0.01).
+
+
+\begin{figure}[hb]
 \begin{center}
 \includegraphics[scale=0.14]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_1_of_NMF_3.png}} \\
 \begin{spacing}{0.6}
@@ -582,7 +615,7 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 \vspace{0.5cm}
 {\small Component ICA 3 of 5} \\
 \vspace{1cm}
-\includegraphics[scale=0.08]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_5_of_ICA_5.png}} \\
+\includegraphics[scale=0.07]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_5_of_ICA_5.png}} \\
 \begin{spacing}{0.6}
 {\small Genes: \tiny \input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/TCGA_OV_VST/GeneEnrichment/go_gene_set_5_of_ICA_5.txt}}
 \end{spacing}
@@ -596,12 +629,12 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 
 \begin{sidewaysfigure}[ht]
 \begin{center}
-\includegraphics[scale=0.075]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_4_of_ICA_5.png}} \\
+\includegraphics[width=\textwidth, draft=false]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_4_of_ICA_5.png}} \\
 \begin{spacing}{0.6}
 {\small Genes: \tiny \input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/TCGA_OV_VST/GeneEnrichment/go_gene_set_4_of_ICA_5.txt}}
 \end{spacing}
 \vspace{0.5cm}
-\caption{Lineage maps of enriched Gene Ongology (GO) terms for components 4 from the rank=5 ICA factorization. }
+\caption{Lineage maps of enriched Gene Ongology (GO) terms for components 4 from the rank=5 ICA factorization. For this component it was necessary to additionally filter the enriched terms -- see text.}
 \label{fig-ICA-4-go-lineage}
 \end{center}
 \end{sidewaysfigure}
@@ -609,15 +642,14 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.1]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_1_of_PCA_3.png}} \\
-
+\includegraphics[width=\textwidth]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_1_of_PCA_3.png}} \\
 \begin{spacing}{0.6}
 {\small Genes: \tiny \input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/TCGA_OV_VST/GeneEnrichment/go_gene_set_1_of_PCA_3.txt}}
 \end{spacing}
 \vspace{0.5cm}
 {\small Component PCA 1 of 3} \\
 \vspace{1cm}
-\includegraphics[scale=0.09]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_3_of_PCA_3.png}} \\
+\includegraphics[width=\textwidth]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_3_of_PCA_3.png}} \\
 \begin{spacing}{0.6}
 {\small Genes: \tiny \input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/TCGA_OV_VST/GeneEnrichment/go_gene_set_3_of_PCA_3.txt}}
 \end{spacing}
@@ -628,8 +660,14 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 \end{center}
 \end{figure}
 
+\afterpage{\clearpage}
 
 \subsection{Survival analysis results}
+
+Kaplan-Meier overall survival (OS) plots stratified by each metasample component are shown for the TCGA dataset  in figure \ref{fig-kaplan-meier-os-TCGA-TCGA} and for the AOCS dataset in figure \ref{fig-kaplan-meier-os-TCGA-OACS}.  Plots for progression free survival (PFS) on OACS are shown in figure \ref{fig-kaplan-meier-pfs-TCGA-OACS}.   All plots show 95\% confidence intervals, hazard ratio (HR) with associated p-value.
+
+All these results are summarised in figure \ref{fig-summary-survival-plots}, which brings together the three sets of results -- TCGA (OS), OACS OS) and OACS (PFS) with respect to the 11 metasample components.  $\log_2{HR}$ is used in order that the sense of the survival impact can be readily appreciated.    If a metasample component had a robust correlation with survival, then we would expect the p-value for all three sets of results to show significance \emph{and} for the effects to be in the same direction.  None of the 11 components pass this test, thus we have a negative result.
+
 
 \begin{figure}
 \begin{center}
@@ -652,7 +690,7 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 \begin{figure}
 \begin{center}
 \includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_pfs_TCGA_AOCS.pdf}} 
-\caption{Kaplan-Meier for TCGA $\rightarrow$ TCGA for progression free survival (PFS) case.  }
+\caption{Kaplan-Meier plots for TCGA $\rightarrow$ TCGA for progression free survival (PFS) case.  }
 \label{fig-kaplan-meier-pfs-TCGA-OACS}
 \end{center}
 \end{figure}
@@ -662,45 +700,46 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 \begin{center}
 \includegraphics[scale=0.5]{\plotspath{/SurvivalAnalysis/survival_summary_barplots_NMF.pdf}} \\
 \includegraphics[scale=0.5]{\plotspath{/SurvivalAnalysis/survival_summary_barplots_ICA.pdf}} \\
-\includegraphics[scale=0.5]{\plotspath{/SurvivalAnalysis/survival_summary_barplots_PCA.pdf}} \\
+\includegraphics[scale=0.5]{\plotspath{/SurvivalAnalysis/survival_summary_barplots_PCA.pdf}}
 \caption{Visual summary of survival analysis as applied to TCGA(OS), AOCS(OS) and AOCS(PFS).  Plots are divided by factorization method.  Bar heights show $\log_2(HR)$ with p-value also shown.  For a component to have robust correlation with survival we expect all three of the analysis bars to pass a significance threshold {\em and} for the $\log{HR}$ to to be {\em in the same sense\/}.  None achieve this.}
 \label{fig-summary-survival-plots}
 \end{center}
 \end{figure}
 
+\afterpage{\clearpage}
 
-%\begin{table}
-%\begin{center}
-%\small
-%% \renewcommand{\arraystretch}{0.75}
-%\input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/SurvivalAnalysis/survival_analysis_table_os_TCGA_TCGA.tex}
-%\end{center}
-%\caption{Survival analysis (overall survival) for TCGA stratified at the median of each of the selected components}
-%\label{tab-survival-os_TCGA_TCGA}
-%\end{table}
-%
-%
-%\begin{table}
-%\begin{center}
-%\small
-%% \renewcommand{\arraystretch}{0.75}
-%\input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/SurvivalAnalysis/survival_analysis_table_os_TCGA_AOCS.tex}
-%\end{center}
-%\caption{Survival analysis (overall survival) for OACS stratified at the median of each of the selected components}
-%\label{tab-survival-os_TCGA_AOCS}
-%\end{table}
-%
-%
-%\begin{table}
-%\begin{center}
-%\small
-%% \renewcommand{\arraystretch}{0.75}
-%\input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/SurvivalAnalysis/survival_analysis_table_pfs_TCGA_AOCS.tex}
-%\end{center}
-%\caption{Survival analysis (progression free survival) for OACS stratified at the median of each of the selected components}
-%\label{tab-survival-hr_pfs_TCGA_AOCS}
-%\end{table}
+\subsection{Metasample heatmap clustering results}
 
+As with survival analysis, metasamples were derived from the metagenes factorized from the TCGA dataset, then applied to both TCGA and AOCS datasets, as shown in figures \ref{fig-heatmap-TCGA-TCGA} and \ref{fig-heatmap-TCGA-OACS} respectively.   Metadata was available for the AOCS dataset, and this is presented in colour coded columns on the left of figure \ref{fig-heatmap-TCGA-OACS}.   The meanings of each column are as follows:
+\begin{description}
+\item[WGD]:
+\item[Cellularity]: proportion of cells belonging to the tumour (as opposed to surrounding normal tissue).
+\item[HR Detect]: score from homologous repair (HR) analysis, deriving from Ewing \etal's work \cite{Ewing2020}
+\item[Mutational Load]:
+\item[CNV Load]: Copy-number variation ...
+\item[Donor survival time]: (should probably remove).
+\end{description}
+
+The dendrogram clustering of metasamples (columns, top of figures) gives insights as to the similarity of each metasample component, while the clustering of patients (rows, left of figures) offers insights into sub-populations of patients and how (in the case of AOCS only) how these relate to metadata variables such as cellularity and mutational load.   These topics will be taken up int he discussion.
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.7, draft=false]{\plotspath{HeatMaps/clustered_heatmap_TCGA_TCGA.pdf}} 
+\caption{Heatmap of the metasamples matrix for the TCGA dataset, computed from metagenes factorized also TCGA.   Clustering dendrograms (based on a correlation distance) are shown between the metasamples (columns) and patients (rows).}
+\label{fig-heatmap-TCGA-TCGA}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.7, draft=false]{\plotspath{HeatMaps/clustered_heatmap_TCGA_AOCS.pdf}} 
+\caption{Heatmap of the metasamples matrix for the AOCS dataset, computed from metagenes factorized from the TCGA dataset.   Clustering dendrograms (based on a correlation distance) are shown between the metasamples (columns) and patients (rows).  Several patient patient metadata variables are shown in columns to the left.  (ToDo: key for metadata colouring).}
+\label{fig-heatmap-TCGA-OACS}
+\end{center}
+\end{figure}
+
+\clearpage
 
 \section{Discussion}
 \begin{itemize}
@@ -711,8 +750,8 @@ The rationalle for these choices is that, firstly $k>2$ is desirable to have suf
 \section{Conclusions}
 
 
-\bibliography{OvarianCancer}
-\bibliographystyle{ieeetr}
+%\bibliography{OvarianCancer}
+%\bibliographystyle{ieeetr}
 
 \section{Appendices}
 
