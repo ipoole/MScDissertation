@@ -126,22 +126,42 @@ Disssertation Supervisor:  Dr. Ailith Ewing
 
 
 \section{Introduction}
+\emph{Say something about ovarian cancer!   An image perhaps.}
 
-Research questions:  
-\begin{enumerate}
-\item What are the known patterns of gene expression in high-grade serous ovarian cancer?
-\item How can blind-source separation techniques such as independent component analysis and non-negative matrix factorization be applied to transcrptomics studies?
-\item How can biological databases be used to link genes into oncogenesis pathways?
-\end{enumerate}
 
 \subsection{Matrix factorization methods}
 \label{sec-matrix-factorization-intro}
 
-A good introduction is found in ref \cite{Stein-OBrien2018} matrix factorization (MF) methods are discussed as a means of extraction the low dimensional structure from a high dimensional ``-omics" datasets, with gene expression analysis being the prime example.  
+A good introduction to field is ref \cite{Stein-OBrien2018}, in which matrix factorization (MF) methods are discussed as a means of extraction the low dimensional structure from a high dimensional ``-omics" datasets, with gene expression analysis being the prime example.  
+
+There are three matrix factorization methods of interest to this project:
+\begin{enumerate}
+\item Independent component analysis (ICA)
+\item Non-negative matrix factorization (NMF)
+\item Principal component analysis (PCA)
+\end{enumerate}
+
 Conventionally, transcriptomics expression arrays are oriented with genes (or transcripts) as rows, and samples (e.g. patients) in columns.   
 A typical expression array might have in the order of tens of thousands of rows and hundreds of columns.  
 MF methods reduces this large $M \times N$ (genes $\times$ samples) matrix into two two smaller matrices.
-In the terminology of Stein-O'Brien \etal\ these are the $M \times K$ \emph{pattern matrix} and the $K \times N$ \emph{amplitude matrix}.  $K$ is typically small of the order 10, and refers to the number of extracted \emph{factors} (or components). 
+In the general terminology of Stein-O'Brien \etal\ these are the $M \times K$ \emph{pattern matrix} and the $K \times N$ \emph{amplitude matrix}.  $K$ is typically small of the order 10, and refers to the number of extracted \emph{factors} (or components). 
+Since we are focussing on transriptomics, rather than pattern and amplitude we will use the terms \emph{metagenes} and \emph{metasamples} respectively, which are in common useage.  The symbol conventions for these matrices varies depending whether NMF, ICA or PCA is being discussed.   NMF generally uses $W$ and $H$ respectively while ICA generally uses $S$ and $A$.  PCA is tends to be differently formulated, but $W$ and $T$ sometimes used.   The original matrix to be factorized is variously named $X$ or $V$.
+
+In this work we wish to treat and discuss the three factorization methods in a unified way.  Thus, for the remainder of this dissertation we will adopt the following conventions:
+\begin{description}
+\item[Expression matrix:] $X$ $(M \times N)$
+\item[Metagene matrix:] $W$ $(M \times K)$
+\item[Metasample matrix:] $H$ $(K \times N)$
+\end{description}
+where $N$ is the number of patients (or samples), $M$ is the number of genes and $K$ is the factorization rank, i.e. the number of components or factors.  Thus the factorization is written
+\begin{equation}
+X \approx W H
+\end{equation}
+Adding subscripts to indicate the row,column orientation of the matrices:
+\begin{equation}
+X_{M,N} \approx W_{M,K} H_{K,N}
+\end{equation}
+as illustrated in figure \ref{fig-matrix-factorization}
 
 \begin{figure}[ht]
 \def\M{2.2cm}
@@ -149,14 +169,13 @@ In the terminology of Stein-O'Brien \etal\ these are the $M \times K$ \emph{patt
 \def\K{0.3cm}
 \def\fudge{-0.8mm}
 \centering
-
 \subfloat[Optimising independence of Meta\underline{genes}]{
 \begin{tikzpicture}[node distance = 0.25cm]
 	\node (X) [draw, fill=green, minimum height=\M, minimum width=\N] {\large X};
 	\node [right=of X] (eq) {\large $\approx$};
-	\node [right=of eq] (S) [draw, fill=yellow, minimum width=\K, minimum height=\M] {\large S};
+	\node [right=of eq] (S) [draw, fill=yellow, minimum width=\K, minimum height=\M] {\large W};
 	\node [right=of S] (times) {\LARGE$\times$};
-	\node [right=of times] (A) [draw, fill=cyan, minimum width=\N, minimum height=\K] {\large A};
+	\node [right=of times] (A) [draw, fill=cyan, minimum width=\N, minimum height=\K] {\large H};
 	
 	\node [below=\fudge of X] {\tiny{$N$ Samples}};
 	\node [left=\fudge of X] {\rotatebox{90}{\tiny{$M$ Genes}}};
@@ -168,16 +187,16 @@ In the terminology of Stein-O'Brien \etal\ these are the $M \times K$ \emph{patt
 	
 	\node [below=\fudge of A] {\tiny{$N$ Samples}};
 	\node [left=\fudge of A] {\tiny{$K$}};
-	\node [below=of A, text width=2cm, align=center] {\small Metasamples};
-\end{tikzpicture}}
+	\node [below=of A, text width=2.5cm, align=center] {\small Metasamples};
+\end{tikzpicture}} 
 
 \subfloat[Optimising independence of Meta\underline{samples}]{
 \begin{tikzpicture}[node distance = 0.25cm]
 	\node (X) [draw, fill=green, minimum height=\N, minimum width=\M] {\large X};
 	\node [right=of X] (eq) {\large $\approx$};
-	\node [right=of eq] (S) [draw, fill=cyan, minimum width=\K, minimum height=\N]{\large S};
+	\node [right=of eq] (S) [draw, fill=cyan, minimum width=\K, minimum height=\N]{\large W};
 	\node [right=of S] (times) {\LARGE$\times$};
-	\node [right=of times] (A) [draw, fill=yellow, minimum width=\M, minimum height=\K]{\large A};
+	\node [right=of times] (A) [draw, fill=yellow, minimum width=\M, minimum height=\K]{\large H};
 	
 	\node [below=\fudge of X] {\tiny{$M$ Genes}};
 	\node [left=\fudge of X] {\rotatebox{90}{\tiny{$N$ Samples}}};
@@ -185,22 +204,15 @@ In the terminology of Stein-O'Brien \etal\ these are the $M \times K$ \emph{patt
 	
 	\node [below=\fudge of S] {\tiny{$K$ Metasamples}};
 	\node [left=\fudge of S] {\rotatebox{90}{\tiny{$N$ Samples}}};
-	\node [below=of S, text width=2cm, align=center] {\small Metasamples};
+	\node [below=of S, text width=2.5cm, align=center] {\small Metasamples};
 	
 	\node [below=\fudge of A] {\tiny{$M$ Genes}};
 	\node [left=\fudge of A] {\tiny{$K$}};
 	\node [below=of A, text width=2cm, align=center] {\small Metagenes};
 \end{tikzpicture}}
 \caption{Two ways of configuring ICA.  The $S$ matrix is optimised for independence of components, thus configuration (a) optimises for metagenes, while (b) optimises for metasamples. The $X \approx S \times A$ notation is conventional for ICA.}
-\label{fig:matrix-factorization}
+\label{fig-matrix-factorization}
 \end{figure}
-
-There are three matrix factorization methods of potential interest to this project:
-\begin{enumerate}
-\item Independent component analysis (ICA)
-\item Non-negative matrix factorization (NMF)
-\item Principal component analysis (PCA)
-\end{enumerate}
 
 
 \subsubsection{Independent Component Analysis (ICA)}
@@ -225,7 +237,7 @@ The point of substance (as opposed to notational convention) is whether ICA is u
 \item[to optimise metasamples] the expression matrix is oriented as ($N$ samples, $M$ genes), resulting in a ($N$, $K$) metasamples matrix.
 \end{description}
 
-See figure \ref{fig:matrix-factorization}.
+See figure \ref{fig-matrix-factorization}.
 
 There is substantial confusion an lack of clarity in the way that ICA is applied in transcriptomics research.  ``Surprisingly, both ways of applying ICA to omics data are wide-spread, and sometimes it makes an effort to figure out in which way ICA was applied." \cite{Sompairac2019a}, and ``Different protocols to apply ICA to transcriptomic data exist and currently no single standard approach has been defined. The main difference in the existing approaches consists in what is considered as source signal matrix in the decomposition" \cite{Cantini}.   According to Cantini \etal\, references \cite{Au-Yeung2014}, \cite{Kairov2017}, \cite{Kong2008} and \cite{Lee2003} optimise metagenes, while references \cite{Meng2016} 
 
@@ -288,24 +300,15 @@ Stratification of HGSOC by immunohistochemistry is addresses Kamble \etal. \cite
 
 The platinum based drug Cisplatin is a key treatment in ovarian cancer, yet tumours often develop resistance, possibly related to the host's immune response.  Understanding and predicting such resistance is therefore of clinical importance and is addressed by Maringer \etal\ \cite{Mairinger2019} through expression analysis using the NanoString platform with a panel of 770 immune related genes.   They find the following to be significantly related to platinum resistance: KLRC1, TCF7, CD274, HSD11B1, COLEC12, PDGFC, FCF1, BMI1, TNFRSF9, ATG10, EWSR1.
 
-\subsection{Research Questions}
+
+\subsection{Research questions}
+The following research goals were set out early in project. 
 \begin{enumerate}
-\item
-Which are the influential genes in HGSOC according
-to expression data? Do these confirm published
-results?
-\item
-Which of PCA, ICA and NMF is best suited to this
-analysis?
-\item
-For identified genes, what is the underlying biology of
-their action?
-\item
-Can we discriminate subtypes of HGSOC from
-expression data?
-\item
-Is there value in incorporating somatic and germline
-genomic data?
+\item Which are the influential genes in HGSOC according to gene expression data?   Do these confirm published results?
+\item Which of PCA, ICA and NMF is best suited to this analysis?
+\item For identified genes, what is the underlying biology?
+\item Can we discriminate subtypes of HGSOC from expression data?
+\item Is there value in incorporating somatic and germline genomic data?
 \end{enumerate}
 
 %%%%%%%%%%%%%%% METHODOLOGY %%%%%%%%%%%%%%%%%
@@ -324,6 +327,14 @@ Two gene expression datasets were assailable for this work (n refers to number o
 
 \subsubsection{Method outline}
 An overview of the methodology adopted in this work can be seen in figure \ref{fig-method-overview}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.7, draft=false]{methodlology_overview.pdf}
+\end{center}
+\caption{Overview of methodology as information flow}
+\label{fig-method-overview}
+\end{figure}
 In outline our method is follows:
 \begin{enumerate}
 \item
@@ -537,7 +548,7 @@ All code is available in a github repository: \url{https://github.com/ipoole/Hgs
 
 
 %%%%%%%%%%% RESULTS %%%%%%%%%%%%%
-\afterpage{\clearpage}
+% \afterpage{\clearpage}
 
 \section{Results}
 
