@@ -161,7 +161,7 @@ Adding subscripts to indicate the row,column orientation of the matrices:
 \begin{equation}
 X_{M,N} \approx W_{M,K} H_{K,N}
 \end{equation}
-as illustrated in figure \ref{fig-matrix-factorization}
+as illustrated in figure \ref{fig-matrix-factorization} (a).
 
 \begin{figure}[ht]
 \def\M{2.2cm}
@@ -210,43 +210,16 @@ as illustrated in figure \ref{fig-matrix-factorization}
 	\node [left=\fudge of A] {\tiny{$K$}};
 	\node [below=of A, text width=2cm, align=center] {\small Metagenes};
 \end{tikzpicture}}
-\caption{Two ways of configuring ICA.  The $S$ matrix is optimised for independence of components, thus configuration (a) optimises for metagenes, while (b) optimises for metasamples. The $X \approx S \times A$ notation is conventional for ICA.}
+\caption{Two ways of configuring matrix factorization in the context of gene expression analysis.
+In configuration (a) NMF and ICA will optimise the \emph{metagenes}, while in (b) the \emph{metasamples} are optimised. }
 \label{fig-matrix-factorization}
 \end{figure}
 
+However, in the case of NMF and ICA, the $W$ and $H$ matrices cannot be trivially exchanged and transposed.  This is because the optimisations (sparsity and independence respectively) which define these algorithms are focussed on the $W$ matrix.  It is perfectly possible to apply these algorithms to gene expression analysis with exchanged and transposed meanings of $W$ and $H$, and this is illustrated in figure \ref{fig-matrix-factorization} (b).  In this case it is the properties of the \emph{metasamples} which will be optimised.  Thus, the two forms are different in substance, not simply in notational convention.
 
-\subsubsection{Independent Component Analysis (ICA)}
-
-The most commonly used matrix notation for ICA, (independent of
- -omics applications) is:
-\begin{equation}
-X \approx S A
-\end{equation}
-Adding subscripts to indicate the row,column orientation of the matrices:
-\begin{equation}
-X_{M,N} \approx S_{M,K} A_{K,N}
-\end{equation}
-
-$X$ is assumed to have been pre-whitened.  $S$ is referred to variously as the pattern matrix, latent variable or independent component matrix.  $A$ is referred to as the mixing or amplitude matrix.   If $X$ is sized ($M$, $N$) then $S$ will be ($M$, $K$) and $A$ ($K$, $N$) by the rules of matrices.  Crucially, it is the $S$ matrix which captures the independent components.
-
-Authors use different conventions in the nomencalture and orientation of the expression array.  This is partly a matter of convention but there are ramifications of substance.   The terms ``metagenes'' is used commonly and consistently to refer to the $K$ components of $M$ long gene expression profiles.  Similarly, ``metasamples'' refers to the $K$ components of $N$ long sample profiles.   However, the packing of these entities into matrices varies in orientation, so that metagenes are sometimes $M \times K$, sometimes $K \times M$, and metasamples are sometimes $N \times K$, sometimes $K \times N$, depending on the orientation of the input expression array.
-
-The point of substance (as opposed to notational convention) is whether ICA is used to maximise independence of metagenes or of metasamples.  This relates to the choice of orientation of the input expression matrix.  Given the standard definition of ICA above \cite{ICA_definition}, the following rule applies to the (row, column) orientation of the expression matrix, as passed to ICA:
-\begin{description}
-\item[to optimise metagenes] the expression matrix is oriented as ($M$ genes, $N$ samples) resulting in a ($M$, $K$) metagenes matrix. 
-\item[to optimise metasamples] the expression matrix is oriented as ($N$ samples, $M$ genes), resulting in a ($N$, $K$) metasamples matrix.
-\end{description}
-
-See figure \ref{fig-matrix-factorization}.
-
-There is substantial confusion an lack of clarity in the way that ICA is applied in transcriptomics research.  ``Surprisingly, both ways of applying ICA to omics data are wide-spread, and sometimes it makes an effort to figure out in which way ICA was applied." \cite{Sompairac2019a}, and ``Different protocols to apply ICA to transcriptomic data exist and currently no single standard approach has been defined. The main difference in the existing approaches consists in what is considered as source signal matrix in the decomposition" \cite{Cantini}.   According to Cantini \etal\, references \cite{Au-Yeung2014}, \cite{Kairov2017}, \cite{Kong2008} and \cite{Lee2003} optimise metagenes, while references \cite{Meng2016} 
-
-The most commonly used matrix notation for ICA, (independent of any -omics applications) is:
-\begin{equation}
-X \approx S A
-\end{equation}
-
-$X$ is assumed to have been pre-whitened.  $S$ is referred to variously as the pattern matrix, latent variable or independent component matrix.  $A$ is referred to as the mixing or amplitude matrix.   If $X$ is sized ($M$, $N$) then $S$ will be ($M$, $K$) and $A$ ($K$, $N$) by the rules of matrices.  Crucially, it is the $S$ matrix which captures the independent components.
+There seems to be substantial confusion an lack of clarity in the way that matrix factorization, particularly ICA, is applied in transcriptomics research.  
+``Surprisingly, both ways of applying ICA to omics data are wide-spread, and sometimes it makes an effort to figure out in which way ICA was applied." \cite{Sompairac2019a}, and ``Different protocols to apply ICA to transcriptomic data exist and currently no single standard approach has been defined. The main difference in the existing approaches consists in what is considered as source signal matrix in the decomposition" \cite{Cantini2019}.  
+According to Cantini \etal\, references \cite{Au-Yeung2014}, \cite{Kairov2017}, \cite{Kong2008} and \cite{Lee2003} optimise metagenes, while references \cite{Meng2016} and \cite{Barillot2013} optimises metasamples.
 
 
 \subsubsection{Determining the optimum number of factors}
@@ -255,11 +228,6 @@ The number of factors, $K$, to extract is a key decision in any matrix factoriza
 
 The problem of determining the optimal $K$ for a given expression matrix is addressed  by Kairov \etal\ \cite{Kairov2017}, based on optimizing the \emph{stability} of the components over multiple runs.
 
-\subsubsection{Non-negative Matrix Factorization}
-
-When the NMF is used, the pattern and amplitude matrices are typically notated as $W$ and $H$ respectively, while the original expression matrix is notated as $V$, or $A$ and oriented as ($M$ genes, $N$ samples).   The facorization is thus written $V \approx W H$, Thus $W$ represents the ($M$, $K$) metagenes matrix and $H$ represents the ($K$, $N$) metasamples.
-
-\subsubsection{Principal component analysis}
 
 \subsection{Ovarian cancer sub-type prediction}
 
@@ -372,7 +340,7 @@ A full list of software and libraries used, with versions, is given in appendix 
 
 \subsection{Data normalization and quality control}
 
-Expression data for the AOCS and TCGA datasets was received for this project in a spreadsheet format, having been derived from the RNA-Seq data as described in \ref{Ewing2020}, including  normalization by variance stabilizing transformation.   
+Expression data for the AOCS and TCGA datasets was received for this project in a spreadsheet format, having been derived from the RNA-Seq data as described in \cite{Ewing2020}, including  normalization by variance stabilizing transformation.   
 
 \subsection{Gene set intersection}
 \label{sec:gene-set-intersection}
@@ -452,7 +420,7 @@ In order to gain insights into what biological processes are involved, gene enri
 
 The essence of gene enrichment analysis is to compare a candidate set of genes with many functional gene sets, asking the question "are there significantly more (or less, i.e. depletion) intersecting genes than would be expected for the same number of genes being drawn at random (without replacement) from the total population of genes in the study. 
 
-For each metagene, the candidate gene set was determined as those genes having weights outwith three standard deviations of the mean.   This set was analysed using the Python GOATOOLS package \cite{GOATOOLS}.   
+For each metagene, the candidate gene set was determined as those genes having weights outwith three standard deviations of the mean.   This set was analysed using the Python GOATOOLS package \cite{Klopfenstein2018}.   
 
 The gene ontology was downloaded from \url{http://purl.obolibrary.org/obo/go/go-basic.obo}.  ({\tt Purl.org} is a resource for managing permanent URLs; {\tt obo} refers to the Open Biological and Biomedical Ontology (OBO)).  
 Annotations linking human genes to GO concepts was downloaded from the GO website, specifically \url{http://geneontology.org/gene-associations/goa_human.gaf.gaf}.   
@@ -568,6 +536,7 @@ Figure \ref{fig-AOCS-ica-fixed-vs-bootstrap} demonstrates that \emph{sampling} e
 \includegraphics[scale=\S]{\plotspath{AOCS_Protein/FactorClustering/multiple_single_factors_scatter_AOCS_ICA_2_3_5_10_bootstrap.pdf}}\\
 \caption{Clustering of metagenes from ICA facorizations on the N=80 AOCS dataset, comparing \emph{fixed} sampling (top row) with \emph{bootstrap} sampling (bottom row) for a selection of factorization ranks.  With sampling error excluded, clusters appear reasonably coherent, but when sampling error is modelled by bootstrap sampling then we see the factorizations become much less stable.}
 \label{fig-AOCS-ica-fixed-vs-bootstrap}
+\label{fig-first-cluster-result}
 \end{center}
 \end{figure}
 
@@ -596,6 +565,7 @@ The rationale for these choices is that, firstly $k>2$ is desirable to have suff
 \includegraphics[scale=0.55]{\plotspath{/TCGA_OV_VST/FactorClustering/silhouette_plots_TCGA_2_3_4_5_6_7_8_9_10_bootstrap.pdf}} 
 \caption{Metagene clustering for all three methods applied to the N=374 TCGA dataset with bootstrap sampling, over a range of factorization ranks.  The silhouette scores are also plotted (bottom).  It is on the basis of this figure that the factorization ranks for each method were selected.}
 \label{fig-TCGA-all-bootstrap}
+\label{fig-last-cluster-result}
 \end{center}
 \end{figure}
 
@@ -755,7 +725,7 @@ The dendrogram clustering of metasamples (columns, top of figures) gives insight
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.7, draft=false]{\plotspath{HeatMaps/clustered_heatmap_TCGA_TCGA.pdf}} 
+\includegraphics[scale=0.7]{\plotspath{HeatMaps/clustered_heatmap_TCGA_TCGA.pdf}} 
 \caption{Heatmap of the metasamples matrix for the TCGA dataset, computed from metagenes factorized also TCGA.   Clustering dendrograms (based on a correlation distance) are shown between the metasamples (columns) and patients (rows).}
 \label{fig-heatmap-TCGA-TCGA}
 \end{center}
@@ -763,7 +733,7 @@ The dendrogram clustering of metasamples (columns, top of figures) gives insight
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.7, draft=false]{\plotspath{HeatMaps/clustered_heatmap_TCGA_AOCS.pdf}} 
+\includegraphics[scale=0.7]{\plotspath{HeatMaps/clustered_heatmap_TCGA_AOCS.pdf}} 
 \caption{Heatmap of the metasamples matrix for the AOCS dataset, computed from metagenes factorized from the TCGA dataset.   Several patient patient metadata variables are shown in columns to the left.  (ToDo: key for metadata colouring).}
 \label{fig-heatmap-TCGA-OACS}
 \end{center}
@@ -780,8 +750,8 @@ The dendrogram clustering of metasamples (columns, top of figures) gives insight
 \section{Conclusions}
 
 
-%\bibliography{OvarianCancer}
-%\bibliographystyle{ieeetr}
+\bibliography{OvarianCancer}
+\bibliographystyle{ieeetr}
 
 \section{Appendices}
 
