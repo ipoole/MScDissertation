@@ -165,7 +165,7 @@ MF methods reduces this large $M \times N$ (genes $\times$ samples) matrix into 
 In the general terminology of Stein-O'Brien \etal\ these are the $M \times K$ \emph{pattern matrix} and the $K \times N$ \emph{amplitude matrix}.  $K$ is typically small of the order 10, and refers to the number of extracted \emph{factors} (or components). 
 Since we are focussing on transriptomics, rather than pattern and amplitude we will use the terms \emph{metagenes} and \emph{metasamples} respectively, which are in common useage.  The symbol conventions for these matrices varies depending whether NMF, ICA or PCA is being discussed.   NMF generally uses $W$ and $H$ respectively while ICA generally uses $S$ and $A$.  PCA tends to be differently formulated, but $W$ and $T$ sometimes used.   The original matrix to be factorized is variously named $X$ or $V$.
 
-In this work we wish to treat and discuss the three factorization methods in a unified way.  Thus, for the remainder of this dissertation we adopt the following conventions:
+In this work we wish to treat and discuss the three factorization methods in a unified way.  Thus, for the remainder of this dissertation we adopt the following conventions:\footnote{I should probably use bold font for X, W and H matrices}.
 \begin{description}
 \item[Expression matrix:] $X$ $(M \times N)$
 \item[Metagene matrix:] $W$ $(M \times K)$
@@ -312,7 +312,7 @@ An overview of the methodology adopted in this work is shown in figure \ref{fig-
 \begin{center}
 \includegraphics[scale=0.7, draft=false]{methodlology_overview.pdf}
 \end{center}
-\caption{Overview of methodology as information flow.  The diagramatic convention here is that at each stage, both datasets -- TCGA and AOCS -- are processes separately by the given algorithm.  The exception is Gene Set Intersection, which involves interaction between the datasets.}
+\caption{Overview of methodology as information flow.  The diagramatic convention here is that at each stage, both datasets -- TCGA and AOCS -- are processed separately by the given algorithm.  The exception is Gene Set Intersection, which involves interaction between the datasets.}
 \label{fig-method-overview}
 \end{figure}
 In outline our method is follows:
@@ -675,14 +675,14 @@ From this heatmap we can see that within a factorization method the components h
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.85 \textwidth]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_1_of_PCA_3.png}} \\
+\includegraphics[width=0.5 \textwidth]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_1_of_PCA_3.png}} \\
 \begin{spacing}{0.6}
 {\small Genes: \tiny \input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/TCGA_OV_VST/GeneEnrichment/go_gene_set_1_of_PCA_3.txt}}
 \end{spacing}
 \vspace{0.5cm}
 {\small Component PCA-1-of-3} \\
 \vspace{1cm}
-\includegraphics[width=0.85 \textwidth]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_3_of_PCA_3.png}} \\
+\includegraphics[width= \textwidth]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_3_of_PCA_3.png}} \\
 \begin{spacing}{0.6}
 {\small Genes: \tiny \input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/TCGA_OV_VST/GeneEnrichment/go_gene_set_3_of_PCA_3.txt}}
 \end{spacing}
