@@ -126,20 +126,34 @@ Disssertation Supervisor:  Dr. Ailith Ewing
 
 
 \section{Introduction}
-\emph{Say something about ovarian cancer!   An image perhaps.}
+High grade serous ovarian cancer (HGSOC) effects the epithelium of the ovaries and fallopian tube.   ``Serous" refers to the epithelial membrane which secretes serous (serum) fluid.  It is the 7th most common cancer in women worldwide .  Epithelial ovarian cancers are classified into two broad subtypes:  Type I are low grade with generally good prognosis; type II are more aggressive and typically carry P53 mutations with defects in mechanisms of DNA repair.  Type II is more-or-less synonomous with HGSOC. \cite{Lisio2019}.
 
+This work is concerned with analysing the patters gene expression in HGSOC dimensionality reduction techniques of matrix factorization, and relating these patterns to clinical and genomic features.
 
-\subsection{Matrix factorization methods}
+\subsection{Matrix factorization}
 \label{sec-matrix-factorization-intro}
 
 A good introduction to field is ref \cite{Stein-OBrien2018}, in which matrix factorization (MF) methods are discussed as a means of extraction the low dimensional structure from a high dimensional ``-omics" datasets, with gene expression analysis being the prime example.  
 
-There are three matrix factorization methods of interest to this project:
-\begin{enumerate}
-\item Independent component analysis (ICA)
-\item Non-negative matrix factorization (NMF)
-\item Principal component analysis (PCA)
-\end{enumerate}
+The three matrix factorization methods of interest to this project are listed below.  All are forms of dimensionality reduction, but have differing criteria they aim to optimise.  The number of target dimensions is referred to as the rank, $k$.
+\begin{description}
+\item [Non-negative matrix factorization (NMF).]  
+As the name implies, this is only applicable to matrices with +ve or zero elements, and finds components which themselves +ve or zero.   This property make the resulting factorization more interpretable since the components are strictly additive.   It also allows for input samples to be directly assigned to one of $k$ clusters.   A good description of NMF and its applications in bioinformatics can be found in \cite{Brunet2004}.
+%
+\item [Independent component analysis (ICA).] The goal of ICA is to represent the given matrix with components which are statistically independent of each other.  It was originally proposed to solve the blind source separation problem \cite{Comon1994}. If the input matrix of samples were drawn from a multivariate Gaussian distribution, then the result would be no different to that of PCA.    Where the data is non-Gaussian however, ICA results in components which separate out independent sources of variation.  See \cite{Sompairac2019} for a full explanation, from which figure \ref{fig-pca-ica-nmp-explanation} is taken.
+\item [Principal component analysis (PCA).]  PCA is a well known technique for dimensionality reduction, based on eigenvalue decomposition.  It is the ideal, efficient solution for multivariate Gaussian distributed data.
+\end{description}
+
+The contrasting results of the three methods is illustrated in figure.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.4, draft=false]{Sompairac_ICA_NMF_PCA.png}
+\end{center}
+\caption{Illustrating the differing results of component extraction by PCA, ICA and NMF.  From \cite{Sompairac2019}}
+\label{fig-pca-ica-nmp-explanation}
+\end{figure}
+
 
 Conventionally, transcriptomics expression arrays are oriented with genes (or transcripts) as rows, and samples (e.g. patients) in columns.   
 A typical expression array might have in the order of tens of thousands of rows and hundreds of columns.  
@@ -224,30 +238,11 @@ According to Cantini \etal\, references \cite{Au-Yeung2014}, \cite{Kairov2017}, 
 
 \subsubsection{Determining the optimum number of factors}
 
-The number of factors, $K$, to extract is a key decision in any matrix factorization approach.  In this regard, PCA differs from ICA and NMF.  In PCA it is reasonable to extract all factors, setting $K=N$, the factors being ranked by the associated eigenvalue which also ranks the proportion of variance explained.   That approach is not reasonable for ICA and NMF, since differing sets of factors will be obtained for different $K$, and for a given choice of $K$ all factors are equally important -- they do not rank \cite{Stein-OBrien2018}.
+The number of factors, or rank $K$, to extract is a key decision in any matrix factorization approach.  In this regard, PCA differs from ICA and NMF.  In PCA it is reasonable to extract all factors, setting $K=N$, the factors being ranked by the associated eigenvalue which also ranks the proportion of variance explained.   However, that approach is not valid for ICA and NMF, since differing sets of factors will be obtained for different $K$, and for a given choice of $K$ all factors are equally important -- they do not rank \cite{Stein-OBrien2018}.
 
 The problem of determining the optimal $K$ for a given expression matrix is addressed  by Kairov \etal\ \cite{Kairov2017}, based on optimizing the \emph{stability} of the components over multiple runs.
 
 
-\subsection{Ovarian cancer sub-type prediction}
-
-A recent pre-publication develops a pipeline for sub-type prediction which the potential to be used clinically \cite{Talhouk2020}.
-The NanoString gene expression platform is used. Approach is to focus on small set of 513 genes (vs 20,000 protein coding genes) known have relevance to subtyping, as identified from literature.
-
-Two approaches were followed by different teams.  ``All Array": used expression array data from 1650 patients across 14 studies evaluating 9 supervised learning algorithms by bootstrap, selecting an AdaBoost -like method. ``TCGA" used 434 patients from TCGA evaluating 5 algorithms by cross-validation selecting a random forest.
-
-"All Array" had the advantage of more data but needed attention to batch effects. A final classifier took a consensus of the two methods based on a minimal gene set (order 40 genes), validated by a leave-one-out (patient level) approach.
-
-Survival analysis was carried out stratified by predicted subtype.
-
-
-\begin{figure}
-\begin{center}
-\includegraphics[scale=0.35]{talhouk_figure_1_part.png}
-\end{center}
-\caption{HGSOC subtype prediction by expression analysis of a focussed gene set and concensus across two independent pipelines.  From \cite{Talhouk2020}.}
-\label{fig-talhouk_figure_1_part.png}
-\end{figure}
 
 
 \subsection{Gene expression in HGSOC}
@@ -267,6 +262,24 @@ Note that several of the studies reviewed here use data from the Australian Ovar
 Stratification of HGSOC by immunohistochemistry is addresses Kamble \etal. \cite{Kamble2019}.  They identify a panel of six biomarkers -- TCF21, E-cadherin, PARP1, Slug and AnnexinA2.   These markers allow stratification into categories including Mesenchymal-to-epithelial transition, Homologous recombination repair and Epithelial-to-mesenchymal transition.  This, they argue, will allow selection of class-specific inhibitor drugs such as Olaparib and Rucaparib.
 
 The platinum based drug Cisplatin is a key treatment in ovarian cancer, yet tumours often develop resistance, possibly related to the host's immune response.  Understanding and predicting such resistance is therefore of clinical importance and is addressed by Maringer \etal\ \cite{Mairinger2019} through expression analysis using the NanoString platform with a panel of 770 immune related genes.   They find the following to be significantly related to platinum resistance: KLRC1, TCF7, CD274, HSD11B1, COLEC12, PDGFC, FCF1, BMI1, TNFRSF9, ATG10, EWSR1.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.35]{talhouk_figure_1_part.png}
+\end{center}
+\caption{HGSOC subtype prediction by expression analysis of a focussed gene set and concensus across two independent pipelines.  From \cite{Talhouk2020}.}
+\label{fig-talhouk_figure_1_part.png}
+\end{figure}
+
+
+A recent pre-publication develops a pipeline for sub-type prediction which the potential to be used clinically \cite{Talhouk2020}.
+The NanoString gene expression platform is used. Approach is to focus on small set of 513 genes (vs 20,000 protein coding genes) known have relevance to subtyping, as identified from literature.
+
+Two approaches were followed by different teams.  ``All Array": used expression array data from 1650 patients across 14 studies evaluating 9 supervised learning algorithms by bootstrap, selecting an AdaBoost -like method. ``TCGA" used 434 patients from TCGA evaluating 5 algorithms by cross-validation selecting a random forest.
+
+"All Array" had the advantage of more data but needed attention to batch effects. A final classifier took a consensus of the two methods based on a minimal gene set (order 40 genes), validated by a leave-one-out (patient level) approach.
+
+Survival analysis was carried out stratified by predicted subtype.
 
 
 \subsection{Research questions}
@@ -357,18 +370,19 @@ Some of the key algorithm hyper parameters of each method were investigated and 
 \item[NMF:] Parameters {\tt max\_iter} (algorithm iterations) and {\tt tol} (tolerance of convergence) were optimised for good accuracy and acceptable execution time.  Other parameters of interest are {\tt alpha} (multipluer for regulation term) and {\tt l1\_ratio} (multiplier for L1 regularization, when {\tt alpha} $> 0$).  L1 regularization  favours elements being precisely zero, whereas L2 regularization will encourage them to be small.  These parameters have not been explored in this project, and the default {\tt alpha = 0} (no regularization) was used.
 \item[ICA:]  Parameters {\tt max\_iter} and {\tt tol} were investigated as for NMF above.  Additionally, options for the entropy functional which forms the basis of the optimiziation were investigated.
 \item[PCA:] This is in principle a deterministic algorithm based on eigenvector decomposition.  However, {\tt sklearn.decomposition.PCA} uses a more efficient 'randomized' algorithm when the given matrix is larger than 500 in both dimensions.  Thus in our use case PCA is seen to have stochastic behaviour.
-
 \end{description}
 
 \subsection{Metagene selection by cluster coherence}
 \label{sec-metagene-selection}
-As outlined in the discussion, deciding on the number of components (metagenes) to extract -- that is the factorization rank -- is key.  Taking more components results in more accurate representation of the observed expression matrix and provides more avenues to explore the underlying biology.  However, it is important that the metagenes are \emph{stable}, that is that they have reliable meaning when transfered to other datasets.   There are two sources of variation or instability to consider.
+As outlined in the discussion, deciding on the number of components (factors, metagenes) to extract -- that is the factorization rank -- is key.  Taking more components results in more accurate representation of the observed expression matrix and provides more avenues to explore the underlying biology.  However, it is important that the metagenes are \emph{stable}, that is that they have reliable meaning when transfered to other datasets.   There are two sources of variation or instability to consider.
 
 Firstly, NMF and ICA are inherently stochastic algorithms, sensitive to their starting state, so repeated runs give different results.
 
 A second and more fundamental source of variation of relevance to all three factorization methods is \emph{sampling error}.   Our factorizations are based on a small (N=80 or N=374) sample of patients drawn from the population of HGSOC patients; our particular datasets are just two examples of many different `draws' which could have been made from that population.
 
 \emph{Bootstrap sampling} (also know as \emph{Monte Carlo} simulation) is a common method of empirically propagating the consequence of sampling error when the distribution or processing operations are difficult to model mathematically.   This is implemented by performing factorizations multiple times, at each iterations choosing N samples from the N available \emph{with replacement}.   For this work 50 repeats were performed, being a compromise between achieving an adequate simulation without overly burdensome computation time.  The overall process is summarised as pseudocode in figure \ref{fig-clustering-psuedocode}.  
+
+A complication arises in the computation of ICA and PCA facorizations, in that essentially the same factor can arise as $w$ or $-w$ vectors. These would appear as separate cluster in repeated sampling, and confound attempts to collect and aggregate.  The solution adopted here is to normalise each factor by requiring that the most extreme value -- i.e. having the greatest absolute value -- is positive, the whole factor being negated if this is not the case.  This is arguably over simplistic, but seems to be effective in practice.
 
 Each of the three factorizer methods was evaluated for rank $k$ between 2 and 10.  In each case, 50 iterations of factorization are performed on bootstrap samples, generating $50 k$ instances of 19,566 dimensioned metagenes.  Two dimensional t-SNE plots \ref{tsne-reference} were generated for visualization.   If sampling and algorithm initialisation error are modest then we expect to see $k$ clusters of points.   To avoid lengthy computation in the t-SNE clustering, the metagenes were first reduced to $r=20$ dimensions by PCA; brief experiments showed that this reduction had negligible effect on the t-SNE visualisation for $r \geq 10$.   
 
