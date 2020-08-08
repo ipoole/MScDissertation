@@ -1,6 +1,7 @@
 % MSc Dissertation on pattern expression in Ovarian Cancer
 
-\documentclass[tikz, 12pt,a4paper,oneside,fleqn]{article}
+\documentclass[draft, tikz, 12pt,a4paper,oneside,fleqn]{article}
+
 \usepackage[margin=1.5cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
@@ -53,17 +54,17 @@
 %\titleformat{\subsubsection}
 %   {\itshape\normalsize}{\thesubsubsection}{1em}{}
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SUBMISSION PAGE %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \thispagestyle{empty}
 
-\title{Disentangling patterns of gene expression in high grade serous ovarian cancer}
+\title{Disentangling patterns of gene expression in high grade serous ovarian cancer by matrix factorization}
 \author{}
 
 \begin{document}
 
 %%%%%% Assesment Title Page
+\begin{center}
 \begin{center}
 \includegraphics[scale=0.3]{images/UoE_SBO_logo.png}
 \end{center}
@@ -117,6 +118,7 @@ Disssertation Supervisor:  Dr. Ailith Ewing
 \vspace{0.2in}
 \end{center}
 \end{mdframed}
+\end{center}
 
 \newpage
 \setcounter{page}{1}
@@ -128,11 +130,112 @@ Disssertation Supervisor:  Dr. Ailith Ewing
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Start of report for real %%%%%%%%%%%%%%%%%%%
 
+\begin{abstract}
+Here is the abstract
+\end{abstract}
+\newpage
+
 
 \section{Introduction}
-High grade serous ovarian cancer (HGSOC) effects the epithelium of the ovaries and fallopian tubes.   ``Serous" refers to the epithelial membrane which secretes serous fluid (serum).  It is the 7th most common cancer in women worldwide .  Epithelial ovarian cancers are classified into two broad subtypes:  Type I are low grade with generally good prognosis; type II are more aggressive and typically carry P53 mutations with defects in mechanisms of DNA repair.  Type II is more-or-less synonomous with HGSOC. \cite{Lisio2019}.
 
-This work is concerned with analysing the patters gene expression in HGSOC by dimensionality reduction techniques of matrix factorization, and relating these patterns to clinical and genomic features.
+\subsection{Epithelial Ovarian Cancer}
+
+Ovarian cancer (OC) is a heterogeneous disease, presenting with a wide range of pathologies and molecular characteristics .  The World Health Organisation (WHO) sets out five subtypes of epithelial ovarian carcinomas (EOC) grouped into two main types\cite{Kossai2018, Lisio2019}: 
+
+\begin{description}
+\item[Type I] are low grade with generally good prognosis, with two subtypes:
+\begin{description}
+\item[Low grade serous] affecting the epithelial membrane which secretes serous fluid), $< 5$\% of cases
+\item[Mucosal] affecting membrane rich mucous glands, 2 - 3\% 
+\item[Clear cell] relating to the presence of clear cells in histology, 5 - 10\%.
+\end{description}
+\item[Type II] are more aggressive (rapidly growing), typically carrying P53 mutations with defects in mechanisms of DNA repair. Three subtypes:
+\begin{description}
+\item[\emph{High grade serous OC (HGSOC)}] affects the epithelium of the ovaries and fallopian tubes.  It is the most common, accounting for 70\% of cases, and most serious of the OC subtypes and the focus of this dissertation.
+\item[Endometrial] affecting the the inner lining of the uterus, 10 \% of cases.
+\end{description}
+\end{description}
+
+HGSOC typically occur in older patients and are diagnosed at a late stage.   Histology of HGSOC is similar to the low grade subtype, but develops along distinct molecular pathways. 
+
+\emph{Treatment options for HGSOC...}
+
+
+\subsection{Patterns of gene expression in HGSOC}
+
+Identifying the patterns -- or ``signatures'' -- of gene expression has been an active research area, for the purposes of understanding the carcinogenesis pathway, subtype classification, predicting survival prognosis, predicting treatment response and understanding the causative mechanism of risk factors; these are clearly related, however.
+
+\subsubsection{Carcinogenesis pathways including homologous repair deficiency
+}
+
+
+BRCA1 inactivation is known to cause chromosomal instability in many cancers.  Pradhan \etal\ \cite{Pradhan2010} investigated the role of BRCA1 in HGSOC by copy number and expression analysis, finding surprisingly that inactivation has no relationship with gross genomic alteration.  They leave open the question whether DNA repair by PARP plays a role.   The relationship between BRCA1/2 and DNA repair -- specifically homologous repair deficiency (HRD) -- is picked up by Ewing \etal \cite{Ewing2020}.  They study the complex interplay of single nucleotide variants and large structural variants as they impact BRCA1/2 disruption and thence HRD.  This work suggests that when BRCA1/2 loss is detected in HGSOC patients, there may be a clinical role for PARP inhibitors, since this would prevent error-prone non-homologous repair by PARP, and so selectively kill BRCA1/2 disrupted cells.
+
+Studying the combined landscape of chromosomal rearrangements, driver mutations (particularly TP53, BRCA1/2), methylation and gene expression profiles has lead to a better understanding of the molecular events involved in the progression HGSOC and the development of chemoresistance \cite{Patch2015}.  The sequence of events is complex, however, and not easily summarised here.   A similar integrative / multiplatform approach is taken in \cite{He2017a} and \cite{Hoadley2014}.
+
+\subsubsection{Subtype classification}
+
+
+
+A relatively early (2003) expression microarray based work demonstrated clustering into for example lymphocyte related genes (IGH3, IGKC, IGLJ3), extracellular matrix/stromal related (COL11A1, Col3A1, MMP2, SPARC, RBBP1) and six others \cite{Schaner2003}.
+
+Wang \etal\ \cite{Wang2017c} also use NMF clustering to identify five subtypes of HGSOC informative of outcomes: 1:mesenchymal, 2:immunoreactive, 3:proliferative, 4:differentiated and 5:anti-mesenchymal.
+Subtypes 2, 5 are found to be associated with longer survival.
+
+Disruption of the PI3K-AKT signalling pathway is known to be significant in several cancers, due to its role in regulating apoptosis.  
+Espinosa \etal\ \cite{Espinosa2011} used unsupervised clustering techniques to investigate expression of 22 genes of the pathway.  
+They found that HGSOC cases formed two separate clusters; the cluster with high expression of CASP3, XIAP, NFKB1, FAS and GSK3B was linked with better outcomes.
+
+A recent pre-publication develops a pipeline for sub-type prediction with the potential to be used clinically \cite{Talhouk2020}.
+The NanoString gene expression platform is used.  See figure \ref{fig-talhouk_figure_1_part.png}, their strategy was to focus on small set of 513 genes (vs $\sim$20,000 protein coding genes) known from the literature to have relevance to subtyping.
+Two approaches were followed by different teams.  ``All Array": used expression array data from 1650 patients across 14 studies evaluating 9 supervised learning algorithms by bootstrap, selecting an AdaBoost -like method. ``TCGA" used 434 patients from TCGA evaluating 5 algorithms by cross-validation selecting a random forest.  "All Array" had the advantage of more data but needed attention to batch effects. A final classifier took a consensus of the two methods based on a minimal gene set (order 40 genes), validated by a leave-one-out (patient level) approach.  Survival analysis was carried out stratified by predicted subtype.
+
+\subsubsection{Treatment response and survival}
+
+As we have seen in section \ref{sec-epithelial-ovarian-cancer}, EOC subtypes are closely linked with survival, however much research is directed at finding direct links between expression and survival.
+
+The prognostic value of expression signatures is demonstrated by the ``Classification of Ovarian Cancer" (CLOVAR) system \cite{Verhaak2013}.  
+Single-sample gene set enrichment analysis (ssGSEA) to obtain scores for previously reported expression signatures of differentiated, immunoreative, mesenchymal and proliferative.  
+A survival outcome prediction model based on these signatures gave good survival stratification (likelihood ratio 10.8 on a validation dataset) which improved to 15.7 when augmented with BRCA1/2 mutation status and other clinical post-operative details.
+
+An explicit supervised learning approach can be taken, as in Berchuck \etal, where a hybrid decision tree plus linear discriminant model demonstrated survival stratification in both cross-validation and external validation experiments, based on microarray expression data.   
+They found expression of CSFT3, ABCD3, MAL and APMCF1 to be the most influential; in fact the decision tree was almost entirely driven by the first two of these
+
+Mairinger \etal\ screened 770 immune related genes to identify 11 differentially expressed genes associated with response to platinum treatment.  
+They find that expression of HS11B1, DNBT1, CKLF, NUP107. CCL18, LY96, ATG7, SLAMF7, CXCL9 is associated with better survival, while IKBKG and SDHA associate with with poor survival.
+
+The platinum based drug Cisplatin is a key treatment in ovarian cancer, yet tumours often develop resistance, possibly related to the host's immune response.  
+Understanding and predicting such resistance is therefore of clinical importance and is addressed by Maringer \etal\ \cite{Mairinger2019} through expression analysis using the NanoString platform with a panel of 770 immune related genes.   
+They find the following to be significantly related to platinum resistance: KLRC1, TCF7, CD274, HSD11B1, COLEC12, PDGFC, FCF1, BMI1, TNFRSF9, ATG10, EWSR1.
+
+Finding a clear correlation between gene expression patterns and survival is not straight forward.  
+One substantial meta-analysis applied 16 previously published gene sets, to two studies from GEO (199 samples) which included survival information, and found no significant predictive power \cite{Fekete2012a}.  
+Although, within the same study, the authors did identify predictive genes, in particular SNGC, MAPT, ESR2 and PGR.
+
+Expression of a single gene -- CD38, which codes for a transmembrane glycoprotein -- has recently been shown to have survival prognostic value on its own \cite{Zhu2020}.
+CD38 has a role in the breakdown of nicotinamide adenine dinucleotide ($\mbox{NAD}^+$), and is also a cell marker of lymphocytes.
+CD38 is over expressed in myloma cells, thence its importance as a prognostic marker and a potential drug treatment target.  
+It is worth mentioning that the analysis in this paper made use of the Gene Expression Profiling Interactive Analysis (GEPIA) database, which conveniently supports survival analysis with respect of any given gene, against a range of TCGA gene expression databases.
+
+\subsubsection{Association with other risk factors}
+
+Obesity has been shown to negatively impact prognosis in ovarian cancer, possibly through difficulties in matching chemotherapy dose with patient BMI.  \cite{Au-Yeung2014}  A more direct molecular link is proposed by Cuello \etal\ \cite{Cuello2018}.  They used NMF based clustering (see section \ref{sec-nmf}) to demonstrate that expression of genes linked with obesity and lipid metabolism impart poorer progression free survival, independent of known HGSOC driver gene expression.  The link is complex however, there been many confounding non-molecular based reasons for a link between high BMI and HGSOC survival, including later diagnosis and compromised operability.  Some studies (e.g. \cite{Hew2013}) conclude no overall link at all.
+
+Note that several of the studies reviewed here use data from the Australian Ovarian Cancer Study (AOCS): \cite{Patch2015,Ewing2020,Cuello2018,Au-Yeung2014}.
+
+%Stratification of HGSOC by immunohistochemistry is addresses Kamble \etal. \cite{Kamble2019}.  They identify a panel of six biomarkers -- TCF21, E-cadherin, PARP1, Slug and AnnexinA2.   These markers allow stratification into categories including Mesenchymal-to-epithelial transition, Homologous recombination repair and Epithelial-to-mesenchymal transition.  This, they argue, allows selection of class-specific inhibitor drugs such as Olaparib and Rucaparib.
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.35]{talhouk_figure_1_part.png}
+\end{center}
+\caption{HGSOC subtype prediction by expression analysis of a focussed gene set and concensus across two independent pipelines.  From \cite{Talhouk2020}.}
+\label{fig-talhouk_figure_1_part.png}
+\end{figure}
+
+
+
 
 \subsection{Matrix factorization}
 \label{sec-matrix-factorization-intro}
@@ -152,7 +255,7 @@ The contrasting results of the three methods is illustrated in figure \ref{fig-p
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.4, draft=false]{Sompairac_ICA_NMF_PCA.png}
+\includegraphics[scale=0.4]{Sompairac_ICA_NMF_PCA.png}
 \end{center}
 \caption{Illustrating the differing results of component extraction by PCA, ICA and NMF.  From \cite{Sompairac2019}}
 \label{fig-pca-ica-nmp-explanation}
@@ -165,7 +268,7 @@ MF methods reduces this large $M \times N$ (genes $\times$ samples) matrix into 
 In the general terminology of Stein-O'Brien \etal\ these are the $M \times K$ \emph{pattern matrix} and the $K \times N$ \emph{amplitude matrix}.  $K$ is typically small of the order 10, and refers to the number of extracted \emph{factors} (or components). 
 Since we are focussing on transriptomics, rather than pattern and amplitude we will use the terms \emph{metagenes} and \emph{metasamples} respectively, which are in common useage.  The symbol conventions for these matrices varies depending whether NMF, ICA or PCA is being discussed.   NMF generally uses $W$ and $H$ respectively while ICA generally uses $S$ and $A$.  PCA tends to be differently formulated, but $W$ and $T$ sometimes used.   The original matrix to be factorized is variously named $X$ or $V$.
 
-In this work we wish to treat and discuss the three factorization methods in a unified way.  Thus, for the remainder of this dissertation we adopt the following conventions:\footnote{I should probably use bold font for X, W and H matrices}.
+In this work I wish to treat and discuss the three factorization methods in a unified way.  Thus, for the remainder of this dissertation the following notational conventions are adopted:
 \begin{description}
 \item[Expression matrix:] $X$ $(M \times N)$
 \item[Metagene matrix:] $W$ $(M \times K)$
@@ -246,40 +349,12 @@ The number of factors, or rank $K$, to extract is a key decision in any matrix f
 
 The problem of determining the optimal $K$ for a given expression matrix is addressed  by Kairov \etal\ \cite{Kairov2017}, based on optimizing the \emph{stability} of the components over multiple algorithm initializations.
 
-\subsection{Gene expression in HGSOC}
-
-This section focusses on biological and clinical conclusions relating to gene expression in HGSOC and mentions analysis techniques only in passing.
-
-Obesity is known to negatively impact prognosis in ovarian cancer \cite{Cuello2018}, \cite{Au-Yeung2014}.  Cuello \etal\ \cite{Cuello2018} used NMF based clustering on mRNA microarrays and reverse-phase protein arrays to demonstrate an association between cancer driver genes and obesity related genes.
-
-Wang \etal\ \cite{Wang2017c} also use NMF clustering to identify five subtypes of HGSOC informative of outcomes: 1:mesenchymal, 2:immunoreactive, 3:proliferative, 4:differentiated and 5:anti-mesenchymal.
-Subtypes 2, 5 are found to be associated with longer survival.
-
-Mairinger \etal\ screened 770 immune related genes to identify 11 differentially expressed genes associated with response to platinum treatment.  They find that expression of HS11B1, DNBT1, CKLF, NUP107. CCL18, LY96, ATG7, SLAMF7, CXCL9 is associated with better survival, while IKBKG and SDHA associate with with poor survival.
-
-BRCA1 inactivation is known to cause chromosomal instability in many cancers.  Pradhan \etal\ \cite{Pradhan2010} investigated the role of BRCA1 in HGSOC by copy number and expression analysis, finding surprisingly that inactivation has no relationship with gross genomic alteration.  They leave open the question whether DNA repair by PARP plays a role.   The relationship between BRCA1/2 and DNA repair -- specifically homologous repair deficiency (HRD) -- is picked up by Ewing \etal \cite{Ewing2020}.  They study the complex interplay of single nucleotide variants and large structural variants as they impact BRCA1/2 disruption and thence HRD.  This work suggests that when BRCA1/2 loss is detected in HGSOC patients, there may be a clinical role for PARP inhibitors, since this would prevent error-prone non-homologous repair by PARP, and so selectively kill BRCA1/2 disrupted cells.
-
-Note that several of the studies reviewed here use data from the Australian Ovarian Cancer Study (AOCS): \cite{Winterhoff2016,Patch2015,Ewing2020,Zhang2018,Cuello2018,Au-Yeung2014}.
-
-Stratification of HGSOC by immunohistochemistry is addresses Kamble \etal. \cite{Kamble2019}.  They identify a panel of six biomarkers -- TCF21, E-cadherin, PARP1, Slug and AnnexinA2.   These markers allow stratification into categories including Mesenchymal-to-epithelial transition, Homologous recombination repair and Epithelial-to-mesenchymal transition.  This, they argue, allows selection of class-specific inhibitor drugs such as Olaparib and Rucaparib.
-
-The platinum based drug Cisplatin is a key treatment in ovarian cancer, yet tumours often develop resistance, possibly related to the host's immune response.  Understanding and predicting such resistance is therefore of clinical importance and is addressed by Maringer \etal\ \cite{Mairinger2019} through expression analysis using the NanoString platform with a panel of 770 immune related genes.   They find the following to be significantly related to platinum resistance: KLRC1, TCF7, CD274, HSD11B1, COLEC12, PDGFC, FCF1, BMI1, TNFRSF9, ATG10, EWSR1.
-
-\begin{figure}
-\begin{center}
-\includegraphics[scale=0.35]{talhouk_figure_1_part.png}
-\end{center}
-\caption{HGSOC subtype prediction by expression analysis of a focussed gene set and concensus across two independent pipelines.  From \cite{Talhouk2020}.}
-\label{fig-talhouk_figure_1_part.png}
-\end{figure}
-
-A recent pre-publication develops a pipeline for sub-type prediction with the potential to be used clinically \cite{Talhouk2020}.
-The NanoString gene expression platform is used.  See figure \ref{fig-talhouk_figure_1_part.png}, their strategy was to focus on small set of 513 genes (vs $\sim$20,000 protein coding genes) known from the literature to have relevance to subtyping.
-Two approaches were followed by different teams.  ``All Array": used expression array data from 1650 patients across 14 studies evaluating 9 supervised learning algorithms by bootstrap, selecting an AdaBoost -like method. ``TCGA" used 434 patients from TCGA evaluating 5 algorithms by cross-validation selecting a random forest.  "All Array" had the advantage of more data but needed attention to batch effects. A final classifier took a consensus of the two methods based on a minimal gene set (order 40 genes), validated by a leave-one-out (patient level) approach.  Survival analysis was carried out stratified by predicted subtype.
 
 
-\subsection{Research questions}
-The following research goals were set out early in project. 
+\subsection{Research goals}
+This work is concerned with analysing the patters gene expression in HGSOC by dimensionality reduction techniques of matrix factorization, and relating these patterns to clinical and genomic features.
+
+The following research questions were set out early in the project. 
 \begin{enumerate}
 \item Which are the influential genes in HGSOC according to gene expression data?   Do these confirm published results?
 \item Which of PCA, ICA and NMF is best suited to this analysis?
@@ -294,7 +369,7 @@ The following research goals were set out early in project.
 
 \subsection{Outline}
 
-Our overall approach is to use \emph{unsupervised} machine learning methods to represent gene expression data in a small number of features, then to study whether these features correlate with clinical and biological variables.  This is appropriate in our case, since of the two datasets available (described below), one (TCGA) has relatively large $n$ but little available metadata, while the other (AOCS) is much smaller but has useful metadata.   This motivates an approach of unsupervised learning on the TCGA dataset. 
+Our overall approach is to use \emph{unsupervised} machine learning methods to represent gene expression data in a small number of features, then to study whether these features correlate with clinical and biological variables.  This is appropriate in our case, since of the two datasets available (described below), one (TCGA) has relatively large $n$ but little available metadata, while the other (AOCS) is much smaller but has more useful metadata of genomic features.   This motivates an approach of unsupervised learning on the TCGA dataset. 
 
 \subsubsection{Datasets}
 Two gene expression datasets were assailable for this work (n refers to number of patients, g refers to number of genes).
@@ -310,7 +385,7 @@ An overview of the methodology adopted in this work is shown in figure \ref{fig-
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.7, draft=false]{methodlology_overview.pdf}
+\includegraphics[scale=0.7]{methodlology_overview.pdf}
 \end{center}
 \caption{Overview of methodology as information flow.  The diagramatic convention here is that at each stage, both datasets -- TCGA and AOCS -- are processed separately by the given algorithm.  The exception is Gene Set Intersection, which involves interaction between the datasets.}
 \label{fig-method-overview}
@@ -417,7 +492,7 @@ $K_{\mbox{\tiny NMF}} = 3, K_{\mbox{\tiny ICA}} = 5, K_{\mbox{\tiny PCA}} =3$.  
        score[factorizer, k] = silhouette score(clustering)	  
        median_metagenes = calculate medians for k clusters of metagenes
        save median_metagenes to file by factorizer and k
-       for each factorizer 
+       for each factorizer:
           plot score vs k
       
 \end{Verbatim}
@@ -459,7 +534,7 @@ The result of this analysis, per metagene, is a list of enriched (or depleted, h
 \newcommand{\trainset}{\mathcal{T}}
 \newcommand{\validset}{\mathcal{V}}
 
-It is fundamental to our approach that metagenes determined on the basis of one cohort of data can be used to generate metasamples for a different cohort.  In the exposition below we refer to these as the \emph{training} and \emph{validation} cohorts respectively.
+It is fundamental to our approach that \emph{metagenes} determined on the basis of one cohort of data can be used to generate \emph{metasamples} for a different cohort.  In the exposition below we refer to these as the \emph{training} and \emph{validation} cohorts respectively.
 
 Rank $k$ matrix factorization on the training dataset $\trainset$ (e.g. TCGA) results in:
 \begin{equation}
@@ -537,7 +612,6 @@ All code is available in a github repository: \url{https://github.com/ipoole/Hgs
 Results of applying the above described methodology are explained and presented here.   Deeper interpretation and discussion is deferred to the following section.  Throughout, consistent colours of \textcolor{blue}{blue}, \textcolor{orange}{orange} and \textcolor{green}{green} are used for results relating to NMF, ICA and PCA respectively.  Specific metagenes are referred to by, for example, ``NMF-2-of-3" -- meaning the 2nd component of the rank $k=3$ NMF factorization.
 
 % \subsection{Investigation of optimal parameters}
-
 \subsection{Cluster coherence analysis results}
 
 From figure \ref{fig-AOCS-ica-fixed-vs-bootstrap} it can be seen that with sampling error excluded, clusters appear reasonably coherent, but when sampling error is modelled by bootstrap sampling then  the factorizations become much less stable.  This demonstrates that \emph{sampling} error is far greater than errors due to algorithm initialisation when the dataset is small (N=80), making metagene extraction unreliable.   Figure  \ref{fig-TCGA-ica-fixed-vs-bootstrap} makes the same comparison for the lager N=374 TCGA dataset, in which it can be seen that the impact of sampling error is not so severe.  For brevity only results for ICA are shown, but a very similar effect is observable for PCA and NMF.   
@@ -591,7 +665,7 @@ There is a curious artefact visible in the NMF factorization clusterings of figu
 \subsection{Gene Enrichment (against GO) Results}
 
 Gene enrichment analysis against the GO results in, for each of the 11 metagenes, a table of GO terms with a list of the candidate genes which have an annotated association to that term.   
-To take full advantage of the hierarchical nature of the GO, results are presented as lineage maps in figures \ref{fig-NMF-go-lineage} to \ref{fig-PCA-1-3-go-lineage}.  
+To take full advantage of the hierarchical nature of the GO, results are presented as lineage maps in figures \ref{fig-NMF-go-lineage} to \ref{fig-PCA-1-3-genesiso-lineage}.  
 The contributing candidate genes for all significantly enriched terms are shown beneath each figure.  
 (Ideally, the specific genes would be listed alongside each term, but this is difficult to achieve graphically).   
 High-level terms at depth less than 3 were removed, since these are generic (e.g. "regulation of biological process") and so uninteresting.   
@@ -604,7 +678,7 @@ The four components NMF-3-of-3, ICA-1-of-5, ICA-2-of-5 and PCA-2-of-3 yielded no
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.5, draft=false]{\plotspath{TCGA_OV_VST/GeneEnrichment/component_jaccard_heatmap.pdf}}
+\includegraphics[scale=0.5]{\plotspath{TCGA_OV_VST/GeneEnrichment/component_jaccard_heatmap.pdf}}
 \end{center}
 \caption{Heatmap of Jaccard similarities between the candidate genes identified by the 11 components.}
 \label{fig-component-jaccard-similarities}
@@ -662,7 +736,7 @@ From this heatmap we can see that within a factorization method the components h
 
 \begin{sidewaysfigure}[ht]
 \begin{center}
-\includegraphics[width=\textwidth, draft=false]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_4_of_ICA_5.png}} \\
+\includegraphics[width=\textwidth]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_4_of_ICA_5.png}} \\
 \begin{spacing}{0.6}
 {\small Genes: \tiny \input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/TCGA_OV_VST/GeneEnrichment/go_gene_set_4_of_ICA_5.txt}}
 \end{spacing}
@@ -694,7 +768,6 @@ From this heatmap we can see that within a factorization method the components h
 \end{figure}
 
 
-
 \afterpage{\clearpage}
 
 \subsection{Survival analysis results}
@@ -704,8 +777,6 @@ Kaplan-Meier overall survival (OS) plots stratified by each metasample component
 All of these results are summarised in figure \ref{fig-summary-survival-plots}, which brings together the three sets of results -- TCGA (OS), OACS (OS) and OACS (PFS) --  with respect to the 11 metasample components.  $\log_2{\mbox{HR}}$ is used in order that the \emph{sense} of the survival impact can be readily appreciated.    If a metasample component has a robust correlation with survival, then we expect the p-value for all three sets of results to show significance \emph{and} for the effects to have the same sense -- be in the same direction.  None of the 11 components pass this test.   
 
 The component closest to correlation with survival would seem to be PCA 1-of-3, showing a reasonably consistent hazard ratio of around 1.3 ($2^{0.4}$) across the three experiments.  This has $p < 0.05$ in the larger TCGA dataset, but not in the smaller AOCS dataset.
-
-
 
 \begin{figure}
 \begin{center}
@@ -747,7 +818,6 @@ The component closest to correlation with survival would seem to be PCA 1-of-3, 
 \afterpage{\clearpage}
 
 \subsection{Metasample heatmap clustering results}
-
 As with survival analysis, metasamples were derived from the metagenes factorized from the TCGA dataset, then applied to both TCGA and AOCS.  The resulting heatmaps are shown in figures \ref{fig-heatmap-TCGA-TCGA} and \ref{fig-heatmap-TCGA-OACS} respectively.   Metadata was available for the AOCS dataset, and this is presented in colour coded columns on the left of figure \ref{fig-heatmap-TCGA-OACS}.   The meanings of each column are as follows:
 \begin{description}
 \item[WGD]: Whole genome doubling -- a marker of genome instability.
