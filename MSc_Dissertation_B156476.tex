@@ -176,8 +176,6 @@ Studying the combined landscape of chromosomal rearrangements, driver mutations 
 
 \subsubsection{Subtype classification}
 
-
-
 A relatively early (2003) expression microarray based work demonstrated clustering into lymphocyte related genes (IGH3, IGKC, IGLJ3), extracellular matrix/stromal related (COL11A1, COL3A1, MMP2, SPARC, RBBP1) and six other clusters \cite{Schaner2003}.
 
 Wang \etal\ \cite{Wang2017c} use NMF clustering (see section \ref{sec-NMF}) to identify five subtypes of HGSOC informative of outcomes: 1:mesenchymal, 2:immunoreactive, 3:proliferative, 4:differentiated and 5:anti-mesenchymal.
@@ -242,7 +240,7 @@ As the name implies, this is only applicable to matrices with +ve or zero elemen
 
 The contrasting results of the three methods is illustrated in figure \ref{fig-pca-ica-nmp-explanation}.
 
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.4]{Sompairac_ICA_NMF_PCA.png}
 \end{center}
@@ -372,7 +370,7 @@ TODO: \emph{more explanation of the provenance of these datasets}.
 \subsubsection{Method outline}
 An overview of the methodology adopted in this work is shown in figure \ref{fig-method-overview}.
 
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.7]{methodlology_overview.pdf}
 \end{center}
@@ -398,6 +396,8 @@ Survival analysis on TCGA and AOCS to investigate relationship between metasampl
 \item
 Clustered heatmaps to visualise relationships between metasamples, patients and metadata.
 \end{enumerate}
+
+\afterpage{\clearpage}
 
 \subsubsection{Tools}
 \begin{itemize}
@@ -460,7 +460,7 @@ Initial investigation on the N=80 AOCS dataset showed very poor cluster coherenc
 The selection rationale is set out in the results section, but is convenient to state here that the following ranks were selected:
 $K_{\mbox{\tiny NMF}} = 3, K_{\mbox{\tiny ICA}} = 5, K_{\mbox{\tiny PCA}} =3$.  Thus, there were $3 + 5 + 3 = 11$ metagenes taken forward for follow-on analysis.
 
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \begin{Verbatim}[baselinestretch=1, frame=single, rulecolor=\color{blue}, label=Metagene Stability Assessment, fontfamily=courier, fontsize=\small]
 
@@ -594,7 +594,7 @@ All code is available in a github repository: \url{https://github.com/ipoole/Hgs
 
 
 %%%%%%%%%%% RESULTS %%%%%%%%%%%%%
-% \afterpage{\clearpage}
+\afterpage{\clearpage}
 
 \section{Results}
 
@@ -608,7 +608,7 @@ From figure \ref{fig-AOCS-ica-fixed-vs-bootstrap} it can be seen that with sampl
 For this reason, and in line with our overall strategy, it is appropriate to perform all metagene extraction on the larger TCGA dataset, in the expectation that the obtained metagenes will be more robust and likely to better generalise to other datasets.
 
 \def\S{0.4}
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=\S]{\plotspath{AOCS_Protein/FactorClustering/multiple_single_factors_scatter_AOCS_ICA_2_3_5_10_fixed.pdf}} \\
 \includegraphics[scale=\S]{\plotspath{AOCS_Protein/FactorClustering/multiple_single_factors_scatter_AOCS_ICA_2_3_5_10_bootstrap.pdf}}\\
@@ -618,7 +618,7 @@ For this reason, and in line with our overall strategy, it is appropriate to per
 \end{center}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=\S]{\plotspath{TCGA_OV_VST/FactorClustering/multiple_single_factors_scatter_TCGA_ICA_2_3_5_10_fixed.pdf}} 
 \includegraphics[scale=\S]{\plotspath{TCGA_OV_VST/FactorClustering/multiple_single_factors_scatter_TCGA_ICA_2_3_5_10_bootstrap.pdf}}
@@ -637,7 +637,7 @@ The rationale for these choices is that, firstly $k>2$ is desirable to have suff
 
 There is a curious artefact visible in the NMF factorization clusterings of figure \ref{fig-TCGA-all-bootstrap}, top row.  For $k=2, 3$ and $5$ several of the clusters show a bi-modal character.  This is not observed in the fixed sampling case (not shown).  The artefact is difficult to explain.  It cannot be the $180^\circ$ rotation issue discussed earlier, since this does not apply to the all +ve components.
 
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=\S]{\plotspath{TCGA_OV_VST/FactorClustering/multiple_single_factors_scatter_TCGA_NMF_2_3_5_10_bootstrap.pdf}} \\
 \includegraphics[scale=\S]{\plotspath{TCGA_OV_VST/FactorClustering/multiple_single_factors_scatter_TCGA_ICA_2_3_5_10_bootstrap.pdf}} \\
@@ -665,7 +665,7 @@ The full table of terms for this component is available in appendix \ref{tab-ica
 The four components NMF-3-of-3, ICA-1-of-5, ICA-2-of-5 and PCA-2-of-3 yielded no significant enriched terms (for FDR $\leq$ 0.01).
 
 
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.5]{\plotspath{TCGA_OV_VST/GeneEnrichment/component_jaccard_heatmap.pdf}}
 \end{center}
@@ -681,7 +681,7 @@ lying between 0 (no similarity) and 1 (identical).
 
 From this heatmap we can see that within a factorization method the components have almost no similarity -- they represent largely independent projections, as one would expect.  Between methods, however, there is considerable overlap in some cases.  In particular PCA 2\_of\_3 vs ICA 1\_of\_5 (J=0.61), PCA 3\_of\_3 vs ICA 5\_of\_5 (J=0.49) and NMF 1\_of\_3 vs ICA 3\_of\_5 (J=0.39).
 
-\begin{figure}[hb]
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.14]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_1_of_NMF_3.png}} \\
 \begin{spacing}{0.6}
@@ -702,7 +702,7 @@ From this heatmap we can see that within a factorization method the components h
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.1]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_3_of_ICA_5.png}} \\
 \begin{spacing}{0.6}
@@ -736,7 +736,7 @@ From this heatmap we can see that within a factorization method the components h
 \end{sidewaysfigure}
 
 
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[width=0.5 \textwidth]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_1_of_PCA_3.png}} \\
 \begin{spacing}{0.6}
@@ -767,7 +767,7 @@ All of these results are summarised in figure \ref{fig-summary-survival-plots}, 
 
 The component closest to correlation with survival would seem to be PCA 1-of-3, showing a reasonably consistent hazard ratio of around 1.3 ($2^{0.4}$) across the three experiments.  This has $p < 0.05$ in the larger TCGA dataset, but not in the smaller AOCS dataset.
 
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_os_TCGA_TCGA.pdf}} 
 \caption{Kaplan-Meier plots for each metasample component, stratified at the median value, for TCGA $\rightarrow$ TCGA for overall survival (OS) case.  Hazard ratio and p-value is shown for each case.  The final plot (bottom right) is unstratified overall survival}
@@ -776,7 +776,7 @@ The component closest to correlation with survival would seem to be PCA 1-of-3, 
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_os_TCGA_AOCS.pdf}} 
 \caption{Kaplan-Meier plots for TCGA $\rightarrow$ TCGA for overall survival (OS).}
@@ -785,7 +785,7 @@ The component closest to correlation with survival would seem to be PCA 1-of-3, 
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_pfs_TCGA_AOCS.pdf}} 
 \caption{Kaplan-Meier plots for TCGA $\rightarrow$ TCGA for progression free survival (PFS).  }
@@ -794,7 +794,7 @@ The component closest to correlation with survival would seem to be PCA 1-of-3, 
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.5]{\plotspath{/SurvivalAnalysis/survival_summary_barplots_NMF.pdf}} \\
 \includegraphics[scale=0.5]{\plotspath{/SurvivalAnalysis/survival_summary_barplots_ICA.pdf}} \\
@@ -827,16 +827,38 @@ The dendrogram clustering of metasamples (columns, top of figures) gives insight
 \end{center}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.7]{\plotspath{HeatMaps/clustered_heatmap_TCGA_AOCS.pdf}} 
-\caption{Heatmap of the metasamples matrix for the AOCS dataset, computed from metagenes factorized from the TCGA dataset.   Several patient patient metadata variables are shown in columns to the left.  (ToDo: key for metadata colouring).}
+\caption{Heatmap of the metasamples matrix for the AOCS dataset, computed from metagenes factorized from the TCGA dataset.   Several patient metadata variables are shown in columns to the left.  (ToDo: key for metadata colouring).}
 \label{fig-heatmap-TCGA-OACS}
 \end{center}
 \end{figure}
 
 \clearpage
 
+\subsection{Metasample correlation with genomic features}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.6, draft=false]{\plotspath{BoxAndScatters/wgd_boxplot_NMF_TCGA_AOCS.pdf}}
+\includegraphics[scale=0.6, draft=false]{\plotspath{BoxAndScatters/wgd_boxplot_ICA_TCGA_AOCS.pdf}}
+\includegraphics[scale=0.6, draft=false]{\plotspath{BoxAndScatters/wgd_boxplot_PCA_TCGA_AOCS.pdf}}
+\caption{Boxplots showing relationship between metasamples (derived from TCGA metagenes, applied to AOCS data) and whole genome doubling (WGD) status.  Metasamples from NMF, ICA and PCA are shown separately.  To allow convenient visualisation, each metasample is normalised to zero mean unit variance, hence between metasample variation is removed.}
+\end{center}
+\label{fig-wgd-boxplots}
+\end{figure}
+
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.54, draft=false]{\plotspath{BoxAndScatters/genomic_feature_scatters_TCGA_AOCS.pdf}} 
+\caption{Grid of scatter plots to visualise the correlation between metasamples and genomic features.  In the case of WGD which has binary values (0, 1), jitter is applied for visual effect only.   Above each plot is shown a correlation coefficient $r$ and associated p-value, highlighted with '***' where $p < 0.01$.  In the case of WGD , the Point-Biserial correlation is used; for all others Pearson's r is used.}
+\label{fig-genomic-scatters}
+\end{center}
+\end{figure}
+
+\clearpage
 \section{Discussion}
 
 One valuable lesson from this work is the importance of accounting for sampling error, by bootstrapping,  when considering the stability of factorizations and thence the selection of factorization rank.    Sevaral authors comment on the variability of NMF and ICA factorization due to algorithm initialisation \cite{Kairov2017,Sompairac2019,WayGregory2019}, but most neglect sampling error which we have shown to be far more significant.   Cantini \etal\ \cite{Cantini2019a} mention bootstrapping, in reference to the BIODICA package (for ICA factorization), but it is unclear whether this is applied to the input data to model sampling error.  In the initial stages of the current work, BIODICA was used, and was found to recommend ranks of 14, 19 or 30.  Yet we have seen that such high ranks on the small n=80 dataset leads to highly unstable factorizations when bootstrap modelling of sampling error is included.
