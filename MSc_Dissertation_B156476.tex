@@ -139,8 +139,9 @@ Here is the abstract
 \section{Introduction}
 
 \subsection{Epithelial Ovarian Cancer}
+\label{sec-epithelial-ovarian-cancer}
 
-Ovarian cancer (OC) is a heterogeneous disease, presenting with a wide range of pathologies and molecular characteristics .  The World Health Organisation (WHO) sets out five subtypes of epithelial ovarian carcinomas (EOC) grouped into two main types\cite{Kossai2018, Lisio2019}: 
+Ovarian cancer (OC) is a heterogeneous disease, presenting with a wide range of pathologies and molecular characteristics .  The World Health Organisation sets out five subtypes of epithelial ovarian carcinomas (EOC) grouped into two main types\cite{Kossai2018, Lisio2019}: 
 
 \begin{description}
 \item[Type I] are low grade with generally good prognosis, with two subtypes:
@@ -151,19 +152,19 @@ Ovarian cancer (OC) is a heterogeneous disease, presenting with a wide range of 
 \end{description}
 \item[Type II] are more aggressive (rapidly growing), typically carrying P53 mutations with defects in mechanisms of DNA repair. Three subtypes:
 \begin{description}
-\item[\emph{High grade serous OC (HGSOC)}] affects the epithelium of the ovaries and fallopian tubes.  It is the most common, accounting for 70\% of cases, and most serious of the OC subtypes and the focus of this dissertation.
 \item[Endometrial] affecting the the inner lining of the uterus, 10 \% of cases.
+\item[\emph{High grade serous OC (HGSOC)}] affects the epithelium of the ovaries and fallopian tubes.  It is the most common type of OC, accounting for 70\% of cases, and most serious of the OC subtypes and the focus of this dissertation.
 \end{description}
 \end{description}
 
-HGSOC typically occur in older patients and are diagnosed at a late stage.   Histology of HGSOC is similar to the low grade subtype, but develops along distinct molecular pathways. 
+HGSOC typically occurs in older patients and is diagnosed at a late stage.   Histology of HGSOC is similar to the low grade subtype, but the cancer develops along distinct molecular pathways. 
 
-\emph{Treatment options for HGSOC...}
+Treatment options for HGSOC depend on tumour stage and include surgery (tumour debulking) or platinum-based chemotherapy (e.g. Cisplatin).  Acquired resistance to platinum is a major cause of disease recurrance\cite{Patch2015} and so motivates research into the genomic events which lead to such resistance.
 
 
 \subsection{Patterns of gene expression in HGSOC}
 
-Identifying the patterns -- or ``signatures'' -- of gene expression has been an active research area, for the purposes of understanding the carcinogenesis pathway, subtype classification, predicting survival prognosis, predicting treatment response and understanding the causative mechanism of risk factors; these are clearly related, however.
+Identifying the patterns -- or ``signatures'' -- of gene expression has been an active research area, for the purposes of understanding the carcinogenesis pathway, subtype classification, predicting survival prognosis, predicting treatment response and understanding the causative mechanism of risk factors; there is much cross-over between these areas, however.
 
 \subsubsection{Carcinogenesis pathways including homologous repair deficiency
 }
@@ -177,26 +178,26 @@ Studying the combined landscape of chromosomal rearrangements, driver mutations 
 
 
 
-A relatively early (2003) expression microarray based work demonstrated clustering into for example lymphocyte related genes (IGH3, IGKC, IGLJ3), extracellular matrix/stromal related (COL11A1, Col3A1, MMP2, SPARC, RBBP1) and six others \cite{Schaner2003}.
+A relatively early (2003) expression microarray based work demonstrated clustering into lymphocyte related genes (IGH3, IGKC, IGLJ3), extracellular matrix/stromal related (COL11A1, COL3A1, MMP2, SPARC, RBBP1) and six other clusters \cite{Schaner2003}.
 
-Wang \etal\ \cite{Wang2017c} also use NMF clustering to identify five subtypes of HGSOC informative of outcomes: 1:mesenchymal, 2:immunoreactive, 3:proliferative, 4:differentiated and 5:anti-mesenchymal.
-Subtypes 2, 5 are found to be associated with longer survival.
+Wang \etal\ \cite{Wang2017c} use NMF clustering (see section \ref{sec-NMF}) to identify five subtypes of HGSOC informative of outcomes: 1:mesenchymal, 2:immunoreactive, 3:proliferative, 4:differentiated and 5:anti-mesenchymal.
+Subtypes 2 and 5 are found to be associated with better survival.
 
 Disruption of the PI3K-AKT signalling pathway is known to be significant in several cancers, due to its role in regulating apoptosis.  
-Espinosa \etal\ \cite{Espinosa2011} used unsupervised clustering techniques to investigate expression of 22 genes of the pathway.  
+Espinosa \etal\ \cite{Espinosa2011} used unsupervised clustering techniques to investigate expression of 22 genes of this pathway.  
 They found that HGSOC cases formed two separate clusters; the cluster with high expression of CASP3, XIAP, NFKB1, FAS and GSK3B was linked with better outcomes.
 
 A recent pre-publication develops a pipeline for sub-type prediction with the potential to be used clinically \cite{Talhouk2020}.
-The NanoString gene expression platform is used.  See figure \ref{fig-talhouk_figure_1_part.png}, their strategy was to focus on small set of 513 genes (vs $\sim$20,000 protein coding genes) known from the literature to have relevance to subtyping.
-Two approaches were followed by different teams.  ``All Array": used expression array data from 1650 patients across 14 studies evaluating 9 supervised learning algorithms by bootstrap, selecting an AdaBoost -like method. ``TCGA" used 434 patients from TCGA evaluating 5 algorithms by cross-validation selecting a random forest.  "All Array" had the advantage of more data but needed attention to batch effects. A final classifier took a consensus of the two methods based on a minimal gene set (order 40 genes), validated by a leave-one-out (patient level) approach.  Survival analysis was carried out stratified by predicted subtype.
+The NanoString gene expression platform is used.  Their strategy was to focus on small set of 513 genes (vs $\sim$21,000 protein coding genes) known from the literature to have relevance to subtyping.
+Two approaches were followed by different teams.  ``All Array": used expression array data from 1650 patients across 14 studies evaluating 9 supervised learning algorithms by bootstrap, selecting an AdaBoost -like method. The ``TCGA" team used 434 patients from The Cancer Genome Atlas (TCGA\footnote{I'm always amused by the geneticist's pun in the naming of this resource!}) evaluating 5 algorithms by cross-validation selecting a random forest.  "All Array" had the advantage of more data but needed attention to batch effects. A final classifier took a consensus of the two methods based on a minimal gene set (order 40 of genes), validated by a leave-one-out (patient level) approach.  Survival analysis was carried out stratified by predicted subtype.
 
 \subsubsection{Treatment response and survival}
 
-As we have seen in section \ref{sec-epithelial-ovarian-cancer}, EOC subtypes are closely linked with survival, however much research is directed at finding direct links between expression and survival.
+As we have seen in section \ref{sec-epithelial-ovarian-cancer}, EOC subtypes are closely linked with survival, never-the-less much research is directed at finding direct links with expression.
 
 The prognostic value of expression signatures is demonstrated by the ``Classification of Ovarian Cancer" (CLOVAR) system \cite{Verhaak2013}.  
-Single-sample gene set enrichment analysis (ssGSEA) to obtain scores for previously reported expression signatures of differentiated, immunoreative, mesenchymal and proliferative.  
-A survival outcome prediction model based on these signatures gave good survival stratification (likelihood ratio 10.8 on a validation dataset) which improved to 15.7 when augmented with BRCA1/2 mutation status and other clinical post-operative details.
+Single-sample gene set enrichment analysis (ssGSEA) is used to obtain scores for previously reported expression signatures: differentiated, immunoreative, mesenchymal and proliferative.  
+An outcome prediction model based on these signatures gave good survival stratification (likelihood ratio 10.8 between above/below median groups) on a validation dataset) which improved to 15.7 when augmented with BRCA1/2 mutation status and other post-operative clinical factors.
 
 An explicit supervised learning approach can be taken, as in Berchuck \etal, where a hybrid decision tree plus linear discriminant model demonstrated survival stratification in both cross-validation and external validation experiments, based on microarray expression data.   
 They found expression of CSFT3, ABCD3, MAL and APMCF1 to be the most influential; in fact the decision tree was almost entirely driven by the first two of these
@@ -206,10 +207,10 @@ They find that expression of HS11B1, DNBT1, CKLF, NUP107. CCL18, LY96, ATG7, SLA
 
 The platinum based drug Cisplatin is a key treatment in ovarian cancer, yet tumours often develop resistance, possibly related to the host's immune response.  
 Understanding and predicting such resistance is therefore of clinical importance and is addressed by Maringer \etal\ \cite{Mairinger2019} through expression analysis using the NanoString platform with a panel of 770 immune related genes.   
-They find the following to be significantly related to platinum resistance: KLRC1, TCF7, CD274, HSD11B1, COLEC12, PDGFC, FCF1, BMI1, TNFRSF9, ATG10, EWSR1.
+They find the following genes to be significantly related to platinum resistance: KLRC1, TCF7, CD274, HSD11B1, COLEC12, PDGFC, FCF1, BMI1, TNFRSF9, ATG10, EWSR1.
 
-Finding a clear correlation between gene expression patterns and survival is not straight forward.  
-One substantial meta-analysis applied 16 previously published gene sets, to two studies from GEO (199 samples) which included survival information, and found no significant predictive power \cite{Fekete2012a}.  
+Finding a clear, robust correlation between gene expression patterns and survival is not straight forward.  
+One substantial meta-analysis applied 16 previously published gene sets to two studies from GEO (199 samples) which included survival information, and found no significant predictive power \cite{Fekete2012a}.  
 Although, within the same study, the authors did identify predictive genes, in particular SNGC, MAPT, ESR2 and PGR.
 
 Expression of a single gene -- CD38, which codes for a transmembrane glycoprotein -- has recently been shown to have survival prognostic value on its own \cite{Zhu2020}.
@@ -219,23 +220,11 @@ It is worth mentioning that the analysis in this paper made use of the Gene Expr
 
 \subsubsection{Association with other risk factors}
 
-Obesity has been shown to negatively impact prognosis in ovarian cancer, possibly through difficulties in matching chemotherapy dose with patient BMI.  \cite{Au-Yeung2014}  A more direct molecular link is proposed by Cuello \etal\ \cite{Cuello2018}.  They used NMF based clustering (see section \ref{sec-nmf}) to demonstrate that expression of genes linked with obesity and lipid metabolism impart poorer progression free survival, independent of known HGSOC driver gene expression.  The link is complex however, there been many confounding non-molecular based reasons for a link between high BMI and HGSOC survival, including later diagnosis and compromised operability.  Some studies (e.g. \cite{Hew2013}) conclude no overall link at all.
+Obesity has been shown to negatively impact prognosis in ovarian cancer, possibly through difficulties in matching chemotherapy dose with patient BMI.  \cite{Au-Yeung2014}  A more direct molecular link is proposed by Cuello \etal\ \cite{Cuello2018}.  They used NMF based clustering to demonstrate that expression of genes linked with obesity and lipid metabolism impart poorer progression free survival, independent of known HGSOC driver gene expression.  The link is complex however, there been many confounding non-molecular based reasons for a link between high BMI and HGSOC survival, including later diagnosis and compromised operability.  Some studies (e.g. \cite{Hew2013}) conclude no overall link at all.
 
-Note that several of the studies reviewed here use data from the Australian Ovarian Cancer Study (AOCS): \cite{Patch2015,Ewing2020,Cuello2018,Au-Yeung2014}.
+
 
 %Stratification of HGSOC by immunohistochemistry is addresses Kamble \etal. \cite{Kamble2019}.  They identify a panel of six biomarkers -- TCF21, E-cadherin, PARP1, Slug and AnnexinA2.   These markers allow stratification into categories including Mesenchymal-to-epithelial transition, Homologous recombination repair and Epithelial-to-mesenchymal transition.  This, they argue, allows selection of class-specific inhibitor drugs such as Olaparib and Rucaparib.
-
-
-\begin{figure}
-\begin{center}
-\includegraphics[scale=0.35]{talhouk_figure_1_part.png}
-\end{center}
-\caption{HGSOC subtype prediction by expression analysis of a focussed gene set and concensus across two independent pipelines.  From \cite{Talhouk2020}.}
-\label{fig-talhouk_figure_1_part.png}
-\end{figure}
-
-
-
 
 \subsection{Matrix factorization}
 \label{sec-matrix-factorization-intro}
@@ -375,7 +364,7 @@ Our overall approach is to use \emph{unsupervised} machine learning methods to r
 Two gene expression datasets were assailable for this work (n refers to number of patients, g refers to number of genes).
 \begin{enumerate}
 \item The Cancer Genome Atlas (TCGA) derived, n=274, g=19,601, with metadata on survival
-\item Austrailian Ovarian Cancer Study (AOCS) \cite{Patch2015}, n=80, g=19,730, with metadata on survival, cellularity and additional genomic features.
+\item Austrailian Ovarian Cancer Study (AOCS) \cite{Patch2015}, n=80, g=19,730, with metadata on survival, cellularity and additional genomic features. Several of the studies reviewed earlier also use data from the Australian Ovarian Cancer Study (AOCS): \cite{Patch2015,Ewing2020,Cuello2018,Au-Yeung2014}.
 \end{enumerate}
 TODO: \emph{more explanation of the provenance of these datasets}.
 
