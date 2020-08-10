@@ -1,6 +1,6 @@
 % MSc Dissertation on pattern expression in Ovarian Cancer
 
-\documentclass[draft, tikz, 12pt,a4paper,oneside,fleqn]{article}
+\documentclass[tikz, 12pt,a4paper,oneside,fleqn]{article}
 
 \usepackage[margin=1.5cm]{geometry}
 \usepackage[utf8]{inputenc}
@@ -167,30 +167,31 @@ Treatment options for HGSOC depend on tumour stage and include surgery (tumour d
 
 Identifying the patterns -- or ``signatures'' -- of gene expression has been an active research area, for the purposes of understanding the carcinogenesis pathway, subtype classification, predicting survival prognosis, predicting treatment response and understanding the causative mechanism of risk factors; there is much cross-over between these areas, however.
 
-\subsubsection{Carcinogenesis pathways including homologous repair deficiency
-}
-
+\subsubsection{Carcinogenesis pathways including homologous repair deficiency}
 
 BRCA1 inactivation is known to cause chromosomal instability in many cancers.  Pradhan \etal\ \cite{Pradhan2010} investigated the role of BRCA1 in HGSOC by copy number and expression analysis, finding surprisingly that inactivation has no relationship with gross genomic alteration.  They leave open the question whether DNA repair by PARP plays a role.   The relationship between BRCA1/2 and DNA repair -- specifically homologous repair deficiency (HRD) -- is picked up by Ewing \etal \cite{Ewing2020}.  They study the complex interplay of single nucleotide variants and large structural variants as they impact BRCA1/2 disruption and thence HRD.  This work suggests that when BRCA1/2 loss is detected in HGSOC patients, there may be a clinical role for PARP inhibitors, since this would prevent error-prone non-homologous repair by PARP, and so selectively kill BRCA1/2 disrupted cells.
 
 Studying the combined landscape of chromosomal rearrangements, driver mutations (particularly TP53, BRCA1/2), methylation and gene expression profiles has lead to a better understanding of the molecular events involved in the progression HGSOC and the development of chemoresistance \cite{Patch2015}.  The sequence of events is complex, however, and not easily summarised here.   A similar integrative / multiplatform approach is taken in \cite{He2017a} and \cite{Hoadley2014}.
 
 \subsubsection{Subtype classification}
+\label{sec-subtype-classification}
 
 A relatively early (2003) expression microarray based work demonstrated clustering into lymphocyte related genes (IGH3, IGKC, IGLJ3), extracellular matrix/stromal related (COL11A1, COL3A1, MMP2, SPARC, RBBP1) and six other clusters \cite{Schaner2003}.
 
 A relatively early (2003) expression microarray based work demonstrated clustering into lymphocyte related genes (IGH3, IGKC, IGLJ3), extracellular matrix/stromal related (COL11A1, COL3A1, MMP2, SPARC, RBBP1) and six other clusters \cite{Schaner2003}.
 
-Wang \etal\ \cite{Wang2017c} use NMF clustering (see section \ref{sec-NMF}) to identify five subtypes of HGSOC informative of outcomes: 1:mesenchymal, 2:immunoreactive, 3:proliferative, 4:differentiated and 5:anti-mesenchymal.
+Wang \etal\ \cite{Wang2017c} use NMF clustering (see section \ref{sec-nmf}) to identify five subtypes of HGSOC informative of outcomes: 1:mesenchymal, 2:immunoreactive, 3:proliferative, 4:differentiated and 5:anti-mesenchymal.
 Subtypes 2 and 5 are found to be associated with better survival.
 
 Disruption of the PI3K-AKT signalling pathway is known to be significant in several cancers, due to its role in regulating apoptosis.  
 Espinosa \etal\ \cite{Espinosa2011} used unsupervised clustering techniques to investigate expression of 22 genes of this pathway.  
 They found that HGSOC cases formed two separate clusters; the cluster with high expression of CASP3, XIAP, NFKB1, FAS and GSK3B was linked with better outcomes.
 
+An integrative network approach has identified two distinct subtypes of ovarian cancer, distinguished by differences in expression of genes related to transcription factors which influence angiogenesis \cite{Glass2015}.  The authors suggest that the regulatory networks highlighted by their analysis can lead to targetting with specific drugs.
+
 A recent pre-publication develops a pipeline for sub-type prediction with the potential to be used clinically \cite{Talhouk2020}.
 The NanoString gene expression platform is used.  Their strategy was to focus on small set of 513 genes (vs $\sim$21,000 protein coding genes) known from the literature to have relevance to subtyping.
-Two approaches were followed by different teams.  ``All Array": used expression array data from 1650 patients across 14 studies evaluating 9 supervised learning algorithms by bootstrap, selecting an AdaBoost -like method. The ``TCGA" team used 434 patients from The Cancer Genome Atlas (TCGA\footnote{I'm always amused by the geneticist's pun in the naming of this resource!}) evaluating 5 algorithms by cross-validation selecting a random forest.  "All Array" had the advantage of more data but needed attention to batch effects. A final classifier took a consensus of the two methods based on a minimal gene set (order 40 of genes), validated by a leave-one-out (patient level) approach.  Survival analysis was carried out stratified by predicted subtype.
+Two approaches were followed by different teams.  ``All Array": used expression array data from 1650 patients across 14 studies evaluating 9 supervised learning algorithms by bootstrap, selecting an AdaBoost -like method. The ``TCGA" team used 434 patients from The Cancer Genome Atlas (TCGA\footnote{I'm always amused by the genetics pun in the naming of this resource!}) evaluating 5 algorithms by cross-validation selecting a random forest.  "All Array" had the advantage of more data but needed attention to batch effects. A final classifier took a consensus of the two methods based on a minimal gene set (order 40 of genes), validated by a leave-one-out (patient level) approach.  Survival analysis was carried out stratified by predicted subtype.
 
 \subsubsection{Treatment response and survival}
 
@@ -211,7 +212,7 @@ Understanding and predicting such resistance is therefore of clinical importance
 They find the following genes to be significantly related to platinum resistance: KLRC1, TCF7, CD274, HSD11B1, COLEC12, PDGFC, FCF1, BMI1, TNFRSF9, ATG10, EWSR1.
 
 Finding a clear, robust correlation between gene expression patterns and survival is not straight forward.  
-One substantial meta-analysis applied 16 previously published gene sets to two studies from GEO (199 samples) which included survival information, and found no significant predictive power \cite{Fekete2012a}.  
+One substantial meta-analysis applied 16 previously published gene sets to two studies from GEO (199 samples) which included survival information, and found no significant predictive power \cite{Fekete2012}.  
 Although, within the same study, the authors did identify predictive genes, in particular SNGC, MAPT, ESR2 and PGR.
 
 Expression of a single gene -- CD38, which codes for a transmembrane glycoprotein -- has recently been shown to have survival prognostic value on its own \cite{Zhu2020}.
@@ -221,27 +222,32 @@ It is worth mentioning that the analysis in this paper made use of the Gene Expr
 
 \subsubsection{Association with other risk factors}
 
-Obesity has been shown to negatively impact prognosis in ovarian cancer, possibly through difficulties in matching chemotherapy dose with patient BMI.  \cite{Au-Yeung2014}  A more direct molecular link is proposed by Cuello \etal\ \cite{Cuello2018}.  They used NMF based clustering to demonstrate that expression of genes linked with obesity and lipid metabolism impart poorer progression free survival, independent of known HGSOC driver gene expression.  The link is complex however, there been many confounding non-molecular based reasons for a link between high BMI and HGSOC survival, including later diagnosis and compromised operability.  Some studies (e.g. \cite{Hew2013}) conclude no overall link at all.
+Obesity has been shown to negatively impact prognosis in ovarian cancer, possibly through difficulties in matching chemotherapy dose with patient BMI  \cite{Au-Yeung2014}.  A more direct molecular link is proposed by Cuello \etal\ \cite{Cuello2018}.  They used NMF based clustering to demonstrate that expression of genes linked with obesity and lipid metabolism impart poorer progression free survival, independent of known HGSOC driver gene expression.  The link is complex however, there been many confounding non-molecular based reasons for a link between high BMI and HGSOC survival, including later diagnosis and compromised operability.  Some studies (e.g. \cite{Hew2013}) conclude no overall link at all.
 
 
 
 %Stratification of HGSOC by immunohistochemistry is addresses Kamble \etal. \cite{Kamble2019}.  They identify a panel of six biomarkers -- TCF21, E-cadherin, PARP1, Slug and AnnexinA2.   These markers allow stratification into categories including Mesenchymal-to-epithelial transition, Homologous recombination repair and Epithelial-to-mesenchymal transition.  This, they argue, allows selection of class-specific inhibitor drugs such as Olaparib and Rucaparib.
 
-\subsection{Matrix factorization}
+\subsection{Matrix factorization for dimensionality reduction}
 \label{sec-matrix-factorization-intro}
 
-A good introduction to field is ref \cite{Stein-OBrien2018}, in which matrix factorization (MF) methods are discussed as a means of extraction the low dimensional structure from a high dimensional ``-omics" datasets, with gene expression analysis being the prime example.  
+Dimensionality reduction concerns representing high dimensional data in far fewer dimensions, with minimal loss of information.  This is possible in many cases because dimensions -- or equivalently elements of a feature vector -- are highly correlated.  In the case of gene expression analysis, the dimensionality is of the order 20,000, i.e. the number of transcripts (mRMA transcribed genes) being considered.  However, it is known that sets of genes act in concert, their expression thus being correlated, so reducing the true degrees of freedom in the data.  The challenge is to uncover these true degrees of freedom, which constitute our ``patterns of gene expression''.
 
-The three matrix factorization methods of interest to this work are listed below.  All are forms of dimensionality reduction, but have differing criteria they aim to optimise.  The number of target dimensions (or components, factors, metagenes) is referred to as the rank, $k$.
-\begin{description}
-\item [Non-negative matrix factorization (NMF).]  
-As the name implies, this is only applicable to matrices with +ve or zero elements, and finds components which are themselves +ve or zero.   This property make the resulting factorization more interpretable since the components are strictly additive.   It also allows for input samples to be directly assigned to one of $k$ clusters.   A good description of NMF and its applications in bioinformatics can be found in \cite{Brunet2004}.
+The three matrix factorization methods considered in this work are described below.  All are forms of dimensionality reduction, but have differing criteria they aim to optimise.  The number of target dimensions (or components, factors, metagenes -- these terms are used somewhat synonymously) is referred to as the rank, $k$.
+\subsubsection{Non-negative matrix factorization (NMF)}
+\label{sec-nmf}
+As the name implies, this is only applicable to matrices with +ve or zero elements, and finds components which are themselves +ve or zero.   This property make the resulting factorization more interpretable since the components are strictly additive.   
+NMF has been applied widely in -omics research, originally to gene expression microarrays  and latterly to RNA-seq datasets.  
+A particular value of NMF is that it allows for input samples to be directly assigned to one of $k$ clusters.   
+The optimization function on which NMF is based can be tuned to achieve a \emph{sparse} factorization result, that is one in which only a small number of elements in the achieved factorization are non-zero, a property which further simplifies interpretation.
+\cite{Brunet2004}.
 %
-\item [Independent component analysis (ICA).] The goal of ICA is to represent the given matrix with components which are statistically independent of each other.  It was originally proposed to solve the blind source separation problems \cite{Comon1994}. If the input matrix of samples were drawn from a multivariate Gaussian distribution, then the result would be no different to that of PCA.    Where the data is non-Gaussian however, ICA results in components which separate out independent sources of variation.  See \cite{Sompairac2019} for a full explanation, from which figure \ref{fig-pca-ica-nmp-explanation} is taken.
-\item [Principal component analysis (PCA).]  PCA is a well known technique for dimensionality reduction, based on eigenvalue decomposition.  It is the ideal, efficient solution for multivariate Gaussian distributed data.
-\end{description}
+\subsubsection{Independent component analysis (ICA)} 
+The goal of ICA is to represent the given matrix with components which are statistically independent of each other.  It was originally proposed to solve the blind source separation problems \cite{Comon1994}. If the input matrix of samples were drawn from a multivariate Gaussian distribution, then the result would be no different to that of PCA.    Where the data is non-Gaussian however, ICA results in components which separate out independent sources of variation.  See \cite{Sompairac2019} for a full explanation, from which figure \ref{fig-pca-ica-nmp-explanation} is taken.
+\subsubsection{Principal component analysis (PCA)}
+PCA is a well known technique for dimensionality reduction, based on eigenvalue decomposition.  It is arguably the ideal, efficient solution for data which is multivariate Gaussian distributed -- or can assumed to be so.  PCA results in components which are ordered by the proportion of total variance they explain, and are mutually orthogonal.
 
-The contrasting results of the three methods is illustrated in figure \ref{fig-pca-ica-nmp-explanation}.
+The contrasting results of the three methods is illustrated in figure \ref{fig-pca-ica-nmp-explanation}. \emph{TODO: add explanation of this diagram}
 
 \begin{figure}[ht]
 \begin{center}
@@ -254,8 +260,8 @@ The contrasting results of the three methods is illustrated in figure \ref{fig-p
 
 Conventionally, transcriptomics expression arrays are oriented with genes (or transcripts) as rows, and samples (e.g. patients) in columns.   
 A typical expression array might have in the order of tens of thousands of rows and hundreds of columns.  
-MF methods reduces this large $M \times N$ (genes $\times$ samples) matrix into two two smaller matrices.
-In the general terminology of Stein-O'Brien \etal\ these are the $M \times K$ \emph{pattern matrix} and the $K \times N$ \emph{amplitude matrix}.  $K$ is typically small of the order 10, and refers to the number of extracted \emph{factors} (or components). 
+MF methods reduces this large $M \times N$ (genes $\times$ samples) matrix into two smaller matrices.
+In the general terminology of Stein-O'Brien \etal\ these are the $M \times K$ \emph{pattern matrix} and the $K \times N$ \emph{amplitude matrix}.  $K$ (or $k$ as we will use) is typically small of the order 10, and refers to the number of extracted \emph{factors} (or components); it is the rank of the factorization.
 Since we are focussing on transriptomics, rather than pattern and amplitude we will use the terms \emph{metagenes} and \emph{metasamples} respectively, which are in common useage.  The symbol conventions for these matrices varies depending whether NMF, ICA or PCA is being discussed.   NMF generally uses $W$ and $H$ respectively while ICA generally uses $S$ and $A$.  PCA tends to be differently formulated, but $W$ and $T$ sometimes used.   The original matrix to be factorized is variously named $X$ or $V$.
 
 In this work I wish to treat and discuss the three factorization methods in a unified way.  Thus, for the remainder of this dissertation the following notational conventions are adopted:
@@ -328,23 +334,22 @@ In configuration (a) NMF and ICA will optimise the \emph{metagenes}, while in (b
 
 In the case of NMF and ICA, the $W$ and $H$ matrices cannot be trivially exchanged and transposed.  This is because the optimisations (sparsity and independence respectively) which define these algorithms are focussed on the $W$ matrix.  It is perfectly possible to apply these algorithms to gene expression analysis with exchanged and transposed meanings of $W$ and $H$, and this is illustrated in figure \ref{fig-matrix-factorization} (b).  In this case it is the properties of the \emph{metasamples} which will be optimised.  Thus, the two forms are different in substance, not simply in notational convention.
 
-There seems to be substantial confusion an lack of clarity in the way that matrix factorization, particularly ICA, is applied in transcriptomics research.  
-``Surprisingly, both ways of applying ICA to omics data are wide-spread, and sometimes it makes an effort to figure out in which way ICA was applied." \cite{Sompairac2019}, and ``Different protocols to apply ICA to transcriptomic data exist and currently no single standard approach has been defined. The main difference in the existing approaches consists in what is considered as source signal matrix in the decomposition" \cite{Cantini2019}.  
+There is substantial confusion and lack of clarity in the way that matrix factorization, particularly ICA, is applied in transcriptomics research.  
+``Surprisingly, both ways of applying ICA to omics data are wide-spread, and sometimes it takes an effort to figure out in which way ICA was applied" \cite{Sompairac2019}, and ``Different protocols to apply ICA to transcriptomic data exist and currently no single standard approach has been defined. The main difference in the existing approaches consists in what is considered as source signal matrix in the decomposition" \cite{Cantini2019}.  
 According to Cantini \etal\, references \cite{Au-Yeung2014}, \cite{Kairov2017}, \cite{Kong2008} and \cite{Lee2003} optimise metagenes, while references \cite{Meng2016} and \cite{Barillot2013} optimises metasamples.
 
 
 \subsubsection{Determining the optimum number of factors}
 
-The number of factors, or rank $K$, to extract is a key decision in any matrix factorization approach.  In this regard, PCA differs from ICA and NMF.  In PCA it is reasonable to extract all factors, setting $K=N$, the factors being ranked by the associated eigenvalue which also ranks the proportion of variance explained.   However, that approach is not valid for ICA and NMF, since differing sets of factors will be obtained for different $K$, and for a given choice of $K$ all factors are equally important -- they do not rank \cite{Stein-OBrien2018}.
+The number of factors, or rank $k$, to extract is a key decision in any matrix factorization approach.  In this regard, PCA differs from ICA and NMF.  In PCA it is reasonable to extract all factors, setting $k=N$, the factors being ranked by the associated eigenvalue which also ranks the proportion of variance explained.   However, that approach is not valid for ICA and NMF, since differing sets of factors will be obtained for different $k$, and for a given choice of $k$ all factors are equally important -- they do not rank \cite{Stein-OBrien2018}.
 
-The problem of determining the optimal $K$ for a given expression matrix is addressed  by Kairov \etal\ \cite{Kairov2017}, based on optimizing the \emph{stability} of the components over multiple algorithm initializations.
-
+The problem of determining the optimal $k$ for a given expression matrix is addressed  by Kairov \etal\ \cite{Kairov2017}, based on optimizing the \emph{stability} of the components over multiple algorithm initializations.
 
 
 \subsection{Research goals}
-This work is concerned with analysing the patters gene expression in HGSOC by dimensionality reduction techniques of matrix factorization, and relating these patterns to clinical and genomic features.
+This work is concerned with analysing the patterns gene expression in HGSOC by dimensionality reduction techniques of matrix factorization, and relating these patterns to clinical and genomic features.
 
-The following research questions were set out early in the project. 
+The following research questions were set out early in the project. \emph{TODO: tweak these goals!}
 \begin{enumerate}
 \item Which are the influential genes in HGSOC according to gene expression data?   Do these confirm published results?
 \item Which of PCA, ICA and NMF is best suited to this analysis?
@@ -359,7 +364,7 @@ The following research questions were set out early in the project.
 
 \subsection{Outline}
 
-Our overall approach is to use \emph{unsupervised} machine learning methods to represent gene expression data in a small number of features, then to study whether these features correlate with clinical and biological variables.  This is appropriate in our case, since of the two datasets available (described below), one (TCGA) has relatively large $n$ but little available metadata, while the other (AOCS) is much smaller but has more useful metadata of genomic features.   This motivates an approach of unsupervised learning on the TCGA dataset. 
+Our overall approach is to use \emph{unsupervised} machine learning methods to represent gene expression data in a small number of features, then to study whether these features correlate with clinical and biological variables.  This is appropriate in our case, since of the two datasets available (described below), one (TCGA) has relatively large n but little available metadata, while the other (AOCS) is much smaller but has more useful metadata of genomic features.   This motivates an approach of unsupervised learning on the TCGA dataset which is then transferred to the AOCS dataset.
 
 \subsubsection{Datasets}
 Two gene expression datasets were assailable for this work (n refers to number of patients, g refers to number of genes).
@@ -369,9 +374,11 @@ Two gene expression datasets were assailable for this work (n refers to number o
 \end{enumerate}
 TODO: \emph{more explanation of the provenance of these datasets}.
 
+Expression data for the AOCS and TCGA datasets was received for this project in a spreadsheet format, having been derived from the RNA-Seq data as described in \cite{Ewing2020}, including  normalization by variance stabilizing transformation.   
+
 
 \subsubsection{Method outline}
-An overview of the methodology adopted in this work is shown in figure \ref{fig-method-overview}.
+An overview of the methodology adopted in this work is shown in figure \ref{fig-method-overview}, consisting of:
 
 \begin{figure}[ht]
 \begin{center}
@@ -380,7 +387,7 @@ An overview of the methodology adopted in this work is shown in figure \ref{fig-
 \caption{Overview of methodology as information flow.  The diagramatic convention here is that at each stage, both datasets -- TCGA and AOCS -- are processed separately by the given algorithm.  The exception is Gene Set Intersection, which involves interaction between the datasets.}
 \label{fig-method-overview}
 \end{figure}
-In outline our method is follows:
+
 \begin{enumerate}
 \item
 Identification of a consistent gene set between the TCGA and AOCS datasets.
@@ -397,19 +404,18 @@ Alignment of available metadata with computed metasamples, for TCGA and AOCS.
 \item 
 Survival analysis on TCGA and AOCS to investigate relationship between metasamples and patient survival.
 \item
-Clustered heatmaps to visualise relationships between metasamples, patients and metadata.
+Scatter plots and heat maps to investigate the relationships between metasamples and genomic features available for the AOCS dataset.
 \end{enumerate}
 
-\afterpage{\clearpage}
+\clearpage
 
 \subsubsection{Tools}
 \begin{itemize}
 \item Python 3.6
-\item PyCharm IDE
+\item PyCharm Integrated Development Environment
 \item Numpy for high performance matrix manipulation
 \item Pandas for data frame handing
-\item Matplotlib for general plotting
-\item Seaborn for heatmaps
+\item Matplotlib and Seaborn for general plotting
 \item Scikit-learn for matrix factorization and k-means clustering
 \item GOATOOLS package for gene enrichment analysis against GO
 \item Lifelines package for survival analysis.
@@ -417,9 +423,7 @@ Clustered heatmaps to visualise relationships between metasamples, patients and 
 
 A full list of software and libraries used, with versions, is given in appendix \ref{sec-software-versions}.
 
-\subsection{Data normalization and quality control}
 
-Expression data for the AOCS and TCGA datasets was received for this project in a spreadsheet format, having been derived from the RNA-Seq data as described in \cite{Ewing2020}, including  normalization by variance stabilizing transformation.   
 
 \subsection{Gene set intersection}
 \label{sec:gene-set-intersection}
@@ -427,7 +431,8 @@ Expression data for the AOCS and TCGA datasets was received for this project in 
 In order to allow factorizations found in the TCGA dataset to be applied to the AOCS dataset it is necessary (or at least convenient) to synchronize the set of genes over which the expression matrices are defined.   As provided to this project, the TCGA and AOCS datasets cover 19,610 and 19,730 protein coding genes respectively, 19,566 of which are common to both (according to ENSG encodings).  Thus, both datasets were pruned to the 19,566 intersection set and ordered consistently.
 
 \subsection{Matrix factorization computation}
-One of the aims of this work is to compare the efficacy of three methods of dimensionality reduction -- NMF, ICA and PCA -- as explained in the introduction.   The three methods have different properties and notational conventions, but to simplify the discussion here we adopt the notation $X \approx W H$ for all three methods, where $X$ is the (genes, patients) expression matrix  $W$ is the (genes, factors) metagenes matrix and $H$ is the (factors, patients) metasamples matrix.   
+One of the aims of this work is to compare the efficacy of three methods of dimensionality reduction -- NMF, ICA and PCA -- as explained in the introduction.   
+%The three methods have different properties and notational conventions, but to simplify the discussion here we adopt the notation $X \approx W H$ for all three methods, where $X$ is the (genes, patients) expression matrix  $W$ is the (genes, factors) metagenes matrix and $H$ is the (factors, patients) metasamples matrix.   
 
 Some of the key algorithm hyper parameters of each method were investigated and tuned with respect to reconstruction accuracy, specifically the root-mean square (RMS) difference between $X$ and $W H$. The following parameters were explored in each case:
 \begin{description}
@@ -435,6 +440,8 @@ Some of the key algorithm hyper parameters of each method were investigated and 
 \item[ICA:]  Parameters {\tt max\_iter} and {\tt tol} were investigated as for NMF above.  Additionally, options for the entropy functional which forms the basis of the optimiziation were investigated.
 \item[PCA:] This is in principle a deterministic algorithm based on eigenvector decomposition.  However, {\tt sklearn.decomposition.PCA} uses a more efficient 'randomized' algorithm when the given matrix is larger than 500 in both dimensions.  Thus in our use case PCA is seen to have stochastic behaviour.
 \end{description}
+
+\emph{TODO: probably best to state the chosen hyper parameters here}
 
 \subsection{Metagene selection by cluster coherence}
 \label{sec-metagene-selection}
@@ -446,21 +453,22 @@ A second and more fundamental source of variation of relevance to all three fact
 
 \emph{Bootstrap sampling} (also know as \emph{Monte Carlo} simulation) is a common method of empirically propagating the consequence of sampling error when the distribution or processing operations are difficult to model mathematically.   This is implemented by performing factorizations multiple times, at each iterations choosing N samples from the N available \emph{with replacement}.   For this work 50 repeats were performed, being a compromise between achieving an adequate simulation without overly burdensome computation time.  The overall process is summarised as pseudocode in figure \ref{fig-clustering-psuedocode}.  
 
-A complication arises in the computation of ICA and PCA facorizations, in that essentially the same factor can arise as $w$ or $-w$ vectors -- i.e. $180^\circ$ rotated. These would appear as separate cluster in repeated sampling, and confound attempts to collect and aggregate.  The solution adopted here is to normalise each factor by requiring that the most extreme element -- i.e. having the greatest absolute value -- is positive, the whole factor being negated if this is not the case.  This is arguably over simplistic, but seems to be effective in practice.
+A complication arises in the computation of ICA and PCA facorizations, in that essentially the same factor can arise as $w$ or $-w$ -- i.e. $180^\circ$ rotated vectors. These would appear as separate cluster in repeated sampling, and confound attempts to collect and aggregate.  The solution adopted here is to normalise each factor by requiring that the most extreme element -- i.e. having the greatest absolute value -- is positive, the whole factor being negated if this is not the case.  This is arguably over simplistic, but seems to be effective in practice.
 
 Each of the three factorizer methods was evaluated for rank $k$ between 2 and 10.  In each case, 50 iterations of factorization are performed on bootstrap samples, generating $50 k$ instances of 19,566 dimensioned metagenes.  Two dimensional t-SNE plots were generated for visualization purposes.   If sampling and algorithm initialisation error are modest then we expect to see $k$ tight clusters of points.   To avoid lengthy computation in the t-SNE clustering, the metagenes were first reduced to $r=20$ dimensions by PCA; brief experiments showed that this reduction had negligible effect on the t-SNE visualisation for $r \geq 10$.   
 
-In order to obtain median estimates of the $k$ metagenes from the $50 k$ which were generated, k-means clustering was performed in the PCA reduced (20 dimension) space, delivering $k$ sets of points.  These were referenced back to the original 19,566 dimensioned metagenes and the per-dimension median calculated.  These $k$ median metagenes were saved to a file named for the specific factorizer and rank $k$.  
+In order to obtain median estimates of the $k$ metagenes from the $50 k$ which were generated, k-means clustering was performed in the PCA reduced ($r=20$ dimension) space, delivering $k$ sets of points.  These were referenced back to the original 19,566 dimensioned metagenes and the per-dimension median calculated.  These $k$ median metagenes were saved to a file named for the specific factorizer and rank $k$.  
 
 The k-means clustering further allowed for a quantitative assessment of cluster coherence for the particular choice of factorizer and rank, via the \emph{silhouette score}.  In brief, this is a measure of how close (by Euclidean distance) each point in a cluster is to other points in the cluster versus points \emph{not} in the same cluster.  See 
 \href{https://en.wikipedia.org/wiki/Silhouette_(clustering)}{Wikipedia: Silouette (clustering)}.
+\emph{TODO: make this a reference}
 The score is in the range -1 to +1, with 0 implying random scatter and 1 implying all points of a cluster perfectly overlay.
 
-The t-SNE plots and silhouette scores were assessed visually (see figures \ref{fig-first-cluster-result} to \ref{fig-last-cluster-result}) to decide, for each of the three factorizers, the highest rank with good cluster coherence, those median metagenes to take forward to gene enrichment and survival analysis.   
+The t-SNE plots and silhouette scores were assessed visually to decide, for each of the three factorizers, the highest rank with good cluster coherence, those median metagenes to take forward to gene enrichment and survival and genomic feature correlation analysis.   
 Note that the t-SNE plots are used only for visualisation; they are not involved in the computation of median metagenes or silhouette score.
 
-Initial investigation on the N=80 AOCS dataset showed very poor cluster coherence, even for k=2.   Thus it was decided to compute and select metagenes only from the N=374 TCGA dataset.   
-The selection rationale is set out in the results section, but is convenient to state here that the following ranks were selected:
+Initial investigation on the N=80 AOCS dataset showed very poor cluster coherence, even for k=2 (this will be seen in the presented results).   Thus it was decided to compute and select metagenes only from the N=374 TCGA dataset.   
+The selection rationale is set out in the results section, but it is convenient to state here that the following ranks were selected:
 $K_{\mbox{\tiny NMF}} = 3, K_{\mbox{\tiny ICA}} = 5, K_{\mbox{\tiny PCA}} =3$.  Thus, there were $3 + 5 + 3 = 11$ metagenes taken forward for follow-on analysis.
 
 \begin{figure}[ht]
@@ -489,9 +497,20 @@ $K_{\mbox{\tiny NMF}} = 3, K_{\mbox{\tiny ICA}} = 5, K_{\mbox{\tiny PCA}} =3$.  
       
 \end{Verbatim}
 \end{center}
-\caption{Pseudocode for generating median metagenes and assessing there stability to random algorithm initialization and sampling error.}
+\caption{Pseudocode for generating median metagenes and assessing their stability to random algorithm initialization and sampling error.}
 \label{fig-clustering-psuedocode}
 \end{figure}
+
+\subsection{Determining metagene similarity by Jaccard index}
+
+It is pertinent to ask ``how similar are the 11 components which emerge from the foregoing factorization and cluster analysis?''.  We expect those coming from a single factorization method to be distinct by construction.  But perhaps ICA and PCA identified similar components.  Similarity with NMF derived components is possible but less likely due to the positivity constraint.  A possible approach to measuring similarity might be to treat the components as vectors and determine the angle between them, via the scalar or ``dot'' product.  But in such a high dimension space (19,566) any pair of vectors will be very close to $90^\circ$.
+
+An alternative to consider the intersection of the gene sets which each metagene highlights.  In the gene enrichment analysis which follows, candidate genes will be identified for each meatagene.  A standard measure of set similarity is the Jaccard index, (or similarity), defined on a pair of sets as:
+
+\[
+   \mbox{Jaccard}(A, B) = \frac{A \cap B}{A \cup B}.
+\]
+The measure lies between 0 (no similarity) and 1 (identical), and is symmetric.  Jaccard similarity was thus calculated for all pairs of the 11 genes sets and visualised as a heatmap.
 	   	  
 \subsection{Gene enrichment analysis}
 
@@ -507,17 +526,17 @@ Annotations linking human genes to GO concepts was downloaded from the GO websit
 The gene population was defined as the common 19,566 protein coding genes (see section \ref{sec:gene-set-intersection}) against which the metagenes were computed.  
 
 Uncorrected p-value threshold was set to 0.01.
-Multiple hypothesis significance testing used the false discovery rate (FDR) method of Bengamini and Hochberg, the FDR threshold being set to 0.01.  This is more stringent than the 0.05 value which is typically used, and was chosen since multiple metagenes are being analysed, implying multiple hypothesis testing over and above that which is accounted for by FDR filtering within a single gene enrichment analysis run.
+Multiple hypothesis significance testing used the false discovery rate (FDR) method of Bengamini and Hochberg, the FDR threshold being set to 0.01.  This is more stringent than the 0.05 value which is commonly used, and was chosen since multiple metagenes are being analysed, implying multiple hypothesis testing over and above that which is accounted for by FDR filtering within a single gene enrichment analysis run.
 
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=0.13]{GO_0042773_lineage.png}
 \caption{Example of a small section of the Gene Ontology (GO), focussed GO:0042773 (in purple), showing parents and children of the term.   Generated by GOATOOLS.}
-\label{fig:eg_go_graphic}
+\label{fig-eg_go_graphic}
 \end{center}
 \end{figure}
 
-The result of this analysis, per metagene, is a list of enriched (or depleted, however in our case no depleted terms were found) GO terms, each with an associated list of involved genes and a FDR significance level.   This list can be inspected directly for insights, but that misses the point of the GO, which is to organise the terms hierarchically by `is a' relationships.   Thus, the enriched terms were rendered graphically to show them in the context of their parent terms.   
+The result of this analysis, per metagene, is a list of enriched (or depleted, however in our case no depleted terms were found) GO terms, each with an associated list of involved genes and a FDR significance level.   This list can be inspected directly for insights, but that misses the point of the GO, which is to organise the terms hierarchically by `is a' relationships.   Thus, the enriched terms were rendered graphically to show them in the context of their parent terms; an example is shown in figure \ref{fig-eg_go_graphic}
 
 
 \subsection{Transfer of learned metagenes to novel a dataset}
@@ -568,49 +587,61 @@ Since in this work we wish to evaluate the efficacy of the three factorization m
 \subsection{Reconciling computed metasamples and metadata}
 \label{sec-reconciling-metasamples-metadata}
 
-To carry out patient level analysis -- survival analysis, heatmaps and boxplot -- as described in the following sections, it is necessary to compile tables (Panda DataFrames) which bring together per-patient metasamples relating to each of the selected metagenes, with associated metadata -- such as cellularity and survival information.   The metagenes always derive from the TCGA dataset (because of its larger size as explained in section \ref{sec-metagene-selection}), but we wish to apply these metagenes to the expression data and associated metadata of either the TCGA or AOCS datasets.   
-The mathematics of transferring metagenes across datasets has been described above.  Care is required to ensure that expression matrices aligned correctly with metagenes with respect to their genes (rows), and with the metadata with respect to patient identifiers in the columns.
+To carry out patient level analysis -- survival analysis, heatmaps and boxplot -- as described in the following sections, it is necessary to compile tables (Pandas DataFrames) which bring together per-patient metasamples relating to each of the selected metagenes, with associated metadata -- such as cellularity and survival information.   The metagenes always derive from the TCGA dataset (because of its larger size as explained in section \ref{sec-metagene-selection}), but we wish to apply these metagenes to the expression data and associated metadata of either the TCGA or AOCS datasets.   
+The mathematics of transferring metagenes across datasets has been described above.  Care is required to ensure that expression matrices are aligned correctly with metagenes with respect to their genes (rows), and with the metadata with respect to patient identifiers in the columns.
 Note that the same transferring approach is taken when metasamples are required for TCGA, even though we could in that case obtain the $H$ matrix directly from the factorization.
 
 
 \subsection{Survival analysis}
 \label{sec-survival-analysis}
 
-Survival analysis was performed to investigate whether the metasamples derived from the selected metagenes correlate with patient survival.  Overall  survival (OS) data is available for both the TCGA and AOCS datsets.  Additionally, progression free survival (PFS) data is available for AOCS.   As described above,  metagenes were obtained by factorization on the TCGA dataset only.  Application to TCGA (for OS) thus represents an in-sample test, while application to AOCS (for OS and PFS) is a more exacting out-of-sample test. There are thus three analyses to consider: 1) TCGA$\rightarrow$TCGA (OS), 2) TCGA$\rightarrow$OACS (OS) and 3) TCGA$\rightarrow$OACS (PFS).
+Survival analysis was performed to investigate whether the metasamples derived from the selected metagenes correlate with patient survival.  Overall  survival (OS) data is available for both the TCGA and AOCS datsets.  Additionally, progression free survival (PFS) data is available for AOCS.   As described above,  metagenes were obtained by factorization on the TCGA dataset only.  Application to TCGA (for OS) thus represents an in-sample test, while application to AOCS (for OS and PFS) is a more exacting out-of-sample test. There are thus three analyses to consider: 1) TCGA$\rightarrow$TCGA (OS), 2) TCGA$\rightarrow$AOCS (OS) and 3) TCGA$\rightarrow$AOCS (PFS). \emph{TODO: describe these three versions of analysis in words}.
 
 Analysis was performed using the Python {\tt Lifelines} package \cite{Davidson-Pilon2020}.  %Metasamples ($H$ matrices) were calculated from the metagenes and expression matrix as explained in section \ref{sec-transfer-to-novel} below.  
-Metasample values were binariased to 0, 1 by thresholding at the median value.   Kaplan-Meier plots were made in respect of derived metasample for each of the three analyses -- making $11 \times 3$ plots each with two survival curves and showing with 95\% confidence intervals.  A hazard ratio (HR)
-\footnote{Do I need to explain the definition and meaning of HR?}
+Metasample values were binariased to 0, 1 by thresholding at the median value.   Kaplan-Meier plots were made in respect of derived metasample for each of the three analyses -- making $11 \times 3$ plots each with two survival curves with 95\% confidence intervals.  A hazard ratio (HR)
 was calculated for each plot by fitting Cox's proportional hazards model with p-value relating to the hypothesis that HR is significantly different to 1.0.
 
 
-\subsection{Metasample heatmap analysis}
+\subsection{Investigating correlation between metasamples and genomic features}
 
-To further investigate the relationship between metasamples and to available patient metadata, clustered heatmaps were generated using the \href{https://seaborn.pydata.org/generated/seaborn.clustermap.html}{Seaborn {\tt clustermap()}} function from the reconciled metasamples and metadata (section \ref{sec-reconciling-metasamples-metadata}).  Heatmaps were generated for TCGA and AOCS datasets (\emph{Should say something about stratifying the metadata, when I figure it out}).  Heatmap clustering by correlation distance was applied.
+For the AOCS dataset (only) pre-determined per-patient high-level genomic features were available as follows:
+\begin{description}
+\item[WGD]: Whole genome doubling -- a marker of genome instability.  This is a binary feature.
+\item[Cellularity]: proportion of cells belonging to the tumour (as opposed to surrounding normal tissue).
+\item[HR Detect]: A predictor of homologous repair deficiency based on established mutational features \cite{Ewing2020}.
+\item[Mutational Load]: A measure of the total number of mutations present in the tumour genome.
+\item[CNV Load]: Copy-number variation, i.e. deviation from the normal diploid cell compliment.
+\item[SV Load]: Structural variation, a measure of the degree of chromosomal rearrangements such as translocations and inversions.
+\end{description}
 
-\subsection{Codebase}
+Scatter plots were generated between each metasample and each genomic features -- a grid of $11 \times 6 = 66$ plots in all.  These were based on the reconciled metasamples and metadata as described in section \ref{sec-reconciling-metasamples-metadata}.  Pearson's correlation coefficients ($r$) and associated p-values (i.e. the probability that $r$ does not differ from zero) were calculated.   However, since WGD is a binary feature, the more appropriate Point-Biserial correlation was used in that case.  A p-value significance threshold of 0.01 was chosen, although with 66 hypotheses being tested, this does risk false discovery.
 
-The described method was implemented in Python.
+As an alternative visualisation of the relationship between metasamples and genomic features, and to see the relationship between metasamples themselves, a clustered heatmaps was generated using the \href{https://seaborn.pydata.org/generated/seaborn.clustermap.html}{Seaborn {\tt clustermap()}} function based on the same underlying data as above.  
+
+
+\subsection{Codebase and plotting conventions}
+
+The described methodology was implemented in Python.
 %except for the KEGG gene enrichment analysis which was implemented in R.
-All code is available in a github repository: \url{https://github.com/ipoole/HgsocTromics}.  Good software engineering practice has been followed, with an object-oriented design, frequent commits and unit testing.  Unit tests are based on tiny expression matrices, just 100 genes by 10 patients, thus the whole test suite of over 60 tests executes in around 30 seconds.  These tests are particularly valuable when re-factoring code by providing a rapid means of detecting coding errors.  The total codebase is approximately 2,800 lines of Python.  All plots are generated in vector graphics pdf format to ensure smooth scaling to any resolution. 
+All code is available in a github repository: \url{https://github.com/ipoole/HgsocTromics}.  Good software engineering practice has been followed, with an object-oriented design, frequent commits and unit testing.  Unit tests are based on tiny expression matrices, just 100 genes by 10 patients, thus the whole test suite of over 60 tests executes in around 40 seconds and can be run frequently.  These tests are particularly valuable when re-factoring code.  The total codebase is approximately 2,900 lines of Python.  
 
+All plots are generated in vector graphics pdf format to ensure smooth scaling to any resolution.  A consistent colour scheme of \textcolor{blue}{blue}, \textcolor{orange}{orange} and \textcolor{olive}{green} was used for plots relating to NMF, ICA and PCA respectively.  Metagenes are consistently referred to by, for example, ``NMF-2-of-3" -- meaning the 2nd component of the rank $k=3$ NMF factorization.
 
 
 %%%%%%%%%%% RESULTS %%%%%%%%%%%%%
-\afterpage{\clearpage}
+\clearpage
 
 \section{Results}
 
-Results of applying the above described methodology are explained and presented here.   Deeper interpretation and discussion is deferred to the following section.  Throughout, consistent colours of \textcolor{blue}{blue}, \textcolor{orange}{orange} and \textcolor{green}{green} are used for results relating to NMF, ICA and PCA respectively.  Specific metagenes are referred to by, for example, ``NMF-2-of-3" -- meaning the 2nd component of the rank $k=3$ NMF factorization.
 
 % \subsection{Investigation of optimal parameters}
-\subsection{Cluster coherence analysis results}
+\subsection{Consideration of sampling error is crucial to finding robust metagene signals}
 
-From figure \ref{fig-AOCS-ica-fixed-vs-bootstrap} it can be seen that with sampling error excluded, clusters appear reasonably coherent, but when sampling error is modelled by bootstrap sampling then  the factorizations become much less stable.  This demonstrates that \emph{sampling} error is far greater than errors due to algorithm initialisation when the dataset is small (N=80), making metagene extraction unreliable.   Figure  \ref{fig-TCGA-ica-fixed-vs-bootstrap} makes the same comparison for the lager N=374 TCGA dataset, in which it can be seen that the impact of sampling error is not so severe.  For brevity only results for ICA are shown, but a very similar effect is observable for PCA and NMF.   
+From figure \ref{fig-AOCS-ica-fixed-vs-bootstrap} it can be seen that with sampling error excluded, clusters appear reasonably coherent, but when sampling error is modelled by bootstrap sampling then  the factorizations become much less stable.  This demonstrates that \emph{sampling} error is far greater than errors due to algorithm initialisation when the dataset is small (N=80), making metagene extraction unreliable.   Figure  \ref{fig-TCGA-ica-fixed-vs-bootstrap} makes the same comparison for the lager N=374 TCGA dataset, in which it can be seen that the impact of sampling error is not so severe.  For brevity only results for ICA are shown here; similar result for PCA and NMF can be found in the appendix, figures
 
-For this reason, and in line with our overall strategy, it is appropriate to perform all metagene extraction on the larger TCGA dataset, in the expectation that the obtained metagenes will be more robust and likely to better generalise to other datasets.
+For this reason it is appropriate to perform all metagene extraction on the larger TCGA dataset, in the expectation that the obtained metagenes will be more robust and likely to better generalise to other datasets.
 
-\def\S{0.4}
+\def\S{0.45}
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[scale=\S]{\plotspath{AOCS_Protein/FactorClustering/multiple_single_factors_scatter_AOCS_ICA_2_3_5_10_fixed.pdf}} \\
@@ -631,14 +662,14 @@ For this reason, and in line with our overall strategy, it is appropriate to per
 \end{figure}
 
 
-The critical decision of the choosing the factorization rank for each method -- $K_{\mbox{\tiny NMF}}$, $K_{\mbox{\tiny ICA}}$ and $K_{\mbox{\tiny PCA}}$ -- is based on figure \ref{fig-TCGA-all-bootstrap}.   On this bases, considering both the t-SNE plots and silhouette scores, the following choices were made:
+In choosing the factorization rank for each method, both the t-SNE plots and silhouette scrore graphs in  figure \ref{fig-TCGA-all-bootstrap} were carefully considered.  
+Firstly, $k>2$ is desirable to have sufficient information to work with.  NMF cluster coherence seems to deteriorate after $k=3$.   Looking at the graph of silhouette scores (figure \ref{fig-TCGA-all-bootstrap}, bottom), ICA appears to have a sweet spot at $k=5$.  For PCA, $k = 3$ or $4$ both seem reasonable.
+The following choices were made:
 $K_{\mbox{\tiny NMF}}  =  3,
 K_{\mbox{\tiny ICA}}  =  5,
-K_{\mbox{\tiny PCA}}  =  3$.
+K_{\mbox{\tiny PCA}}  =  3$.  These choices predicate all the results which follow.
 
-The rationale for these choices is that, firstly $k>2$ is desirable to have sufficient information to work with.  NMF cluster coherence seems to deteriorate after $k=3$.   Looking at the graph of silhouette scores (figure \ref{fig-TCGA-all-bootstrap}, bottom), ICA appears to have a sweet spot at $k=5$.  For PCA, $k = 3$ or $4$ both seem reasonable; $k=3$ was selected.
-
-There is a curious artefact visible in the NMF factorization clusterings of figure \ref{fig-TCGA-all-bootstrap}, top row.  For $k=2, 3$ and $5$ several of the clusters show a bi-modal character.  This is not observed in the fixed sampling case (not shown).  The artefact is difficult to explain.  It cannot be the $180^\circ$ rotation issue discussed earlier, since this does not apply to the all +ve components.
+There is a curious artefact visible in the NMF factorization clusterings of figure \ref{fig-TCGA-all-bootstrap}, top row.  For $k=2, 3$ and $5$ several of the clusters show a bi-modal character.  This is not observed in the fixed sampling case (not shown).  The artefact is difficult to explain.  It cannot be the $180^\circ$ rotation issue discussed earlier, since this does not apply to the all +ve components. \emph{TODO: hypothesis?}
 
 \begin{figure}[ht]
 \begin{center}
@@ -652,21 +683,9 @@ There is a curious artefact visible in the NMF factorization clusterings of figu
 \end{center}
 \end{figure}
 
-\afterpage{\clearpage}
+\subsection{Gene sets identified by metagenes of different methods intersect in some cases}
 
-\subsection{Gene Enrichment (against GO) Results}
-
-Gene enrichment analysis against the GO results in, for each of the 11 metagenes, a table of GO terms with a list of the candidate genes which have an annotated association to that term.   
-To take full advantage of the hierarchical nature of the GO, results are presented as lineage maps in figures \ref{fig-NMF-go-lineage} to \ref{fig-PCA-1-3-genesiso-lineage}.  
-The contributing candidate genes for all significantly enriched terms are shown beneath each figure.  
-(Ideally, the specific genes would be listed alongside each term, but this is difficult to achieve graphically).   
-High-level terms at depth less than 3 were removed, since these are generic (e.g. "regulation of biological process") and so uninteresting.   
-One component -- ICA-4-of-5 -- was problematic in that 49 GO terms (with depth $\geq 3$) were identified as significant.  
-For this component it was necessary to limit the graphic to the 12 terms having the largest number of associated candidate genes.   
-The full table of terms for this component is available in appendix \ref{tab-ica-4-of-5-enrichment-table}.  
-
-The four components NMF-3-of-3, ICA-1-of-5, ICA-2-of-5 and PCA-2-of-3 yielded no significant enriched terms (for FDR $\leq$ 0.01).
-
+The Jaccard heatmap of figure \ref{fig-component-jaccard-similarities} shows that some pairs of metagenes identify overlapping sets of genes, in particular the pairs (ICA-1-of-5, PCA-2-of-3: J=0.61) and (ICA-5-of-5, PCA-3-of-3: J=0.49).  As expected however, there is very little similarity between components \emph{within} a factorization method.
 
 \begin{figure}[ht]
 \begin{center}
@@ -676,13 +695,18 @@ The four components NMF-3-of-3, ICA-1-of-5, ICA-2-of-5 and PCA-2-of-3 yielded no
 \label{fig-component-jaccard-similarities}
 \end{figure}
 
-To what extent do the 11 components overlap in the candidate genes they propose (independent of enrichment analysis)?  Figure \ref{fig-component-jaccard-similarities} shows this by a heatmap of Jaccard similarities.  Jaccard similarity (or index) is defined on a pair of sets, in this case sets of genes, as:
-\[
-   \mbox{Jaccard}(A, B) = \frac{A \cap B}{A \cup B}
-\]
-lying between 0 (no similarity) and 1 (identical).
+\clearpage
 
-From this heatmap we can see that within a factorization method the components have almost no similarity -- they represent largely independent projections, as one would expect.  Between methods, however, there is considerable overlap in some cases.  In particular PCA 2\_of\_3 vs ICA 1\_of\_5 (J=0.61), PCA 3\_of\_3 vs ICA 5\_of\_5 (J=0.49) and NMF 1\_of\_3 vs ICA 3\_of\_5 (J=0.39).
+\subsection{Metagenes highlight genes which are enriched for particular biological processes}
+
+Gene enrichment analysis against the GO results in, for each of the 11 metagenes, a table of GO terms with a list of the candidate genes which have an annotated association to that term; this table can be found in the appendix, table \ref{tab-go-enrichment-results}.
+To take full advantage of the hierarchical nature of the GO, results are presented as lineage maps in figures \ref{fig-NMF-go-lineage} to \ref{fig-PCA-1-3-go-lineage}.  
+The contributing candidate genes for all significantly enriched terms are shown beneath each figure.  
+High-level terms at depth less than 3 were removed, since these are generic (e.g. "regulation of biological process") and so uninteresting.   
+One component -- ICA-4-of-5 -- was problematic in that 49 GO terms (with depth $\geq 3$) were identified as significant.  
+For this component it was necessary to limit the graphic to the 12 terms having the largest number of associated candidate genes.   
+
+The four components NMF-3-of-3, ICA-1-of-5, ICA-2-of-5 and PCA-2-of-3 yielded no significant enriched terms (for FDR $\leq$ 0.01).
 
 \begin{figure}[ht]
 \begin{center}
@@ -759,16 +783,44 @@ From this heatmap we can see that within a factorization method the components h
 \end{center}
 \end{figure}
 
+Considering the biological significance of each of the 11 extracted metagenes, with reference to the GO enrichment results:
+\begin{description}
+%
+\item[NMF 1-of-3]: this is related to the cellular structures and processes of the extra-cellular matrix (ECM), that is the proteins such as collagens which mediate the three-dimensional organisation of cells in a tissues.  ECM molecular composition will vary substantially between tissue types, but is also known to play a part in many disease processes \cite{Theocharis2019}.  Thus, this metagene may simply reflect heterogeneity of tissues in the biopsied sample, or may have some deeper disease related significance.
+%
+\item[NMF 2-of-3]: here we see enrichment of genes relating to the ribosomal subunit and the processes of RNA binding, implying perhaps a link with assembly of the ribosomal RNA-protein complex.   Ribosomes are known to have a role in carcinogenesis, by dysregulation the RNA $\rightarrow$ protein translation, or mutations in ribosomal subunits impacting on cellular metabolism \cite{Sulima2017}.
+%
+\item[NMF 3-of-3, ICA 1-of-5 and ICA 2-of-5]: no significant biological enrichment found.
+%
+\item[ICA 3-of-5]: this component relates to processes of multicellular / extracellular organisation, and the ECM.  It is therefore similar to NMF 1-of-3 above.
+\item[ICA 4-of-5]: this component is seen to relate to the ribosomal subunit (as NMF 2-of-3), additionally membrane proteins in the respiratory complex, mitochondrial and the NADH dehydrogenase complex.  Processes of organonitrogen biosynthesis are also highlighted. 
+%
+\item[ICA 5-of-5]: processes relating to regulation of immune response are enriched in this component, featuring genes from the major histocompatibility complex group, in particular the HLA- genes, allowing the immune system to recognise self from non-self.  GO terms relating to the endoplasmic reticulum (ER) are also highlighted.  It may be that this component is mainly sensitive to the immunohistochemical signature of patients, and therefore not of clinical interest.
+%
+\item[PCA 1-of-3]: there is mention of ECM related terms, as for ICA 3-of-5 and NMF 1-of-3.   However, there are also terms relating to the regulation of angiogenesis.  It is known that tumours have a need for increased blood supply, and that expression level of factors promoting angigenesis are associated with aggresiveness of tumour growth \cite{Nishida2006}.  
+We have already seen (section \ref{sec-subtype-classification}, \cite{Glass2015}) there is evidence for distinct subtypes of OC distinguished by angiogenesis related genes, and that these subtypes have been found to inform clinical outcome \cite{Glass2015}.  Thus, this component might contain useful prognostic value.
+%
+\item[PCA 2-of-3]: no significant biological enrichment found.
+%
+\item[PCA 3-of-3]: this component has some similarity with ICA 5-of-5, in that it refers to regulation of immune processes (HLA- genes) and ER membrane.   However, chemotaxis (cell movement) is also highlighted.
+\end{description}
 
-\afterpage{\clearpage}
+We have noted above that both NMF 1-of-3 and ICA 3-of-5 may be related to tissue type heterogeneity.  We have also seen from metasample heatmap analysis that these two metagenes are associated with closely correlated metasamples (in AOCS), and also to have a moderately high Jaccard similarity of 0.39.  Further, we observed that these components correlate negatively with cellularity.  This is as one would expect: low cellularity implies a mixture of tumour and non-tumour cell types, resulting in variation of ECM composition. 
 
-\subsection{Survival analysis results}
+Interestingly, the above summary of the gene enrichment results tentatively suggests component PCA 1-of-3 is most likely to have clinical prognostic value, based on a cursory look at the literature.  This perhaps supports an earlier observation that, while not conclusive, component PCA-1-of-3 comes closest to demonstrating correlation with patient survival (section \ref{sec-survival-analysis}, figure \ref{fig-summary-survival-plots}).
 
-Kaplan-Meier overall survival (OS) plots stratified by each metasample component are shown for the TCGA dataset in figure \ref{fig-kaplan-meier-os-TCGA-TCGA} and for the AOCS dataset in figure \ref{fig-kaplan-meier-os-TCGA-OACS}.  Plots for progression free survival (PFS) on OACS are shown in figure \ref{fig-kaplan-meier-pfs-TCGA-OACS}.   All plots show 95\% confidence intervals and hazard ratio (HR) with associated p-value.
+How should we interpret those four components which demonstrate no significant enrichment with biological meaning?  It is notable that all three methods have at least one such component.  Among these four, PCA 1-of-3 and ICA 1-of-5 have high (the highest) Jaccard similarity of 0.61.   For all other pairs among these four Jaccard similarity is negligible.  Perhaps these two components are picking up on similar technical variation between the samples?   
 
-All of these results are summarised in figure \ref{fig-summary-survival-plots}, which brings together the three sets of results -- TCGA (OS), OACS (OS) and OACS (PFS) --  with respect to the 11 metasample components.  $\log_2{\mbox{HR}}$ is used in order that the \emph{sense} of the survival impact can be readily appreciated.    If a metasample component has a robust correlation with survival, then we expect the p-value for all three sets of results to show significance \emph{and} for the effects to have the same sense -- be in the same direction.  None of the 11 components pass this test.   
 
-The component closest to correlation with survival would seem to be PCA 1-of-3, showing a reasonably consistent hazard ratio of around 1.3 ($2^{0.4}$) across the three experiments.  This has $p < 0.05$ in the larger TCGA dataset, but not in the smaller AOCS dataset.
+\clearpage
+
+\subsection{Association of unsupervised gene expression patterns with patient survival is inconclusive}
+
+Kaplan-Meier overall survival (OS) plots stratified by each metasample component are shown for the TCGA dataset in figure \ref{fig-kaplan-meier-os-TCGA-TCGA} and for the AOCS dataset in figure \ref{fig-kaplan-meier-os-TCGA-AOCS}.  Plots for progression free survival (PFS) on AOCS can be found in the appendix, figure \ref{fig-kaplan-meier-pfs-TCGA-AOCS}.   All plots show 95\% confidence intervals and hazard ratio (HR) with associated p-value.
+
+All of these results are summarised in figure \ref{fig-summary-survival-plots}, which brings together the three sets of results -- TCGA (OS), AOCS (OS) and AOCS (PFS) --  with respect to the 11 metasample components.  $\log_2{\mbox{HR}}$ is used in order that the \emph{sense} of the survival impact can be readily appreciated.    If a metasample component has a robust correlation with survival, then we expect the p-value for all three sets of results to show significance \emph{and} for the effects to have the same sense -- be in the same direction.  None of the 11 components pass this test.   
+
+The component with the largest observed effect on survival is PCA 1-of-3, showing a reasonably consistent hazard ratio of around 1.3 ($2^{0.4}$) across the three experiments.  This has $p < 0.05$ in the larger TCGA dataset, but not in the smaller AOCS dataset.
 
 \begin{figure}[ht]
 \begin{center}
@@ -783,16 +835,7 @@ The component closest to correlation with survival would seem to be PCA 1-of-3, 
 \begin{center}
 \includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_os_TCGA_AOCS.pdf}} 
 \caption{Kaplan-Meier plots for TCGA $\rightarrow$ TCGA for overall survival (OS).}
-\label{fig-kaplan-meier-os-TCGA-OACS}
-\end{center}
-\end{figure}
-
-
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_pfs_TCGA_AOCS.pdf}} 
-\caption{Kaplan-Meier plots for TCGA $\rightarrow$ TCGA for progression free survival (PFS).  }
-\label{fig-kaplan-meier-pfs-TCGA-OACS}
+\label{fig-kaplan-meier-os-TCGA-AOCS}
 \end{center}
 \end{figure}
 
@@ -802,104 +845,74 @@ The component closest to correlation with survival would seem to be PCA 1-of-3, 
 \includegraphics[scale=0.5]{\plotspath{/SurvivalAnalysis/survival_summary_barplots_NMF.pdf}} \\
 \includegraphics[scale=0.5]{\plotspath{/SurvivalAnalysis/survival_summary_barplots_ICA.pdf}} \\
 \includegraphics[scale=0.5]{\plotspath{/SurvivalAnalysis/survival_summary_barplots_PCA.pdf}}
-\caption{Visual summary of survival analysis as applied to TCGA(OS), AOCS(OS) and AOCS(PFS).  Plots are divided by factorization method.  Bar heights show $\log_2(\mbox{HR})$ with p-value also shown.  For a component to have robust correlation with survival we expect all three of the analysis bars to pass a significance threshold {\em and} for the $\log{\mbox{HR}}$ to to be {\em in the same sense\/}.  None achieve this.}
+\caption{Visual summary of survival analysis as applied to TCGA(OS), AOCS(OS) and AOCS(PFS).  Plots are divided by factorization method.  Bar heights show $\log_2(\mbox{HR})$ with p-value also shown.}
 \label{fig-summary-survival-plots}
 \end{center}
 \end{figure}
 
-\afterpage{\clearpage}
-
-\subsection{Metasample heatmap clustering results}
-As with survival analysis, metasamples were derived from the metagenes factorized from the TCGA dataset, then applied to both TCGA and AOCS.  The resulting heatmaps are shown in figures \ref{fig-heatmap-TCGA-TCGA} and \ref{fig-heatmap-TCGA-OACS} respectively.   Metadata was available for the AOCS dataset, and this is presented in colour coded columns on the left of figure \ref{fig-heatmap-TCGA-OACS}.   The meanings of each column are as follows:
-\begin{description}
-\item[WGD]: Whole genome doubling -- a marker of genome instability.
-\item[Cellularity]: proportion of cells belonging to the tumour (as opposed to surrounding normal tissue).
-\item[HR Detect]: A predictor of homologous repair deficiency based on established mutational features \cite{Ewing2020}.
-\item[Mutational Load]: A measure of the total number of mutations present in the tumour genome.
-\item[CNV Load]: Copy-number variation, i.e. deviation from the normal diploid cell compliment.
-% \item[Donor survival time]: (should probably remove).
-\end{description}
-
-The dendrogram clustering of metasamples (columns, top of figures) gives insights into the similarity of each metasample component, while the clustering of patients (rows, left of figures) offers insights into sub-populations of patients and how (in the case of AOCS only) these relate to metadata variables such as cellularity and mutational load.   These topics will be taken up in the following discussion section.
-
-\begin{figure}
-\begin{center}
-\includegraphics[scale=0.7]{\plotspath{HeatMaps/clustered_heatmap_TCGA_TCGA.pdf}} 
-\caption{Heatmap of the metasamples matrix for the TCGA dataset, computed from metagenes factorized also TCGA.   Clustering dendrograms (based on a correlation distance) are shown between the metasamples (columns) and patients (rows).}
-\label{fig-heatmap-TCGA-TCGA}
-\end{center}
-\end{figure}
-
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.7]{\plotspath{HeatMaps/clustered_heatmap_TCGA_AOCS.pdf}} 
-\caption{Heatmap of the metasamples matrix for the AOCS dataset, computed from metagenes factorized from the TCGA dataset.   Several patient metadata variables are shown in columns to the left.  (ToDo: key for metadata colouring).}
-\label{fig-heatmap-TCGA-OACS}
-\end{center}
-\end{figure}
-
 \clearpage
+
+
+%The dendrogram clustering of metasamples (columns, top of figures) gives insights into the similarity of each metasample component, while the clustering of patients (rows, left of figures) offers insights into sub-populations of patients and how (in the case of AOCS only) these relate to metadata variables such as cellularity and mutational load.   
+%These topics will be taken up in the following discussion section.
+
 
 \subsection{Metasample correlation with genomic features}
 
+From the grid of scatter plots shown in figure \ref{fig-genomic-scatters} it can be seen there are some significant correlations.  
+The sense (sign) of the correlation is arbitrary -- particularly for ICA and PCA -- recall normalisation w.r.t $180^\circ$ was applied. 
+ 
+The significant correlations are summarised in table \ref{tab-genomic-scatter-summary}.  
+WGD and Cellularity show correlation with at least one component from all three methods and indeed three components correlating with WGD also correlate with Cellularity and in the same sense.  
+This might suggest simply that WGD and Cellularity are themselves correlated, but this is not so: $r=-0.14, p=0.201$ for Point-Biserial correlation (data not shown).  % Latent factor??
+HR Detect correlates with two NMF and one ICA component, not intersecting with those above, suggesting distinct biological processes are involved.
+
+The heatmap dendrogram (figure \ref{fig-heatmap-TCGA-AOCS}) shows close correlation between metasamples pairs (NMF-1-of-3, ICA-5-of-5), (ICA-1-of-5, PCA-2-of-3) and (NMF-1-of-3, ICA-3-of-5).
+
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[scale=0.6, draft=false]{\plotspath{BoxAndScatters/wgd_boxplot_NMF_TCGA_AOCS.pdf}}
-\includegraphics[scale=0.6, draft=false]{\plotspath{BoxAndScatters/wgd_boxplot_ICA_TCGA_AOCS.pdf}}
-\includegraphics[scale=0.6, draft=false]{\plotspath{BoxAndScatters/wgd_boxplot_PCA_TCGA_AOCS.pdf}}
-\caption{Boxplots showing relationship between metasamples (derived from TCGA metagenes, applied to AOCS data) and whole genome doubling (WGD) status.  Metasamples from NMF, ICA and PCA are shown separately.  To allow convenient visualisation, each metasample is normalised to zero mean unit variance, hence between metasample variation is removed.}
-\end{center}
-\label{fig-wgd-boxplots}
-\end{figure}
-
-
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.54, draft=false]{\plotspath{BoxAndScatters/genomic_feature_scatters_TCGA_AOCS.pdf}} 
-\caption{Grid of scatter plots to visualise the correlation between metasamples and genomic features.  In the case of WGD which has binary values (0, 1), jitter is applied for visual effect only.   Above each plot is shown a correlation coefficient $r$ and associated p-value, highlighted with '***' where $p < 0.01$.  In the case of WGD , the Point-Biserial correlation is used; for all others Pearson's r is used.}
+\includegraphics[scale=0.5,draft=false]{\plotspath{BoxAndScatters/genomic_feature_scatters_TCGA_AOCS.pdf}} 
+\caption{Grid of scatter plots to visualise the correlation between metasamples and genomic features.  In the case of WGD which has binary values (0, 1), jitter is applied for visual effect only.   Above each plot is shown a correlation coefficient $r$ and associated p-value, highlighted with '***' where $p < 0.01$.  In the case of WGD , the Point-Biserial correlation is used; for all others Pearson's $r$ is used.}
 \label{fig-genomic-scatters}
 \end{center}
 \end{figure}
 
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.7, draft=false]{\plotspath{HeatMaps/clustered_heatmap_TCGA_AOCS.pdf}} 
+\caption{Heatmap of the metasamples matrix for the AOCS dataset, computed from metagenes factorized from the TCGA dataset.   Several patient metadata variables are shown in columns to the left.}
+\label{fig-heatmap-TCGA-AOCS}
+\end{center}
+\end{figure}
+
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+Genomic feature & Significant correlations \\
+\hline 
+WGD & NMF-1-of-3, ICA-5-of-5, PCA-3-of-3 \\
+Cellularity & NMF-1-of-3, ICA-3-of-5, ICA-5-of-5, PCA-3-of-3 \\
+HR Detect & NMF-2-of-3, NMF-3-of-3, ICA-2-of-5 \\
+Mutational load & None \\
+CNV load & None \\
+SV load & NMF-2-of-3 \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Summary of metasample components showing a significant correlation with each genomic feature.}
+\label{tab-genomic-scatter-summary}
+\end{table}
+
 \clearpage
+
 \section{Discussion}
 
 One valuable lesson from this work is the importance of accounting for sampling error, by bootstrapping,  when considering the stability of factorizations and thence the selection of factorization rank.    Sevaral authors comment on the variability of NMF and ICA factorization due to algorithm initialisation \cite{Kairov2017,Sompairac2019,WayGregory2019}, but most neglect sampling error which we have shown to be far more significant.   Cantini \etal\ \cite{Cantini2019a} mention bootstrapping, in reference to the BIODICA package (for ICA factorization), but it is unclear whether this is applied to the input data to model sampling error.  In the initial stages of the current work, BIODICA was used, and was found to recommend ranks of 14, 19 or 30.  Yet we have seen that such high ranks on the small n=80 dataset leads to highly unstable factorizations when bootstrap modelling of sampling error is included.
 
 These considerations lead to the selection of much lower ranks (fewer metagenes) than would otherwise be the case.
 
-Considering the biological significance of each of the 11 extracted metagenes:
-\begin{description}
-%
-\item[NMF 1-of-3]: this is related to the cellular structures and processes of the extra-cellular matrix (ECM), that is the proteins such as collagens which mediate the three-dimensional organisation of cells in a tissues.  ECM molecular composition will vary substantially between tissue types, but is also known to play a part in many disease processes \cite{Theocharis2019}.  Thus, this metagene may simply reflect heterogeneity of tissues in the biopsied sample, or may have some deeper disease related significance.
-%
-\item[NMF 2-of-3]: here we see enrichment of genes relating to the ribosomal subunit and the processes of RNA binding, implying perhaps a link with assembly of the ribosomal RNA-protein complex.   Ribosomes are known to have a role in carcinogenesis, by dysregulation the RNA $\rightarrow$ protein translation, or mutations in ribosomal subunits impacting on cellular metabolism \cite{Sulima2017}.
-%
-\item[NMF 3-of-3]: no significant biological enrichment found.
-%
-\item[ICA 1-of-5 and ICA 2-of-5]: no significant biological enrichment found.
-%
-\item[ICA 3-of-5]: this component relates to processes of multicellular / extracellular organisation, and the ECM.  It is therefore similar to NMF 1-of-3 above.
-\item[ICA 4-of-5]: this component is seen to relate to the ribosomal subunit (as NMF 2-of-3), additionally membrane proteins in the respiratory complex, mitochondrial and the NADH dehydrogenase complex.  Processes of organonitrogen biosynthesis are also highlighted. 
-%
-\item[ICA 5-of-5]: processes relating to regulation of immune response are enriched in this component, featuring genes from the major histocompatibility complex group, in particular the HLA- genes, allowing the immune system to recognise self from non-self.  GO terms relating to the endoplasmic reticulum (ER) are also highlighted.  It may be that this component is mainly sensitive to the immunohistochemical signature of patients, and therefore not of clinical interest.
-%
-\item[PCA 1-of-3]: there is mention of ECM related terms, as for ICA 3-of-5 and NMF 1-of-3.   However, there are also terms relating to the regulation of angiogenesis.  It is known that tumours have a need for increased blood supply, and that expression level of factors promoting angigenesis are associated with aggresiveness of tumour growth \cite{Nishida2006}.  Two distinct subtypes of ovarian cancer have been identified, defined on the expression of angiogenesis related genes.  Further, these subtypes have been found to inform clinical outcome \cite{Glass2015}.  Thus, this component might contain useful prognostic value.
-%
-\item[PCA 2-of-3]: no significant biological enrichment found.
-%
-\item[PCA 3-of-3]: this component has some similarity with ICA 5-of-5, in that it refers to regulation of immune processes (HLA- genes) and ER membrane.   However, chemotaxis (cell movement) is also highlighted.
-\end{description}
-
-We have noted above that both NMF 1-of-3 and ICA 3-of-5 may be related to tissue type heterogeneity.  We have also seen from metasample heatmap analysis that these two metagenes are associated with closely correlated metasamples in both the TCGA and OACS datasets, and also to have a moderately high Jaccard similarity of 0.39.  Further, we observed that these components correlate negatively with cellularity.  This is as one would expect: low cellularity implies a mixture of tumour and non-tumour cell types, resulting in variation of ECM composition. 
-
-Interestingly, the above summary of the gene enrichment results tentatively suggests component PCA 1-of-3 is most likely to have clinical prognostic value, based on a cursory look at the literature.  This perhaps supports an earlier observation that, while not conclusive, component PCA-1-of-3 comes closest to demonstrating correlation with patient survival (section \ref{sec-survival-analysis}, figure \ref{fig-summary-survival-plots}).
-
-How should we interpret those four components which demonstrate no significant enrichment with biological meaning?  It is notable that all three methods have at least one such component.  Among these four, PCA 1-of-3 and ICA 1-of-5 have high (the highest) Jaccard similarity of 0.61.   For all other pairs among these four Jaccard similarity is negligible.  Perhaps these two components are picking up on similar technical variation between the samples?   
-
-\subsection{Research questions revisited}
-
-TODO (sorry!).
+\emph{TODO: much more discussion!}
 
 
 \subsection{Further work}
@@ -916,7 +929,7 @@ In the current work, a single rank was selected for each method -- 3, 5 an 3 for
 \item
 {\bf Cross-dataset factorization stability}.  We went to considerable effort -- through bootstrap sampling and cluster analysis -- to select factorization ranks which we hoped would be robust and generalise well to other datasets.   A way to confirm this robustness would be to perform the factorization / clustering pipeline on \emph{both} datasets separately, yielding two sets of metagenes.  In a perfect world, these metagenes would pair up identically (in-so-far as the two datasets had identical technical characteristics, drawn from identical population of patients).  The Jaccard similarity heatmap could be used to verify this, and reject components which showed low cross-dataset similarity.
 \item
-{\bf Contrasting gene expression patters between cancers}.  The current work set out to find patters of gene expression in HGSOC.  Yet it is hard to say the highlighted patterns are specific to HGSOC, or generic to all cancers.  One way of teasing out cancer specific patterns might be to take a similar approach to the previous item, but instead of looking for metagenes which are consistent between datasets, find those which are distinct.  That said, there will likely be many more sophisticated approached in the literature, given the clinical importance of the topic.
+{\bf Contrasting gene expression patterns between cancers}.  The current work set out to find patters of gene expression in HGSOC.  Yet it is hard to say the highlighted patterns are specific to HGSOC, or generic to all cancers.  One way of teasing out cancer specific patterns might be to take a similar approach to the previous item, but instead of looking for metagenes which are consistent between datasets, find those which are distinct.  That said, there will likely be many more sophisticated approached in the literature, given the clinical importance of the topic.
 \item
 {\bf Systematic comparison with published gene expression patterns}.  In analysing the meaning of each metagene above, some tentative links were made with the research literature.   But this was anecdotal and frankly not particularly scientific; searching on PubMed for GO terms associated with HGSOC and looking at one or two hits!  A more systematic and ideally automated approach is required.  The \href{https://www.ncbi.nlm.nih.gov/geoprofiles}{Geo Profiles database} at NCBI, or the \href{https://www.ebi.ac.uk/gxa/home}{Expression Atlas} at EMBL-BI might be possible starting points.
 
@@ -931,9 +944,49 @@ TODO
 
 \section{Appendices}
 \subsection{Additional figures and plots}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=\S]{\plotspath{AOCS_Protein/FactorClustering/multiple_single_factors_scatter_AOCS_NMF_2_3_5_10_fixed.pdf}} \\
+\includegraphics[scale=\S]{\plotspath{AOCS_Protein/FactorClustering/multiple_single_factors_scatter_AOCS_NMF_2_3_5_10_bootstrap.pdf}}\\
+\caption{Clustering of metagenes from NMF facorizations on the AOCS dataset, comparing fixed and bootstrap sampling}
+\label{fig-AOCS-nmf-fixed-vs-bootstrap}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=\S]{\plotspath{AOCS_Protein/FactorClustering/multiple_single_factors_scatter_AOCS_PCA_2_3_5_10_fixed.pdf}} \\
+\includegraphics[scale=\S]{\plotspath{AOCS_Protein/FactorClustering/multiple_single_factors_scatter_AOCS_PCA_2_3_5_10_bootstrap.pdf}}\\
+\caption{Clustering of metagenes from PCA facorizations on the AOCS dataset, comparing fixed and bootstrap sampling}
+\label{fig-AOCS-pca-fixed-vs-bootstrap}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_pfs_TCGA_AOCS.pdf}} 
+\caption{Kaplan-Meier plots for TCGA $\rightarrow$ TCGA for progression free survival (PFS).  }
+\label{fig-kaplan-meier-pfs-TCGA-AOCS}
+\end{center}
+\end{figure}
+
+
 TODO - I'll likely move the AOCS survivial plots here, and perhaps some of the GO lineages.
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.6]{\plotspath{BoxAndScatters/wgd_boxplot_NMF_TCGA_AOCS.pdf}}
+\includegraphics[scale=0.6]{\plotspath{BoxAndScatters/wgd_boxplot_ICA_TCGA_AOCS.pdf}}
+\includegraphics[scale=0.6]{\plotspath{BoxAndScatters/wgd_boxplot_PCA_TCGA_AOCS.pdf}}
+\caption{Boxplots showing relationship between metasamples (derived from TCGA metagenes, applied to AOCS data) and whole genome doubling (WGD) status.  Metasamples from NMF, ICA and PCA are shown separately.  To allow convenient visualisation, each metasample is normalised to zero mean unit variance, hence between metasample variation is removed.}
+\end{center}
+\label{fig-wgd-boxplots}
+\end{figure}
+
+
 \subsection{Gene enrichment raw results}
-\label{tab-ica-4-of-5-enrichment-table}
+\label{tab-go-enrichment-results}
 TODO
 \subsection{Software libraries and versions}
 TODO
