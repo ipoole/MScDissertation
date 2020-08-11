@@ -1,6 +1,6 @@
 % MSc Dissertation on pattern expression in Ovarian Cancer
 
-\documentclass[draft, tikz, 12pt,a4paper,oneside,fleqn]{article}
+\documentclass[tikz, 12pt,a4paper,oneside,fleqn]{article}
 
 \usepackage[margin=1.5cm]{geometry}
 \usepackage[utf8]{inputenc}
@@ -124,8 +124,9 @@ Disssertation Supervisor:  Dr. Ailith Ewing
 \setcounter{page}{1}
 %\pagestyle{headings}
 
+\setlength{\parskip}{0em}
 \tableofcontents
-
+\setlength{\parskip}{1em}
 \newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Start of report for real %%%%%%%%%%%%%%%%%%%
@@ -405,12 +406,15 @@ Alignment of available metadata with computed metasamples, for TCGA and AOCS.
 Survival analysis on TCGA and AOCS to investigate relationship between metasamples and patient survival.
 \item
 Scatter plots and heat maps to investigate the relationships between metasamples and genomic features available for the AOCS dataset.
+\item
+Investigation of batch effects by repeating of metagene extraction and heatmaps on the \emph{combined} AOCS and TCGA datasets.
 \end{enumerate}
 
 \FloatBarrier
 
 \subsubsection{Tools}
 \begin{itemize}
+\itemsep -0.5em 
 \item Python 3.6
 \item PyCharm Integrated Development Environment
 \item Numpy for high performance matrix manipulation
@@ -420,12 +424,9 @@ Scatter plots and heat maps to investigate the relationships between metasamples
 \item GOATOOLS package for gene enrichment analysis against GO
 \item Lifelines package for survival analysis.
 \end{itemize}
-
 A full list of software and libraries used, with versions, is given in appendix \ref{sec-software-versions}.
 
-
-
-\subsection{Gene set intersection}
+\subsection{Syncrhonisation of gene sets accross AOCS and TCGA}
 \label{sec:gene-set-intersection}
 
 In order to allow factorizations found in the TCGA dataset to be applied to the AOCS dataset it is necessary (or at least convenient) to synchronize the set of genes over which the expression matrices are defined.   As provided to this project, the TCGA and AOCS datasets cover 19,610 and 19,730 protein coding genes respectively, 19,566 of which are common to both (according to ENSG encodings).  Thus, both datasets were pruned to the 19,566 intersection set and ordered consistently.
@@ -443,7 +444,7 @@ Some of the key algorithm hyper parameters of each method were investigated and 
 
 \emph{TODO: probably best to state the chosen hyper parameters here}
 
-\subsection{Metagene selection by cluster coherence}
+\subsection{Metagene extraction by cluster coherence}
 \label{sec-metagene-selection}
 Deciding on the number of components (factors, metagenes) to extract -- that is the factorization rank -- is key.  Taking more components results in more accurate representation of the observed expression matrix and provides more avenues to explore the underlying biology.  However, it is important that the metagenes are \emph{stable}, that is that they have reliable meaning when transfered to other datasets.   There are two sources of variation or instability to consider.
 
@@ -603,6 +604,7 @@ was calculated for each plot by fitting Cox's proportional hazards model with p-
 
 
 \subsection{Investigating correlation between metasamples and genomic features}
+\label{sec-genomic-features}
 
 For the AOCS dataset (only) pre-determined per-patient high-level genomic features were available as follows:
 \begin{description}
@@ -618,14 +620,17 @@ Scatter plots were generated between each metasample and each genomic features -
 
 As an alternative visualisation of the relationship between metasamples and genomic features, and to see the relationship between metasamples themselves, a clustered heatmaps was generated using the \href{https://seaborn.pydata.org/generated/seaborn.clustermap.html}{Seaborn {\tt clustermap()}} function based on the same underlying data as above.  
 
+\subsection{Investigating the impact of batch effects by analysis of a combined dataset}
+
+It has been claimed (e.g. \cite{Stein-OBrien2018}) that matrix factorization methods are an effective means of identifying and removing batch effects.  To verify this, the TCGA and AOCS datasets (after gene set intersection), were horizontally concatenated producing an $n=80+274=354$ patient dataset with a substantial batch artefact.  Survival data is available for both datasets, so this was preserved as metadata associated with the combined datasets. The previously described analyses of metagene extraction, metasample computation and clustered heatmap and survival analysis were repeated on this dataset.  Ideally, the factorization rank selected for each method should be reconsidered, since the larger dataset could justify extracting more components.  For simplicity this was not done however, the previously selected $k = 3,5,3$ for NMF, ICA and PCA respectively being maintained.   Note however that we should not expect the extracted metagenes and derived metasamples to be equivalent. Genomic feature correlation w.r.t these newly extracted components was performed using the AOCS datasets.  Theses results were inspected; is there evidence of some metasamples aligning with technical batch effects while others align with biological processes?
 
 \subsection{Codebase and plotting conventions}
 
 The described methodology was implemented in Python.
 %except for the KEGG gene enrichment analysis which was implemented in R.
-All code is available in a github repository: \url{https://github.com/ipoole/HgsocTromics}.  Good software engineering practice has been followed, with an object-oriented design, frequent commits and unit testing.  Unit tests are based on tiny expression matrices, just 100 genes by 10 patients, thus the whole test suite of over 60 tests executes in around 40 seconds and can be run frequently.  These tests are particularly valuable when re-factoring code.  The total codebase is approximately 2,900 lines of Python.  
+All code is available in a github repository: \url{https://github.com/ipoole/HgsocTromics}.  Good software engineering practice has been followed, with an object-oriented design, frequent commits and unit testing.  A base class is used to present a uniform interface for the three factorization methods.  Intermediate results are cached with lazy computation for efficient working without ordering dependency.  Unit tests are based on tiny expression matrices, just 100 genes by 10 patients, thus the whole test suite of over 65 tests executes in around 45 seconds and so can be run frequently.  The total codebase is approximately 2,900 lines of Python.  
 
-All plots are generated in vector graphics pdf format to ensure smooth scaling to any resolution.  A consistent colour scheme of \textcolor{blue}{blue}, \textcolor{orange}{orange} and \textcolor{olive}{green} was used for plots relating to NMF, ICA and PCA respectively.  Metagenes are consistently referred to by, for example, ``NMF-2-of-3" -- meaning the 2nd component of the rank $k=3$ NMF factorization.
+All plots are generated in vector graphics pdf format to ensure smooth scaling to any resolution.  A consistent colour scheme of \textcolor{blue}{blue}, \textcolor{orange}{orange} and \textcolor{olive}{green} is used for plots relating to NMF, ICA and PCA respectively.  Metagenes are consistently referred to by, for example, ``NMF-2-of-3" -- meaning the 2nd component of the rank $k=3$ NMF factorization.
 
 
 %%%%%%%%%%% RESULTS %%%%%%%%%%%%%
@@ -639,7 +644,7 @@ All plots are generated in vector graphics pdf format to ensure smooth scaling t
 
 From figure \ref{fig-AOCS-ica-fixed-vs-bootstrap} it can be seen that with sampling error excluded, clusters appear reasonably coherent, but when sampling error is modelled by bootstrap sampling then  the factorizations become much less stable.  This demonstrates that \emph{sampling} error is far greater than errors due to algorithm initialisation when the dataset is small (N=80), making metagene extraction unreliable.   Figure  \ref{fig-TCGA-ica-fixed-vs-bootstrap} makes the same comparison for the lager N=374 TCGA dataset, in which it can be seen that the impact of sampling error is not so severe.  For brevity only results for ICA are shown here; similar result for PCA and NMF can be found in the appendix, figures
 
-For this reason it is appropriate to perform all metagene extraction on the larger TCGA dataset, in the expectation that the obtained metagenes will be more robust and likely to better generalise to other datasets.
+For this reason it is was decided to perform all metagene extraction on the larger TCGA dataset, in the expectation that the obtained metagenes will be more robust and likely to better generalise to other datasets.
 
 \def\S{0.45}
 \begin{figure}[htb!]
@@ -683,7 +688,7 @@ There is a curious artefact visible in the NMF factorization clusterings of figu
 \end{center}
 \end{figure}
 
-\subsection{Gene sets identified by metagenes of different methods intersect in some cases}
+\subsection{Jaccard similarity shows metagenes identify intersecting gene sets in some cases}
 
 The Jaccard heatmap of figure \ref{fig-component-jaccard-similarities} shows that some pairs of metagenes identify overlapping sets of genes, in particular the pairs (ICA-1-of-5, PCA-2-of-3: J=0.61) and (ICA-5-of-5, PCA-3-of-3: J=0.49).  As expected however, there is very little similarity between components \emph{within} a factorization method.
 
@@ -815,7 +820,7 @@ Considering the biological significance of each of the 11 extracted metagenes, w
 \item[ICA 3-of-5]: this component relates to processes of multicellular / extracellular organisation, and the ECM.  It is therefore similar to NMF 1-of-3 above.
 \item[ICA 4-of-5]: this component is seen to relate to the ribosomal subunit (as NMF 2-of-3), additionally membrane proteins in the respiratory complex, mitochondrial and the NADH dehydrogenase complex.  Processes of organonitrogen biosynthesis are also highlighted. 
 %
-\item[ICA 5-of-5]: processes relating to regulation of immune response are enriched in this component, featuring genes from the major histocompatibility complex group, in particular the HLA- genes, allowing the immune system to recognise self from non-self.  GO terms relating to the endoplasmic reticulum (ER) are also highlighted.  It may be that this component is mainly sensitive to the immunohistochemical signature of patients, and therefore not of clinical interest.
+\item[ICA 5-of-5]: processes relating to regulation of immune response are enriched in this component, featuring genes from the major histocompatibility complex (MHC) group, in particular the HLA- genes, allowing the immune system to recognise self from non-self.  GO terms relating to the endoplasmic reticulum (ER) are also highlighted.  It may be that this component is mainly sensitive to the immunohistochemical signature of patients, and therefore not of clinical interest.
 %
 \item[PCA 1-of-3]: there is mention of ECM related terms, as for ICA 3-of-5 and NMF 1-of-3.   However, there are also terms relating to the regulation of angiogenesis.  It is known that tumours have a need for increased blood supply, and that expression level of factors promoting angigenesis are associated with aggresiveness of tumour growth \cite{Nishida2006}.  
 We have already seen (section \ref{sec-subtype-classification}, \cite{Glass2015}) there is evidence for distinct subtypes of OC distinguished by angiogenesis related genes, and that these subtypes have been found to inform clinical outcome \cite{Glass2015}.  Thus, this component might contain useful prognostic value.
@@ -824,12 +829,6 @@ We have already seen (section \ref{sec-subtype-classification}, \cite{Glass2015}
 %
 \item[PCA 3-of-3]: this component has some similarity with ICA 5-of-5, in that it refers to regulation of immune processes (HLA- genes) and ER membrane.   However, chemotaxis (cell movement) is also highlighted.
 \end{description}
-
-We have noted above that both NMF 1-of-3 and ICA 3-of-5 may be related to tissue type heterogeneity.  We have also seen from metasample heatmap analysis that these two metagenes are associated with closely correlated metasamples (in AOCS), and also to have a moderately high Jaccard similarity of 0.39.  Further, we observed that these components correlate negatively with cellularity.  This is as one would expect: low cellularity implies a mixture of tumour and non-tumour cell types, resulting in variation of ECM composition. 
-
-Interestingly, the above summary of the gene enrichment results tentatively suggests component PCA 1-of-3 is most likely to have clinical prognostic value, based on a cursory look at the literature.  This perhaps supports an earlier observation that, while not conclusive, component PCA-1-of-3 comes closest to demonstrating correlation with patient survival (section \ref{sec-survival-analysis}, figure \ref{fig-summary-survival-plots}).
-
-How should we interpret those four components which demonstrate no significant enrichment with biological meaning?  It is notable that all three methods have at least one such component.  Among these four, PCA 1-of-3 and ICA 1-of-5 have high (the highest) Jaccard similarity of 0.61.   For all other pairs among these four Jaccard similarity is negligible.  Perhaps these two components are picking up on similar technical variation between the samples?   
 
 
 \FloatBarrier
@@ -862,24 +861,15 @@ The component with the largest observed effect on survival is PCA 1-of-3, showin
 \end{center}
 \end{figure}
 
-\FloatBarrier
-
 
 %The dendrogram clustering of metasamples (columns, top of figures) gives insights into the similarity of each metasample component, while the clustering of patients (rows, left of figures) offers insights into sub-populations of patients and how (in the case of AOCS only) these relate to metadata variables such as cellularity and mutational load.   
 %These topics will be taken up in the following discussion section.
 
 
-\subsection{Metasample correlation with genomic features}
+\subsection{Metasamples correlate with genomic features}
 
-From the grid of scatter plots shown in figure \ref{fig-genomic-scatters} it can be seen there are some significant correlations.  
-The sense (sign) of the correlation is arbitrary -- particularly for ICA and PCA -- recall normalisation w.r.t $180^\circ$ was applied. 
- 
-The significant correlations are summarised in table \ref{tab-genomic-scatter-summary}.  
-WGD and Cellularity show correlation with at least one component from all three methods and indeed three components correlating with WGD also correlate with Cellularity and in the same sense.  
-This might suggest simply that WGD and Cellularity are themselves correlated, but this is not so: $r=-0.14, p=0.201$ for Point-Biserial correlation (data not shown).  % Latent factor??
-HR Detect correlates with two NMF and one ICA component, not intersecting with those above, suggesting distinct biological processes are involved.
+From the grid of scatter plots shown in figure \ref{fig-genomic-scatters} it can be seen there are some significant correlations at play.  These are summarised and analysed in the next section.
 
-The heatmap dendrogram (figure \ref{fig-heatmap-TCGA-AOCS}) shows close correlation between metasamples pairs (NMF-1-of-3, ICA-5-of-5), (ICA-1-of-5, PCA-2-of-3) and (NMF-1-of-3, ICA-3-of-5).
 
 \begin{figure}[htb!]
 \begin{center}
@@ -889,40 +879,62 @@ The heatmap dendrogram (figure \ref{fig-heatmap-TCGA-AOCS}) shows close correlat
 \end{center}
 \end{figure}
 
-\begin{figure}[htb!]
-\begin{center}
-\includegraphics[scale=0.7, draft=false]{\plotspath{HeatMaps/clustered_heatmap_TCGA_AOCS.pdf}} 
-\caption{Heatmap of the metasamples matrix for the AOCS dataset, computed from metagenes factorized from the TCGA dataset.   Several patient metadata variables are shown in columns to the left.}
-\label{fig-heatmap-TCGA-AOCS}
-\end{center}
-\end{figure}
-
-\begin{table}[htb!]
-\begin{center}
-\begin{tabular}{|l|l|}
-\hline
-Genomic feature & Significant correlations \\
-\hline 
-WGD & NMF-1-of-3, ICA-5-of-5, PCA-3-of-3 \\
-Cellularity & NMF-1-of-3, ICA-3-of-5, ICA-5-of-5, PCA-3-of-3 \\
-HR Detect & NMF-2-of-3, NMF-3-of-3, ICA-2-of-5 \\
-Mutational load & None \\
-CNV load & None \\
-SV load & NMF-2-of-3 \\
-\hline
-\end{tabular}
-\end{center}
-\caption{Summary of metasample components showing a significant correlation with each genomic feature.}
-\label{tab-genomic-scatter-summary}
-\end{table}
 
 \FloatBarrier
 
-\section{Matrix factorization discovers and effectively removes batch effects}
+\subsection{Integrative analysis of results}
 
-Here are presented results of applying the three MF methods to the combined AOCS and TCGA datasets. 
+Table \ref{tab-integrative-analysis} summarises the key results of all the forgoing analysis.  
+ 
+\begin{table}[htb!]
+\begin{center}
+\begingroup
+\scriptsize
+\renewcommand{\arraystretch}{1.4} % Default value: 1
+\begin{tabular}{|l||c|c|c|c|c|c|c|l|l|}
+\hline
+Metagene & S'val & WGD & Cell. & HRD & Mut.L. & CN.L. & SV.L. & Enriched GO terms & Similar to\\
+\hline
+%     & S & W & C & H % M & C & S & Enriched % Sim.
+NMF-1 & . & Y-& Y-& . & . & . & . & Extra-cellular matrix (ECM) & ICA-3, PCA-1 \\
+NMF-2 & . & . & . & Y+& . & . & Y+& Ribo. subunit & - \\
+NMF-3 & - & - & - & Y-& . & . & . & . & . \\
+\hline
+ICA-1 & . & . & . & . & . & . & . & . & PCA-2 \\
+ICA-2 & . & . & . & . & . & . & . & . & . \\
+ICA-3 & . & . & Y-& . & . & . & Y-& ECM, multicellular org. & NMF-1, PCA-1 \\
+ICA-4 & . & . & . & . & . & . & . & Ribo subunit, Mitoch. NADH dehydr. & - \\
+ICA-5 & . & Y+& Y+& . & . & . & . & Immune response, MHC & PCA-3 \\
+\hline
+PCA-1 & Y+& . & Y-& . & . & . & . & ECM, Reg. angiogenesis & NMF-1, ICA-3 \\
+PCA-2 & . & . & . & . & . & . & . & . & ICA-1 \\
+PCA-3 & . & Y-& Y-& . & . & . & . & Immune response, MHC, chemotaxis & ICA-5 \\
+\hline
+\end{tabular}
+\endgroup
+\end{center}
+\caption{For each metagenes a 'Y' indicates that a significant correlation was observed with: Survival, WGD, HRD, Mutational load,  CNV load and SV load.  The next column gives a terse summary of the gene enrichment analysis results.  The final column lists the metagenes which are apparently similar -- having a Jaccard similarity of $\geq 0.35$.}
+\label{tab-integrative-analysis}
+\end{table}
+From this summary table we can make some interesting observations:
+\begin{description}
+\item[ECM relationship to Cellularity?]
+We see that NMF-1, ICA-3 and PCA-1 each have an ECM association and we have noted this could be related to tissue type heterogeneity.   These three components (one from each of the methods) are also observed to be correlated with Cellularity.  The sense (+/-1) of the correlation is meaningful for NMF (not so for ICA or PCA) and we see that ECM and thence tissue heterogeneity is negatively correlated with cellularity. This seems reasonable, in that a low Cellularity implies that a greater proportion of surrounding non-tumour tissue is included in the sample, so increasing heterogeneity.   That these three components turn out to be similar by the Jaccard index is as would be expected given their functional similarity.
+\item[Angiogenesis link with survival?]
+The only component showing (albeit weak) correlation with patient survival is PCA-1.  Interestingly, this same component is also found to be linked with Go terms relating to the regulation of angiogenesis, which in turn is related to aggressiveness of tumour growth and outcomes.  Thus, these observations are telling a consistent story.
+\item[Normal cell activity?]
+Component ICA-4 highlights the greatest number of biological processes -- indeed the GO lineage map \ref{fig-ICA-4-go-lineage} needed to be pruned to fit on a page.  And yet this component shows no correlation with any disease related factors, neither survival nor genomic features.  It may be that this component is simply picking up on the normal metabolic activity of the cells,
+\item[Technical batch effects?]
+There are four components (NMF-3, ICA-2, ICA-4 and PCA-2) showing no enrichment of GO terms.  These components also show almost no correlation with disease related factors (the exception being NMF-3 linking with HRD).  With that exception aside, we could conclude that these components have little biological meaning, and are instead picking up technical effects.  I do not know how the TCGA dataset was assembled; perhaps there are multiple batches within the set?
+\item[WGD and Cellularity have curious common influences.]
+The three components NMF-1, ICA-5 and PCA-3 (one from each method) correlate with both WGD and Cellularity, and in the same sense. 
+This might suggest simply that WGD and Cellularity are themselves positively correlated, but this is not so: $r=-0.14, p=0.201$ for Point-Biserial correlation (data not shown).  Neither is there any close similarity between the three components by Jaccard, although ICA-5 and PCA-3 are both linked to immune response and MHC.   Is there some curious non-linear interaction?
+\item[Mutational load CNV load are not captured by these components.]  This is somewhat surprising, perhaps the link would emerge with more extracted components.
+\end{description} 
 
+\subsection{Matrix factorization discovers and effectively removes batch effects}
 
+Here are presented results of applying the three MF methods to the \emph{combined} AOCS and TCGA datasets. 
 
 \begin{figure}[htb!]
 \begin{center}
@@ -945,6 +957,37 @@ Here are presented results of applying the three MF methods to the combined AOCS
 
 From the clustered heatmap of figure \ref{fig-heatmap-BOTH} it is clear that the five components clustered to the left are highly sensitive to the batch effect.   
 
+\begin{table}[htb!]
+\begin{center}
+\begingroup
+\scriptsize
+\renewcommand{\arraystretch}{1.4} % Default value: 1
+\begin{tabular}{|l||c|c|c|c|c|c|c|c|l|l|}
+\hline
+Metagene & Which & WGD & Cell. & HRD & Mut.L. & CN.L. & SV.L. & Enrichment? \\
+\hline
+%     & w & W & C & H % M & C & S & Enrichment?
+NMF-1 & Y & . & . & . & . & . & . &  Y \\
+NMF-2 & Y & Y & Y & . & . &   & . &  Y \\
+NMF-3 & . & Y & Y & . & . & . & . &  Y \\
+\hline
+ICA-1 & Y & . & . & . & . & . & . &  . \\
+ICA-2 & Y & . & . & . & . & . & . &  . \\
+ICA-3 & . & . & . & . & . &   & . &  Y \\
+ICA-4 & . & Y & Y & . & . & . & . &  Y \\
+ICA-5 & . & . & . & . & . & . & . &  Y \\
+\hline
+PCA-1 & . & Y & Y & . & . & . & . &  Y \\
+PCA-2 & Y & . & . & . & . & . & . &  . \\
+PCA-3 & Y & . & . & . & . & . & . &  . \\
+\hline
+\end{tabular}
+\endgroup
+\end{center}
+\caption{In a similar format as table \ref{tab-integrative-analysis}, this summarises results of in respect of the \emph{combined AOCS and TCGA} datasets.  The key point here is that a known batch effect has been introduced, reflected in the 'Which' column. Note that since these metagenes have been re-extracted from different data, they are distinct from those analysed in the previous section}
+\label{tab-integrative-analysis-BOTH}
+\end{table}
+
 \clearpage
 
 \section{Discussion}
@@ -962,8 +1005,6 @@ This work has thrown up several possible lines of further study:
 \begin{enumerate}
 \item
 {\bf Algorithm hyper-parameters}.  NMF and ICA algorithms have a number of hyper-parameters, only a few of which were explored in this work.  For example, NMF has parameters to encourage sparsity through L1 regularization.   This should result in many (most?) metagene elements reducing to zero, and might offer a more robust means of selecting candidate genes to feed into gene enrichment analysis -- replacing the current arbitrary 3 SD from the mean rule.
-\item
-{\bf Discovering batch effects}.  It has been claimed (e.g. \cite{Stein-OBrien2018}) that matrix factorization methods are an effective means of identifying and removing batch effects.  This could be explored by horizontally concatenating the TCGA and AOCS datasets (after gene set intersection), producing an $n=80+274=354$ dataset with a substantial batch artefact.  Factorizations of this combined dataset should be more robust because of the larger $n$.  Does each of NMF, ICA and PCA naturally produce a component which correlates with batch?
 \item
 {\bf Selecting components from several factorization ranks}.
 In the current work, a single rank was selected for each method -- 3, 5 an 3 for NMF, ICA and PCA respectively.  Unlike PCA, components extracted by NMF and ICA  do not `nest' with rank; that is adding rank in general yields a new set of components.  Thus one might, for NMF and ICA, perform factorizations at $k=2,3,4,5$, say, yielding $2 \times 15 = 30$ potential components in total.  Jaccard similarity could be used to identify that subset of components which had the least overlap in detected genes.   In this way, a larger number of components could be obtained without use of high factorization ranks which we have seen to be unstable.
@@ -1023,15 +1064,12 @@ TODO
 \end{center}
 \end{figure}
 
-
 \begin{figure}[htb!]
 \begin{center}
-\includegraphics[scale=0.6]{\plotspath{BoxAndScatters/wgd_boxplot_NMF_TCGA_AOCS.pdf}}
-\includegraphics[scale=0.6]{\plotspath{BoxAndScatters/wgd_boxplot_ICA_TCGA_AOCS.pdf}}
-\includegraphics[scale=0.6]{\plotspath{BoxAndScatters/wgd_boxplot_PCA_TCGA_AOCS.pdf}}
-\caption{Boxplots showing relationship between metasamples (derived from TCGA metagenes, applied to AOCS data) and whole genome doubling (WGD) status.  Metasamples from NMF, ICA and PCA are shown separately.  To allow convenient visualisation, each metasample is normalised to zero mean unit variance, hence between metasample variation is removed.}
+\includegraphics[scale=0.7]{\plotspath{HeatMaps/clustered_heatmap_TCGA_AOCS.pdf}} 
+\caption{Heatmap of the metasamples matrix for the AOCS dataset, computed from metagenes factorized from the TCGA dataset.   Several patient metadata variables are shown in columns to the left.}
+\label{fig-heatmap-TCGA-AOCS}
 \end{center}
-\label{fig-wgd-boxplots}
 \end{figure}
 
 
@@ -1046,13 +1084,6 @@ TODO
 \end{center}
 \end{figure}
 
-\begin{figure}[htb!]
-\begin{center}
-\includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_os_BOTH_BOTH.pdf}} 
-\caption{Kaplan-Meier plots for each metasample component, stratified at the median value, for the combined AOCS + TCGA dataset}
-\label{fig-kaplan-meier-os-BOTH}
-\end{center}
-\end{figure}
 
 \begin{figure}[htb!]
 \begin{center}
