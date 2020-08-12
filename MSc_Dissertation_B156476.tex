@@ -1,6 +1,6 @@
 % MSc Dissertation on pattern expression in Ovarian Cancer
 
-\documentclass[tikz, 12pt,a4paper,oneside,fleqn]{article}
+\documentclass[draft,tikz, 12pt,a4paper,oneside,fleqn]{article}
 
 \usepackage[margin=1.5cm]{geometry}
 \usepackage[utf8]{inputenc}
@@ -76,7 +76,7 @@
 \huge
 \vspace{0.3in}
 \bf
-Disentangling patterns of gene expression in high grade serous ovarian cancer
+Disentangling patterns of gene expression in high grade serous ovarian cancer by matrix factorization
 \vspace{0.2in}
 \end{center}
 \vspace{0.2in}
@@ -176,8 +176,6 @@ Studying the combined landscape of chromosomal rearrangements, driver mutations 
 
 \subsubsection{Subtype classification}
 \label{sec-subtype-classification}
-
-A relatively early (2003) expression microarray based work demonstrated clustering into lymphocyte related genes (IGH3, IGKC, IGLJ3), extracellular matrix/stromal related (COL11A1, COL3A1, MMP2, SPARC, RBBP1) and six other clusters \cite{Schaner2003}.
 
 A relatively early (2003) expression microarray based work demonstrated clustering into lymphocyte related genes (IGH3, IGKC, IGLJ3), extracellular matrix/stromal related (COL11A1, COL3A1, MMP2, SPARC, RBBP1) and six other clusters \cite{Schaner2003}.
 
@@ -337,7 +335,7 @@ In the case of NMF and ICA, the $W$ and $H$ matrices cannot be trivially exchang
 
 There is substantial confusion and lack of clarity in the way that matrix factorization, particularly ICA, is applied in transcriptomics research.  
 ``Surprisingly, both ways of applying ICA to omics data are wide-spread, and sometimes it takes an effort to figure out in which way ICA was applied" \cite{Sompairac2019}, and ``Different protocols to apply ICA to transcriptomic data exist and currently no single standard approach has been defined. The main difference in the existing approaches consists in what is considered as source signal matrix in the decomposition" \cite{Cantini2019}.  
-According to Cantini \etal\, references \cite{Au-Yeung2014}, \cite{Kairov2017}, \cite{Kong2008} and \cite{Lee2003} optimise metagenes, while references \cite{Meng2016} and \cite{Barillot2013} optimises metasamples.
+According to \cite{Cantini2019}, references \cite{Au-Yeung2014,Kairov2017,Kong2008,Lee2003},  optimise metagenes, while references \cite{Meng2016,Barillot2013} optimises metasamples.
 
 
 \subsubsection{Determining the optimum number of factors}
@@ -346,17 +344,29 @@ The number of factors, or rank $k$, to extract is a key decision in any matrix f
 
 The problem of determining the optimal $k$ for a given expression matrix is addressed  by Kairov \etal\ \cite{Kairov2017}, based on optimizing the \emph{stability} of the components over multiple algorithm initializations.
 
+\subsubsection{Comparative studies of dimensionality reduction methods for gene expression analysis}
 
-\subsection{Research goals}
-This work is concerned with analysing the patterns gene expression in HGSOC by dimensionality reduction techniques of matrix factorization, and relating these patterns to clinical and genomic features.
+Recent work by Way \etal\ \cite{WayGregory2019} was aimed directly at answering the question which dimensionality reduction method was best suited to gene expression data.  They considered PCA, ICA, NMF and also non-linear neural network methods -- directional autoencoders  and variational autoencoders .  Briefly, these latter methods work by training a neural network to reconstruct an input signal while being forced through a ``bottleneck'' in dimensionality.   Their conclusion was that no single method was optimal, but best performance -- judged by capturing the most biological pathway-associated features -- was achieved by taking the extracted latent dimensions of all the methods, an approach they call the ``BioBombe''.
 
-The following research questions were set out early in the project. \emph{TODO: tweak these goals!}
+Meng \etal\ \cite{Meng2016} extensively review dimensionality reduction methods applied to multi-omic datasets.   PCA, ICA and NMF are discussed, but the main focus is on less well known algorithms applicable to multiple datasets, including multiple coinertia analysis and consensus PCA.  The essential purpose of these methods is to transform diverse datasets -- transcriptomics, genomics and metabolomics  -- into a common and manageable representation space.
+
+The question of reproducibility across datasets of matrix factorization methods is considered by Cantini \etal. \cite{Cantini2019}.  They experiment with several MF methods applied to a total of 26 cancer transcriptomic datasets (including ovarian).  They conclude the best approach to be ICA, stabilized by the use of Reciprocally Best Hit graphs; in essence requiring reciprocal identification of metagenes between at least two datasets.
+
+\subsection{Research gaps and questions}
+Considering the foregoing review of the literature, there has clearly been much work by large teams of researchers directed at understanding the gene expression patterns in HGSOC, as one would expect given its clinical importance.  
+Dimensionality reduction is a huge and active field -- the bread-and-butter of machine learning research. 
+As we have seen, conclusions both on the underlying biology and the optimal methodology are far from consistent, however.   Some approaches -- such as the BioBombe reviewed above -- are complex with results likely to be difficult to reproduce.   
+
+Robustness of research results is of course fundamental.  MF methods offer a means of \emph{unsupervised} learning on transcriptomic datasets to identify key genes active in a disease process.  Would two teams working with identical data and using similar MF methods obtain similar metagenes and so arrive at the same biological conclusions?   The \emph{stability} of MF methods is well considered by many authors, although this has typically been focussed on stability of the underlying algorithm -- NMF and ICA are stochastic in nature.   Much less considered is stability in the presence of \emph{sampling error} which inevitably exists particularly in small datasets.
+
+These and wider considerations suggest the following research questions.
+
 \begin{enumerate}
-\item Which are the influential genes in HGSOC according to gene expression data?   Do these confirm published results?
-\item Which of PCA, ICA and NMF is best suited to this analysis?
-\item For identified genes, what is the underlying biology?
-\item Can we discriminate subtypes of HGSOC from expression data?
-\item Is there value in incorporating somatic and germline genomic data?
+\item Which are the influential genes, or groups of genes, active in HGSOC according to gene expression data?   
+\item How do these patterns of gene expression relate to underlying biological processes.  Do these confirm published results?
+\item Which MF method is best suited to this analysis and how should they be applied to achieve robust results in the presence of limited dataset size?
+\item Do MF methods yield factors which are predictive of patient survival?
+\item How do the patterns of gene expression uncovered relate to genome level features, such as those marking genome instability?
 \end{enumerate}
 
 %%%%%%%%%%%%%%% METHODOLOGY %%%%%%%%%%%%%%%%%
@@ -378,7 +388,7 @@ TODO: \emph{more explanation of the provenance of these datasets}.
 Expression data for the AOCS and TCGA datasets was received for this project in a spreadsheet format, having been derived from the RNA-Seq data as described in \cite{Ewing2020}, including  normalization by variance stabilizing transformation.   
 
 
-\subsubsection{Method outline}
+\subsubsection{Methods}
 An overview of the methodology adopted in this work is shown in figure \ref{fig-method-overview}, consisting of:
 
 \begin{figure}[htb!]
@@ -406,9 +416,10 @@ Alignment of available metadata with computed metasamples, for TCGA and AOCS.
 Survival analysis on TCGA and AOCS to investigate relationship between metasamples and patient survival.
 \item
 Scatter plots and heat maps to investigate the relationships between metasamples and genomic features available for the AOCS dataset.
-\item
-Investigation of batch effects by repeating of metagene extraction and heatmaps on the \emph{combined} AOCS and TCGA datasets.
+
 \end{enumerate}
+
+These steps are detailed in the following sections.
 
 \FloatBarrier
 
@@ -444,7 +455,7 @@ Some of the key algorithm hyper parameters of each method were investigated and 
 
 \emph{TODO: probably best to state the chosen hyper parameters here}
 
-\subsection{Metagene extraction by cluster coherence}
+\subsection{Metagene extraction by cluster coherence under bootstrap resampling}
 \label{sec-metagene-selection}
 Deciding on the number of components (factors, metagenes) to extract -- that is the factorization rank -- is key.  Taking more components results in more accurate representation of the observed expression matrix and provides more avenues to explore the underlying biology.  However, it is important that the metagenes are \emph{stable}, that is that they have reliable meaning when transfered to other datasets.   There are two sources of variation or instability to consider.
 
@@ -480,12 +491,12 @@ $K_{\mbox{\tiny NMF}} = 3, K_{\mbox{\tiny ICA}} = 5, K_{\mbox{\tiny PCA}} =3$.  
     for k in 2..10:
        Ws = []
        for j in 1..50:
-          X = bootstrap sample N from N
+          X = bootstrap sample N from N with replacement
           W, H = factorizer(X, rank=k, seed=j)
           append W to Ws
    	     
-          # Ws is a list of 50*k metagenes, each of length 19,566
-          # Pragmatically reduce metagenes to 20 dimensions by PCA
+       # Ws is a list of 50*k metagenes, each of length 19,566
+       # Pragmatically reduce metagenes to 20 dimensions by PCA
    	  
        Ws_reduced = PCA(Ws, rank=20)
        plot t-SNE(Ws_reduced)
@@ -511,7 +522,7 @@ An alternative to consider the intersection of the gene sets which each metagene
 \[
    \mbox{Jaccard}(A, B) = \frac{A \cap B}{A \cup B}.
 \]
-The measure lies between 0 (no similarity) and 1 (identical), and is symmetric.  Jaccard similarity was thus calculated for all pairs of the 11 genes sets and visualised as a heatmap.
+The measure lies between 0 (no similarity) and 1 (identical), and is symmetric.  Jaccard similarity was thus calculated for all pairs of the 11 genes sets and visualised as a square heatmap.
 	   	  
 \subsection{Gene enrichment analysis}
 
@@ -938,7 +949,8 @@ Here are presented results of applying the three MF methods to the \emph{combine
 
 \begin{figure}[htb!]
 \begin{center}
-\includegraphics[scale=0.7, draft=false]{\plotspath{HeatMaps/clustered_heatmap_BOTH_BOTH.pdf}} 
+\includegraphics[scale=0.5
+, draft=false]{\plotspath{HeatMaps/clustered_heatmap_BOTH_BOTH.pdf}} 
 \caption{Heatmap of the metasamples matrix for the combined AOCS + TCGA dataset.  The 'Which' field indicates the source dataset; purple: AOCS, yellow:TCGA.}
 \label{fig-heatmap-BOTH}
 \end{center}
@@ -946,9 +958,9 @@ Here are presented results of applying the three MF methods to the \emph{combine
 
 \begin{figure}[htb!]
 \begin{center}
-\includegraphics[scale=0.6]{\plotspath{BoxAndScatters/wgd_boxplot_NMF_BOTH_BOTH.pdf}}
-\includegraphics[scale=0.6]{\plotspath{BoxAndScatters/wgd_boxplot_ICA_BOTH_BOTH.pdf}}
-\includegraphics[scale=0.6]{\plotspath{BoxAndScatters/wgd_boxplot_PCA_BOTH_BOTH.pdf}}
+\includegraphics[scale=0.4]{\plotspath{BoxAndScatters/wgd_boxplot_NMF_BOTH_BOTH.pdf}}
+\includegraphics[scale=0.4]{\plotspath{BoxAndScatters/wgd_boxplot_ICA_BOTH_BOTH.pdf}}
+\includegraphics[scale=0.4]{\plotspath{BoxAndScatters/wgd_boxplot_PCA_BOTH_BOTH.pdf}}
 \caption{Boxplots of metasamples from the combined AOCS + TCGA datasets, showing relationship between metasamples dataset origin; Which=0 or 1 for AOCS or TCGA respectively.}
 \end{center}
 \label{fig-wgd-boxplots-BOTH}
@@ -1007,7 +1019,7 @@ This work has thrown up several possible lines of further study:
 {\bf Algorithm hyper-parameters}.  NMF and ICA algorithms have a number of hyper-parameters, only a few of which were explored in this work.  For example, NMF has parameters to encourage sparsity through L1 regularization.   This should result in many (most?) metagene elements reducing to zero, and might offer a more robust means of selecting candidate genes to feed into gene enrichment analysis -- replacing the current arbitrary 3 SD from the mean rule.
 \item
 {\bf Selecting components from several factorization ranks}.
-In the current work, a single rank was selected for each method -- 3, 5 an 3 for NMF, ICA and PCA respectively.  Unlike PCA, components extracted by NMF and ICA  do not `nest' with rank; that is adding rank in general yields a new set of components.  Thus one might, for NMF and ICA, perform factorizations at $k=2,3,4,5$, say, yielding $2 \times 15 = 30$ potential components in total.  Jaccard similarity could be used to identify that subset of components which had the least overlap in detected genes.   In this way, a larger number of components could be obtained without use of high factorization ranks which we have seen to be unstable.
+In the current work, a single rank was selected for each method -- 3, 5 an 3 for NMF, ICA and PCA respectively.  Unlike PCA, components extracted by NMF and ICA  do not `nest' with rank; that is adding rank in general yields a new set of components.  Thus one might, for NMF and ICA, perform factorizations at $k=2,3,4,5$, say, yielding $2 \times 15 = 30$ potential components in total.  Jaccard similarity could be used to identify that subset of components which had the least overlap in detected genes.   In this way, a larger number of components could be obtained without use of high factorization ranks which we have seen to be unstable.  In fact this is similar to the approach of \cite{WayGregory2019} mentioned in section \ref{sec-comparative-dimensionality-studies}.
 \item
 {\bf Cross-dataset factorization stability}.  We went to considerable effort -- through bootstrap sampling and cluster analysis -- to select factorization ranks which we hoped would be robust and generalise well to other datasets.   A way to confirm this robustness would be to perform the factorization / clustering pipeline on \emph{both} datasets separately, yielding two sets of metagenes.  In a perfect world, these metagenes would pair up identically (in-so-far as the two datasets had identical technical characteristics, drawn from identical population of patients).  The Jaccard similarity heatmap could be used to verify this, and reject components which showed low cross-dataset similarity.
 \item
@@ -1096,8 +1108,7 @@ TODO
 \subsection{Gene enrichment raw results}
 \label{tab-go-enrichment-results}
 TODO
-\subsection{Software libraries and versions}
-TODO
+
 \label{sec-software-versions}
 
 
