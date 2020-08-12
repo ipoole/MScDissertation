@@ -132,7 +132,15 @@ Disssertation Supervisor:  Dr. Ailith Ewing
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Start of report for real %%%%%%%%%%%%%%%%%%%
 
 \begin{abstract}
-Here is the abstract
+Gene expression analysis -- transcriptomics -- of a set biopsied tumour tissue can identify genes whose expression is linked to the pathological process.  In contrast to supervised contrastive approaches (e.g. comparing normal with tumour samples to identify over/under expressed genes), unsupervised approaches work with datasets of mixed and unknown tumour status.   Matrix factorization (MF) methods have become a popular method of reducing and ``disentangling'' the salient components of variation in such datasets, known as metagenes.  From these metagenes, sets of genes most associated with component of variation can be identified, and when combined with gene enrichment analysis against Gene Ontology (GO) linked annotations, can provide insights unto the underlying biological processes in play.
+
+In this work the biological target is high-grade serous ovarian cancer (HGSOC) -- the most common and aggressive type of ovarian cancer.   Two gene expression datasets are analysed; the Austrailian Ovarian Cancer Study dataset (n=80) has patient survival and genomic metadata, while the larger dataset from The Cancer Genome Atlas (n=374) has only survival metadata.  This motivates an approach of unsupervised metagenes discovered by MF techniques in the larger n=374 dataset then transferring that information to the smaller n=80 dataset to test for their power to stratify patient survival by Cox's proportional hazards analysis, and for correlation with genomic features.
+
+Three MF methods are applied and compared: non-negative matrix factorization (NMF), independent component analysis (ICA) and principal component analysis (PCA).  While these are all linear factorization methods, they have very different properties which are explained.  A key problem in applying MF is deciding on the number of components to extract -- the factorization rank.  Too high a rank with result in metagenes which are unstable and fail to generalise to other datasets.  From a review of the literature, it seems that the role of sampling error in the instability is an under appreciated issue, which this work addresses by use of bootstrap resampling.  The similarity of the metagenes across the three methods is assessed via the Jaccard index.
+
+An integrative analysis of the GO enrichment results, survival analysis, genomic feature correlations and metagene similarity allows some tentative biological findings to be suggested and corroboration sought in the literature.  The main methodological findings are that MF is effective in identifying and removing technical batch effects, but to beware of instability due to sampling error when applying MF to small datasets.   The question of which of the three methods -- NMF, ICA or PCA -- is most effective for these purposes is considered but not clear conclusion can be drawn.
+
+
 \end{abstract}
 \newpage
 
@@ -507,8 +515,7 @@ $K_{\mbox{\tiny NMF}} = 3, K_{\mbox{\tiny ICA}} = 5, K_{\mbox{\tiny PCA}} =3$.  
        score[factorizer, k] = silhouette score(clustering)	  
        median_metagenes = calculate medians for k clusters of metagenes
        save median_metagenes to file by factorizer and k
-       for each factorizer:
-          plot score vs k
+    plot score vs for factorizer k
       
 \end{Verbatim}
 \end{center}
@@ -642,7 +649,7 @@ It has been claimed (e.g. \cite{Stein-OBrien2018,Renard2016}) that matrix factor
 
 The described methodology was implemented in Python.
 %except for the KEGG gene enrichment analysis which was implemented in R.
-All code is available in a github repository: \url{https://github.com/ipoole/HgsocTromics}.  Good software engineering practice has been followed, with an object-oriented design, frequent commits and unit testing.  A base class is used to present a uniform interface for the three factorization methods.  Intermediate results are cached with lazy computation for efficient working without ordering dependency.  Unit tests are based on tiny expression matrices, just 100 genes by 10 patients, thus the whole test suite of over 65 tests executes in around 45 seconds and so can be run frequently.  The total codebase is approximately 2,900 lines of Python.  
+All code is available in a github repository: \url{https://github.com/ipoole/HgsocTromics}.  Good software engineering practice has been followed, with an object-oriented design, frequent commits and unit testing.  A base class is used to present a uniform interface for the three factorization methods.  Intermediate results are cached with lazy computation for efficient working without ordering dependency.  Unit tests are based on tiny expression matrices, just 100 genes by 10 patients, thus the whole test suite of over 65 tests executes in around 45 seconds and so can be run frequently.   The fully automated analysis pipeline takes approximately three hours from scratch, the majority of that time being taken for the repeated factorizations over the range of considered ranks.  The total codebase is approximately 2,900 lines of Python.  
 
 All plots are generated in vector graphics pdf format to ensure smooth scaling to any resolution.  A consistent colour scheme of \textcolor{blue}{blue}, \textcolor{orange}{orange} and \textcolor{olive}{green} is used for plots relating to NMF, ICA and PCA respectively.  Metagenes are consistently referred to by, for example, ``NMF-2-of-3" -- meaning the 2nd component of the rank $k=3$ NMF factorization.
 
