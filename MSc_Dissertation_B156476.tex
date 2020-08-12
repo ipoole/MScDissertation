@@ -211,7 +211,7 @@ Understanding and predicting such resistance is therefore of clinical importance
 They find the following genes to be significantly related to platinum resistance: KLRC1, TCF7, CD274, HSD11B1, COLEC12, PDGFC, FCF1, BMI1, TNFRSF9, ATG10, EWSR1.
 
 Finding a clear, robust correlation between gene expression patterns and survival is not straight forward.  
-One substantial meta-analysis applied 16 previously published gene sets to two studies from GEO (199 samples) which included survival information, and found no significant predictive power \cite{Fekete2012}.  
+One substantial meta-analysis applied 16 previously published gene sets to two studies from the Gene Expression Omnibus (GEO) (199 samples) which included survival information, and found no significant predictive power \cite{Fekete2012}.  
 Although, within the same study, the authors did identify predictive genes, in particular SNGC, MAPT, ESR2 and PGR.
 
 Expression of a single gene -- CD38, which codes for a transmembrane glycoprotein -- has recently been shown to have survival prognostic value on its own \cite{Zhu2020}.
@@ -345,6 +345,7 @@ The number of factors, or rank $k$, to extract is a key decision in any matrix f
 The problem of determining the optimal $k$ for a given expression matrix is addressed  by Kairov \etal\ \cite{Kairov2017}, based on optimizing the \emph{stability} of the components over multiple algorithm initializations.
 
 \subsubsection{Comparative studies of dimensionality reduction methods for gene expression analysis}
+\label{sec-comparative-dimensionality-studies}
 
 Recent work by Way \etal\ \cite{WayGregory2019} was aimed directly at answering the question which dimensionality reduction method was best suited to gene expression data.  They considered PCA, ICA, NMF and also non-linear neural network methods -- directional autoencoders  and variational autoencoders .  Briefly, these latter methods work by training a neural network to reconstruct an input signal while being forced through a ``bottleneck'' in dimensionality.   Their conclusion was that no single method was optimal, but best performance -- judged by capturing the most biological pathway-associated features -- was achieved by taking the extracted latent dimensions of all the methods, an approach they call the ``BioBombe''.
 
@@ -426,16 +427,18 @@ These steps are detailed in the following sections.
 \subsubsection{Tools}
 \begin{itemize}
 \itemsep -0.5em 
-\item Python 3.6
-\item PyCharm Integrated Development Environment
-\item Numpy for high performance matrix manipulation
-\item Pandas for data frame handing
-\item Matplotlib and Seaborn for general plotting
-\item Scikit-learn for matrix factorization and k-means clustering
-\item GOATOOLS package for gene enrichment analysis against GO
-\item Lifelines package for survival analysis.
+\item DELL XPS 13, 16GB RAM, running Linux Mint version v19.
+\item Python v3.6.8
+\item PyCharm Integrated Development Environment, v2020.1.3
+\item Numpy for high performance matrix manipulation, v1.18.15
+\item Pandas for data frame handing, v1.0.5
+\item Matplotlib and Seaborn for general plotting, v3.2.2 and v0.10.1
+\item SciPy for least-square solutions and statistical tests, v1.5.0
+\item Scikit-learn for matrix factorization and k-means clustering, v0.23.1
+\item GOATOOLS package for gene enrichment analysis against GO, v1.0.6
+\item Lifelines package for survival analysis, v0.24.16.
+\item Github for source control.
 \end{itemize}
-A full list of software and libraries used, with versions, is given in appendix \ref{sec-software-versions}.
 
 \subsection{Syncrhonisation of gene sets accross AOCS and TCGA}
 \label{sec:gene-set-intersection}
@@ -633,7 +636,7 @@ As an alternative visualisation of the relationship between metasamples and geno
 
 \subsection{Investigating the impact of batch effects by analysis of a combined dataset}
 
-It has been claimed (e.g. \cite{Stein-OBrien2018}) that matrix factorization methods are an effective means of identifying and removing batch effects.  To verify this, the TCGA and AOCS datasets (after gene set intersection), were horizontally concatenated producing an $n=80+274=354$ patient dataset with a substantial batch artefact.  Survival data is available for both datasets, so this was preserved as metadata associated with the combined datasets. The previously described analyses of metagene extraction, metasample computation and clustered heatmap and survival analysis were repeated on this dataset.  Ideally, the factorization rank selected for each method should be reconsidered, since the larger dataset could justify extracting more components.  For simplicity this was not done however, the previously selected $k = 3,5,3$ for NMF, ICA and PCA respectively being maintained.   Note however that we should not expect the extracted metagenes and derived metasamples to be equivalent. Genomic feature correlation w.r.t these newly extracted components was performed using the AOCS datasets.  Theses results were inspected; is there evidence of some metasamples aligning with technical batch effects while others align with biological processes?
+It has been claimed (e.g. \cite{Stein-OBrien2018,Renard2016}) that matrix factorization methods are an effective means of identifying and removing batch effects.  To verify this, the TCGA and AOCS datasets (after gene set intersection), were horizontally concatenated producing an $n=80+274=354$ patient dataset with a substantial batch artefact.  Survival data is available for both datasets, so this was preserved as metadata associated with the combined datasets. The previously described analyses of metagene extraction, metasample computation and clustered heatmap and survival analysis were repeated on this dataset.  Ideally, the factorization rank selected for each method should be reconsidered, since the larger dataset could justify extracting more components.  For simplicity this was not done however, the previously selected $k = 3,5,3$ for NMF, ICA and PCA respectively being maintained.   Note however that we should not expect the extracted metagenes and derived metasamples to be equivalent. Genomic feature correlation w.r.t these newly extracted components was performed using the AOCS datasets.  Theses results were inspected; is there evidence of some metasamples aligning with technical batch effects while others align with biological processes?
 
 \subsection{Codebase and plotting conventions}
 
@@ -726,7 +729,7 @@ The four components NMF-3-of-3, ICA-1-of-5, ICA-2-of-5 and PCA-2-of-3 yielded no
 
 \begin{figure}[htb!]
 \begin{center}
-\includegraphics[scale=0.1]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_1_of_NMF_3.png}} \\
+\includegraphics[scale=0.09]{\plotspath{TCGA_OV_VST/GeneEnrichment/go_lineage_1_of_NMF_3.png}} \\
 \begin{spacing}{0.6}
 {\small Genes: \tiny \input{/home/ipoole/Documents/gitrepos/HgsocTromics/Plots/TCGA_OV_VST/GeneEnrichment/go_gene_set_1_of_NMF_3.txt}}
 \end{spacing}
@@ -822,19 +825,19 @@ The four components NMF-3-of-3, ICA-1-of-5, ICA-2-of-5 and PCA-2-of-3 yielded no
 Considering the biological significance of each of the 11 extracted metagenes, with reference to the GO enrichment results:
 \begin{description}
 %
-\item[NMF 1-of-3]: this is related to the cellular structures and processes of the extra-cellular matrix (ECM), that is the proteins such as collagens which mediate the three-dimensional organisation of cells in a tissues.  ECM molecular composition will vary substantially between tissue types, but is also known to play a part in many disease processes \cite{Theocharis2019}.  Thus, this metagene may simply reflect heterogeneity of tissues in the biopsied sample, or may have some deeper disease related significance.
+\item[NMF 1-of-3]: there is mention of ECM related terms, as in ICA 3-of-5 and NMF 1-of-3 below.   However, there are also terms relating to the regulation of angiogenesis.  It is known that tumours have a need for increased blood supply, and that expression level of factors promoting angigenesis are associated with aggresiveness of tumour growth \cite{Nishida2006}.  
+We have already seen (section \ref{sec-subtype-classification}, \cite{Glass2015}) there is evidence for distinct subtypes of OC distinguished by angiogenesis related genes, and that these subtypes have been found to inform clinical outcome \cite{Glass2015}.  Thus, this component might contain useful prognostic value.
 %
 \item[NMF 2-of-3]: here we see enrichment of genes relating to the ribosomal subunit and the processes of RNA binding, implying perhaps a link with assembly of the ribosomal RNA-protein complex.   Ribosomes are known to have a role in carcinogenesis, by dysregulation the RNA $\rightarrow$ protein translation, or mutations in ribosomal subunits impacting on cellular metabolism \cite{Sulima2017}.
 %
 \item[NMF 3-of-3, ICA 1-of-5 and ICA 2-of-5]: no significant biological enrichment found.
 %
 \item[ICA 3-of-5]: this component relates to processes of multicellular / extracellular organisation, and the ECM.  It is therefore similar to NMF 1-of-3 above.
-\item[ICA 4-of-5]: this component is seen to relate to the ribosomal subunit (as NMF 2-of-3), additionally membrane proteins in the respiratory complex, mitochondrial and the NADH dehydrogenase complex.  Processes of organonitrogen biosynthesis are also highlighted. 
+\item[ICA 4-of-5]: many processes are highlighted by the component.  These include processes relating to the ribosomal subunit (as NMF 2-of-3), additionally membrane proteins in the respiratory complex, mitochondrial and the NADH dehydrogenase complex.  Processes of organonitrogen biosynthesis are also highlighted. 
 %
 \item[ICA 5-of-5]: processes relating to regulation of immune response are enriched in this component, featuring genes from the major histocompatibility complex (MHC) group, in particular the HLA- genes, allowing the immune system to recognise self from non-self.  GO terms relating to the endoplasmic reticulum (ER) are also highlighted.  It may be that this component is mainly sensitive to the immunohistochemical signature of patients, and therefore not of clinical interest.
 %
-\item[PCA 1-of-3]: there is mention of ECM related terms, as for ICA 3-of-5 and NMF 1-of-3.   However, there are also terms relating to the regulation of angiogenesis.  It is known that tumours have a need for increased blood supply, and that expression level of factors promoting angigenesis are associated with aggresiveness of tumour growth \cite{Nishida2006}.  
-We have already seen (section \ref{sec-subtype-classification}, \cite{Glass2015}) there is evidence for distinct subtypes of OC distinguished by angiogenesis related genes, and that these subtypes have been found to inform clinical outcome \cite{Glass2015}.  Thus, this component might contain useful prognostic value.
+\item[PCA 1-of-3]: this is related to the cellular structures and processes of the extra-cellular matrix (ECM), that is the proteins such as collagens which mediate the three-dimensional organisation of cells in a tissues.  ECM molecular composition will vary substantially between tissue types, but is also known to play a part in many disease processes \cite{Theocharis2019}.  Thus, this metagene may simply reflect heterogeneity of tissues in the biopsied sample, or may have some deeper disease related significance.
 %
 \item[PCA 2-of-3]: no significant biological enrichment found.
 %
@@ -894,6 +897,7 @@ From the grid of scatter plots shown in figure \ref{fig-genomic-scatters} it can
 \FloatBarrier
 
 \subsection{Integrative analysis of results}
+\label{sec-integrative-analysis}
 
 Table \ref{tab-integrative-analysis} summarises the key results of all the forgoing analysis.  
  
@@ -907,8 +911,8 @@ Table \ref{tab-integrative-analysis} summarises the key results of all the forgo
 Metagene & S'val & WGD & Cell. & HRD & Mut.L. & CN.L. & SV.L. & Enriched GO terms & Similar to\\
 \hline
 %     & S & W & C & H % M & C & S & Enriched % Sim.
-NMF-1 & . & Y-& Y-& . & . & . & . & Extra-cellular matrix (ECM) & ICA-3, PCA-1 \\
-NMF-2 & . & . & . & Y+& . & . & Y+& Ribo. subunit & - \\
+NMF-1 & . & Y-& Y-& . & . & . & . & ECM, Reg. angiogenesis & ICA-3, PCA-1 \\
+NMF-2 & . & . & . & Y+& . & . & Y+& Ribo. subunit, RNA-binding & - \\
 NMF-3 & - & - & - & Y-& . & . & . & . & . \\
 \hline
 ICA-1 & . & . & . & . & . & . & . & . & PCA-2 \\
@@ -917,8 +921,8 @@ ICA-3 & . & . & Y-& . & . & . & Y-& ECM, multicellular org. & NMF-1, PCA-1 \\
 ICA-4 & . & . & . & . & . & . & . & Ribo subunit, Mitoch. NADH dehydr. & - \\
 ICA-5 & . & Y+& Y+& . & . & . & . & Immune response, MHC & PCA-3 \\
 \hline
-PCA-1 & Y+& . & Y-& . & . & . & . & ECM, Reg. angiogenesis & NMF-1, ICA-3 \\
-PCA-2 & . & . & . & . & . & . & . & . & ICA-1 \\
+PCA-1 & ?+& . & Y-& . & . & . & . & Extra-cellular matrix (ECM)& NMF-1, ICA-3 \\
+PCA-2 & ?+& . & . & . & . & . & . & . & ICA-1 \\
 PCA-3 & . & Y-& Y-& . & . & . & . & Immune response, MHC, chemotaxis & ICA-5 \\
 \hline
 \end{tabular}
@@ -931,10 +935,10 @@ From this summary table we can make some interesting observations:
 \begin{description}
 \item[ECM relationship to Cellularity?]
 We see that NMF-1, ICA-3 and PCA-1 each have an ECM association and we have noted this could be related to tissue type heterogeneity.   These three components (one from each of the methods) are also observed to be correlated with Cellularity.  The sense (+/-1) of the correlation is meaningful for NMF (not so for ICA or PCA) and we see that ECM and thence tissue heterogeneity is negatively correlated with cellularity. This seems reasonable, in that a low Cellularity implies that a greater proportion of surrounding non-tumour tissue is included in the sample, so increasing heterogeneity.   That these three components turn out to be similar by the Jaccard index is as would be expected given their functional similarity.
-\item[Angiogenesis link with survival?]
-The only component showing (albeit weak) correlation with patient survival is PCA-1.  Interestingly, this same component is also found to be linked with Go terms relating to the regulation of angiogenesis, which in turn is related to aggressiveness of tumour growth and outcomes.  Thus, these observations are telling a consistent story.
-\item[Normal cell activity?]
-Component ICA-4 highlights the greatest number of biological processes -- indeed the GO lineage map \ref{fig-ICA-4-go-lineage} needed to be pruned to fit on a page.  And yet this component shows no correlation with any disease related factors, neither survival nor genomic features.  It may be that this component is simply picking up on the normal metabolic activity of the cells,
+\item[No consistent link with survival.]
+The only components showing even correlation with patient survival PCA-1 and PCA-2.  The first of these are associated with ECM terms, which may simply be due to Cellularity.  The other term showes no biological enrichment.]
+Component ICA-4 highlights the greatest number of biological processes -- indeed the GO lineage map \ref{fig-ICA-4-go-lineage} needed to be pruned to fit on a page.  And yet this component shows no correlation with any disease related factors, neither survival nor genomic features.  It may be that this component is simply picking up on the normal metabolic activity of the cells.
+\item[Is HRD linked with ribosomal processing?].  HRD is correlated with NMF-2 and NMF-3.  The first of these is associated with the ribonucleoprotein complex while the second shows no biological enrichment.
 \item[Technical batch effects?]
 There are four components (NMF-3, ICA-2, ICA-4 and PCA-2) showing no enrichment of GO terms.  These components also show almost no correlation with disease related factors (the exception being NMF-3 linking with HRD).  With that exception aside, we could conclude that these components have little biological meaning, and are instead picking up technical effects.  I do not know how the TCGA dataset was assembled; perhaps there are multiple batches within the set?
 \item[WGD and Cellularity have curious common influences.]
@@ -976,9 +980,9 @@ From the clustered heatmap of figure \ref{fig-heatmap-BOTH} it is clear that the
 \renewcommand{\arraystretch}{1.4} % Default value: 1
 \begin{tabular}{|l||c|c|c|c|c|c|c|c|l|l|}
 \hline
-Metagene & Which & WGD & Cell. & HRD & Mut.L. & CN.L. & SV.L. & Enrichment? \\
+Metagene & Batch & WGD & Cell. & HRD & Mut.L. & CN.L. & SV.L. & Enrichment? \\
 \hline
-%     & w & W & C & H % M & C & S & Enrichment?
+%     & B & W & C & H % M & C & S & Enrichment?
 NMF-1 & Y & . & . & . & . & . & . &  Y \\
 NMF-2 & Y & Y & Y & . & . &   & . &  Y \\
 NMF-3 & . & Y & Y & . & . & . & . &  Y \\
@@ -1004,11 +1008,23 @@ PCA-3 & Y & . & . & . & . & . & . &  . \\
 
 \section{Discussion}
 
-One valuable lesson from this work is the importance of accounting for sampling error, by bootstrapping,  when considering the stability of factorizations and thence the selection of factorization rank.    Sevaral authors comment on the variability of NMF and ICA factorization due to algorithm initialisation \cite{Kairov2017,Sompairac2019,WayGregory2019}, but most neglect sampling error which we have shown to be far more significant.   Cantini \etal\ \cite{Cantini2019a} mention bootstrapping, in reference to the BIODICA package (for ICA factorization), but it is unclear whether this is applied to the input data to model sampling error.  In the initial stages of the current work, BIODICA was used, and was found to recommend ranks of 14, 19 or 30.  Yet we have seen that such high ranks on the small n=80 dataset leads to highly unstable factorizations when bootstrap modelling of sampling error is included.
+The high level findings of this work are discussed below, under biological and methodological headings.
 
-These considerations lead to the selection of much lower ranks (fewer metagenes) than would otherwise be the case.
+\subsection{Biological findings}
 
-\emph{TODO: much more discussion!}
+The integrative analysis set out in section \ref{sec-integrative-analysis} suggests that  Cellularity is correlated to the processes of the the ECM, reflecting heterogeneity of tissue type.   Of course Cellularity is not really a biological characteristic -- it is a technical artefact of the tumour biopsy process, and so we might conclude that signatures relating to ECM might also be considered as technical artefacts.  We found that whole genome doubling (WGD) and Cellularity correlate together with three components even though they are not themselves directly correlated.
+
+We found a weak evidence of a link between homologous repair deficiency (HRD) and RNA-binding.   Being the site of protein synthesis, ribosomes will be associated with most of what goes on in a the cell.   One paper suggests a link : ``a comprehensive review of the literature [] reveals a role for conventional DNA repair proteins in ribosome biogenesis, and conversely, ribosome biogenesis proteins in DNA repair" \cite{Ogawa2018}.   Seek and ye shall find!
+
+Expression signature correlations with mutational load and copy-number variation (CNV) load have not been detected.  These markers of genome instability are known to be very noisy, so if a correlation with expression does exist it would likely be a weak signal, below the detection power of the small (N=80) AOCS dataset.
+
+We found no convincing evidence of a metasample correlation with patient survival.
+
+\subsection{Methodological findings}
+
+One valuable lesson from this work is the importance of accounting for sampling error  when considering the stability of factorizations and thence the selection of factorization rank.    Sevaral authors comment on the variability of NMF and ICA factorization due to algorithm initialisation \cite{Kairov2017,Sompairac2019,WayGregory2019}, but most neglect sampling error which we have shown to be far more significant.   Cantini \etal\ \cite{Cantini2019a} mention bootstrapping, in reference to the BIODICA package (for ICA factorization), but it is unclear whether this is applied to the input data to model sampling error.  In the initial stages of this project, experiments were conducted with BIODICA on the AOCS dataset.   The package recommend ranks of 14, 19 or 30.  Yet we have seen that such high ranks on the small n=80 dataset leads to highly unstable factorizations when bootstrap modelling of sampling error is included.  Suspicion of this result lead to me roll my own implementation based on bootstrap resampling, resulting in much lower ranks (fewer metagenes) being selected than would otherwise be the case if only algorithmic randomness were considered.
+
+We have been able to confirm the observations of \cite{Zhou2018a,Renard2016,Meng2016} that detection and removal of technical  batch effects naturally emerge from MF methods.  That is, the technical and biological variation largely (not completely) separate into different components.  This is a useful property, particularly as the growing availability of transcriptomics datasets from resources such as the TCGA and GEO allows for the simultaneous analysis of dozens of distinct datasets with likely different technical provenance, for which hand crafted normalisation would be infeasible.
 
 
 \subsection{Further work}
@@ -1023,15 +1039,22 @@ In the current work, a single rank was selected for each method -- 3, 5 an 3 for
 \item
 {\bf Cross-dataset factorization stability}.  We went to considerable effort -- through bootstrap sampling and cluster analysis -- to select factorization ranks which we hoped would be robust and generalise well to other datasets.   A way to confirm this robustness would be to perform the factorization / clustering pipeline on \emph{both} datasets separately, yielding two sets of metagenes.  In a perfect world, these metagenes would pair up identically (in-so-far as the two datasets had identical technical characteristics, drawn from identical population of patients).  The Jaccard similarity heatmap could be used to verify this, and reject components which showed low cross-dataset similarity.
 \item
-{\bf Contrasting gene expression patterns between cancers}.  The current work set out to find patters of gene expression in HGSOC.  Yet it is hard to say the highlighted patterns are specific to HGSOC, or generic to all cancers.  One way of teasing out cancer specific patterns might be to take a similar approach to the previous item, but instead of looking for metagenes which are consistent between datasets, find those which are distinct.  That said, there will likely be many more sophisticated approached in the literature, given the clinical importance of the topic.
+{\bf Contrasting gene expression patterns between cancers}.  The current work set out to find patters of gene expression in HGSOC.  Yet it is hard to say the highlighted patterns are specific to HGSOC, or generic to all cancers.  One way of teasing out cancer specific patterns might be to take a similar approach to the previous item, but instead of looking for metagenes which are consistent between datasets, find those which are distinct.  That said, there will likely be many more sophisticated approached in the literature, given the clinical importance of the topic.  A direct supervised approach -- find the axis of variation which best separates the two cancers -- may be more appropriate.
 \item
-{\bf Systematic comparison with published gene expression patterns}.  In analysing the meaning of each metagene above, some tentative links were made with the research literature.   But this was anecdotal and frankly not particularly scientific; searching on PubMed for GO terms associated with HGSOC and looking at one or two hits!  A more systematic and ideally automated approach is required.  The \href{https://www.ncbi.nlm.nih.gov/geoprofiles}{Geo Profiles database} at NCBI, or the \href{https://www.ebi.ac.uk/gxa/home}{Expression Atlas} at EMBL-BI might be possible starting points.
+{\bf Systematic comparison with published gene expression patterns}.  In analysing the meaning of each metagene above, some tentative links were made with the research literature, by informal searching.   A more systematic and ideally automated approach is required.  The \href{https://www.ncbi.nlm.nih.gov/geoprofiles}{Geo Profiles database} at NCBI, or the \href{https://www.ebi.ac.uk/gxa/home}{Expression Atlas} at EMBL-BI might be possible starting points.
 
 \end{enumerate}
 
 
 \section{Conclusions}
 TODO
+
+\section*{Acknowledgements}
+I am most grateful to Dr. Ailith Ewing for proposing this project and making available datasets.  Ailith provided excellent, inciteful supervision throughout and gave helpful feedback on an early draft of this dissertation.
+
+I'd like to thank my employer, Canon Medical Research Ltd., for allowing me the flexibility and study leave to undertake this MSc.
+
+Thank you to my family for excusing me from cooking and washing up duties during the more stressful phases of MSc study!
 
 \small
 \bibliography{OvarianCancer}
