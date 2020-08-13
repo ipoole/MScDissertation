@@ -230,8 +230,6 @@ It is worth mentioning that the analysis in this paper made use of the Gene Expr
 
 Obesity has been shown to negatively impact prognosis in ovarian cancer, possibly through difficulties in matching chemotherapy dose with patient BMI  \cite{Au-Yeung2014}.  A more direct molecular link is proposed by Cuello \etal\ \cite{Cuello2018}.  They used NMF based clustering to demonstrate that expression of genes linked with obesity and lipid metabolism impart poorer progression free survival, independent of known HGSOC driver gene expression.  The link is complex however, there been many confounding non-molecular based reasons for a link between high BMI and HGSOC survival, including later diagnosis and compromised operability.  Some studies (e.g. \cite{Hew2013}) conclude no overall link at all.
 
-
-
 %Stratification of HGSOC by immunohistochemistry is addresses Kamble \etal. \cite{Kamble2019}.  They identify a panel of six biomarkers -- TCF21, E-cadherin, PARP1, Slug and AnnexinA2.   These markers allow stratification into categories including Mesenchymal-to-epithelial transition, Homologous recombination repair and Epithelial-to-mesenchymal transition.  This, they argue, allows selection of class-specific inhibitor drugs such as Olaparib and Rucaparib.
 
 \subsection{Matrix factorization for dimensionality reduction}
@@ -1033,7 +1031,17 @@ Expression signature correlations with mutational load and  CNV load have not be
 
 \subsubsection*{Do MF methods yield factors which are predictive of patient survival?}
 
-We found no convincing evidence of this, for an individual factor (metasample).  Some components were predictive in one or other of the two datasets, but not both, which is unconvincing.  The factor with GEA showed indicated regulation of angiogenesis (NMF-1), and thence might have prognostic value, performed poorly in survival analysis.   It is possible that a more sophisticated multiple regression model would be successful, but this would risk over-fitting given the limited dataset size.
+We found no convincing evidence of this, for an individual factor (metasample).  Some components were predictive in one or other of the two datasets, but not both, which is unconvincing.  The factor which GEA indicated regulation of angiogenesis (NMF-1), and thence might have prognostic value, performed poorly in survival analysis.   
+
+Is there a signal for survival to be found in these data?  We have noted that according to \cite{Zhu2020}, the single gene CD38 is highly predictive of survival in EOC.  Does this hold for the TCGA and AOCS datasets we are working with?  This is easy to check, running survival analysis stratified by a hand-crafted metagene, setting the CD38 element to 1, all others to 0.   This was applied as in section \ref{sec-survival-analysis} to TCGA (OS),  AOCS (OS) and AOCS (PFS) -- see figure \ref{fig-cd38 survival}.   The effects are in a consistent direction across the three tests, with high CD38 expression predicting favourable survival.  This is highly significant in the TCGA dataset and $p < 0.05 $ in the smaller AOCS.  So there is a signal, but it did not emerge unbidden from matrix factorization.  (CD38 is in fact highlighted by component ICA-5, see figure \ref{fig-ICA-5-5-go-lineage}, but must be diluted by other genes).
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.7,draft=false]{\plotspath{SurvivalAnalysis/gene_specific_CD38_survival.pdf}}
+\end{center}
+\caption{Survival analysis plots stratified by above/below median expression of CD38 only.}
+\label{fig-cd38 survival}
+\end{figure}
 
 
 \subsubsection*{How should MF methods be applied to achieve robust results on datasets of limited size?}
@@ -1044,8 +1052,7 @@ One valuable lesson from this work is the importance of accounting for sampling 
 
 Yes. We have been able to confirm the observations of \cite{Zhou2018a,Renard2016,Meng2016} that detection and removal of technical  batch effects naturally emerge from MF methods.  That is, the technical and biological variation largely (not completely) separate into different components.  This is a useful property, particularly as the growing availability of transcriptomics datasets from resources such as the TCGA and GEO allows for the simultaneous analysis of dozens of distinct datasets with likely different technical provenance, for which hand crafted normalisation would be infeasible.
 
-\noindent
-\emph{Which MF method is best suited to transcripomics analysis?}
+\subsubsection*{Which MF method is best suited to transcripomics analysis?}
 
 The original focus of this project was ICA and NMF since these are know to be able to disentangle variation in data with complex structure, not multivariate normally distributed.  PCA was added as a baseline dimensionality reduction method, just for comparison.   What would we have been missed if only PCA had been used?  Reviewing the integrative analysis of results in table \ref{tab-integrative-analysis} we see that all three methods picked up on WGD and cellularity.  PCA included the two components having the largest observed effect on overall survival.  NMF and ICA both showed sensitivity to SV load.  NMF further added sensitivity to HRD and identified genes relating to angiogenesis with possible pathological significance.
 
@@ -1070,16 +1077,13 @@ In the current work, a single rank was selected for each method -- 3, 5 an 3 for
 
 \end{enumerate}
 
+\FloatBarrier
 
 \section{Conclusions}
 TODO
 
 \section*{Acknowledgements}
-I am most grateful to Dr. Ailith Ewing for proposing this project and making available datasets.  Ailith provided excellent, inciteful supervision throughout and gave helpful feedback on an early draft of this dissertation.
-
-I'd like to thank my employer, Canon Medical Research Ltd., for allowing me the flexibility and study leave to undertake this MSc.
-
-Thank you to my family for excusing me from cooking and washing up duties during the more stressful phases of MSc study!
+I am most grateful to Dr. Ailith Ewing for proposing this project and making available the datasets.  Ailith provided excellent, insightful supervision throughout and gave valuable feedback on an early draft of this dissertation.  I'd like to thank my employer, Canon Medical Research Ltd., for allowing me the flexibility and study leave to undertake this MSc.  Thank you to my family for excusing me from cooking and washing up duties during the more stressful phases of MSc study!
 
 \small
 \bibliography{OvarianCancer}
@@ -1132,13 +1136,13 @@ Thank you to my family for excusing me from cooking and washing up duties during
 \end{center}
 \end{figure}
 
-
+\subsection{Additional plots relating to the batch effect investigation}
 \begin{figure}[htb!]
 \begin{center}
 \includegraphics[scale=\S]{\plotspath{BOTH_AOCS_TCGA/FactorClustering/multiple_single_factors_scatter_BOTH_NMF_2_3_5_10_bootstrap.pdf}} \\
 \includegraphics[scale=\S]{\plotspath{BOTH_AOCS_TCGA/FactorClustering/multiple_single_factors_scatter_BOTH_ICA_2_3_5_10_bootstrap.pdf}} \\
 \includegraphics[scale=\S]{\plotspath{BOTH_AOCS_TCGA/FactorClustering/multiple_single_factors_scatter_BOTH_PCA_2_3_5_10_bootstrap.pdf}} \\
-%\includegraphics[scale=0.55]{\plotspath{/BOTH_AOCS_TCGA/FactorClustering/silhouette_plots_TCGA_2_3_4_5_6_7_8_9_10_bootstrap.pdf}} 
+\includegraphics[scale=0.55]{\plotspath{/BOTH_AOCS_TCGA/FactorClustering/silhouette_plots_BOTH_2_3_4_5_6_7_8_9_10_bootstrap.pdf}} 
 \caption{Metagene clustering for all three methods applied to the combined N=80+374 AOCS + TCGA dataset with bootstrap sampling, over a range of factorization ranks.  The silhouette scores are also plotted (bottom).  }
 \label{fig-BOTH-all-bootstrap}
 \end{center}
