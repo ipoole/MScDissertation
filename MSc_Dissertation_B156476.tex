@@ -19,6 +19,7 @@
 \usepackage{rotating}
 \usepackage{setspace}
 \usepackage{placeins}
+\usepackage{longtable}
 
 \usepackage[linewidth=1pt]{mdframed}
 
@@ -724,7 +725,7 @@ The Jaccard heatmap of figure \ref{fig-component-jaccard-similarities} shows tha
 
 \subsection{Metagenes highlight genes which are enriched for particular biological processes}
 
-GEA against the GO results in, for each of the 11 metagenes, a table of GO terms with a list of the candidate genes which have an annotated association to that term; this table can be found in the appendix, table \ref{tab-go-enrichment-results}.
+GEA against the GO results in, for each of the 11 metagenes, a table of GO terms with a list of the candidate genes which have an annotated association to that term. See appendix \ref{tab-go-enrichment-results} to access the full table.
 To take full advantage of the hierarchical nature of the GO, results are presented as lineage maps in figures \ref{fig-NMF_1-go-lineage} to \ref{fig-PCA-3-3-go-lineage}.  
 The contributing candidate genes for all significantly enriched terms are shown beneath each figure.  
 High-level terms at depth less than 3 were removed, since these are generic (e.g. ``regulation of biological process") and so uninteresting.   
@@ -889,7 +890,7 @@ From the grid of scatter plots shown in figure \ref{fig-genomic-scatters} it can
 
 \begin{figure}[htb!]
 \begin{center}
-\includegraphics[scale=0.5,draft]{\plotspath{BoxAndScatters/genomic_feature_scatters_TCGA_AOCS.pdf}} 
+\includegraphics[scale=0.4]{\plotspath{BoxAndScatters/genomic_feature_scatters_TCGA_AOCS.pdf}} 
 \caption{Grid of scatter plots to visualise the correlation between metasamples and genomic features.  In the case of WGD which has binary values (0, 1), jitter is applied for visual effect only.   Above each plot is shown a correlation coefficient $r$ and associated p-value, highlighted with '***' where $p < 0.01$.  In the case of WGD , the Point-Biserial correlation is used; for all others Pearson's $r$ is used.}
 \label{fig-genomic-scatters}
 \end{center}
@@ -1087,10 +1088,12 @@ I am most grateful to Dr. Ailith Ewing for proposing this project and making ava
 \small
 \bibliography{OvarianCancer}
 \bibliographystyle{ieeetr}
+\normalsize
 
+\newpage
 \section{Appendices}
-\subsection{Additional figures and plots}
-
+\subsection{Metagene clustering -- additional figures}
+\def\S{0.35}
 \begin{figure}[htb!]
 \begin{center}
 \includegraphics[scale=\S]{\plotspath{AOCS_Protein/FactorClustering/multiple_single_factors_scatter_AOCS_NMF_2_3_5_10_fixed.pdf}} \\
@@ -1110,10 +1113,12 @@ I am most grateful to Dr. Ailith Ewing for proposing this project and making ava
 \end{center}
 \end{figure}
 
+\FloatBarrier
+\subsection{Survival analysis -- additional figures}
 
 \begin{figure}[htb!]
 \begin{center}
-\includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_os_TCGA_TCGA.pdf}} 
+\includegraphics[scale=0.4]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_os_TCGA_TCGA.pdf}} 
 \caption{Kaplan-Meier plots for each metasample component, stratified at the median value, for TCGA $\rightarrow$ TCGA for overall survival (OS) case.  Hazard ratio and p-value is shown for each case.  The final plot (bottom right) is unstratified overall survival}
 \label{fig-kaplan-meier-os-TCGA-TCGA}
 \end{center}
@@ -1121,7 +1126,7 @@ I am most grateful to Dr. Ailith Ewing for proposing this project and making ava
 
 \begin{figure}[htb!]
 \begin{center}
-\includegraphics[scale=0.5]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_pfs_TCGA_AOCS.pdf}} 
+\includegraphics[scale=0.4]{\plotspath{SurvivalAnalysis/multiple_kaplan_meier_pfs_TCGA_AOCS.pdf}} 
 \caption{Kaplan-Meier plots for TCGA $\rightarrow$ TCGA for progression free survival (PFS).  }
 \label{fig-kaplan-meier-pfs-TCGA-AOCS}
 \end{center}
@@ -1129,13 +1134,15 @@ I am most grateful to Dr. Ailith Ewing for proposing this project and making ava
 
 \begin{figure}[htb!]
 \begin{center}
-\includegraphics[scale=0.7]{\plotspath{HeatMaps/clustered_heatmap_TCGA_AOCS.pdf}} 
+\includegraphics[scale=0.5]{\plotspath{HeatMaps/clustered_heatmap_TCGA_AOCS.pdf}} 
 \caption{Heatmap of the metasamples matrix for the AOCS dataset, computed from metagenes factorized from the TCGA dataset.   Several patient metadata variables are shown in columns to the left.}
 \label{fig-heatmap-TCGA-AOCS}
 \end{center}
 \end{figure}
 
-\subsection{Additional plots relating to the batch effect investigation}
+\FloatBarrier
+
+\subsection{Batch effect investigation -- Additional figures}
 \begin{figure}[htb!]
 \begin{center}
 \includegraphics[scale=\S]{\plotspath{BOTH_AOCS_TCGA/FactorClustering/multiple_single_factors_scatter_BOTH_NMF_2_3_5_10_bootstrap.pdf}} \\
@@ -1150,17 +1157,18 @@ I am most grateful to Dr. Ailith Ewing for proposing this project and making ava
 
 \begin{figure}[htb!]
 \begin{center}
-\includegraphics[scale=0.5]{\plotspath{BoxAndScatters/genomic_feature_scatters_BOTH_AOCS.pdf}} 
+\includegraphics[scale=0.4]{\plotspath{BoxAndScatters/genomic_feature_scatters_BOTH_AOCS.pdf}} 
 \caption{Grid of scatter plots to visualise the correlation between metasamples derived from the metagenes of the combined AOCS + TCGA datasets, and genomic features of the AOCS.}
 \label{fig-genomic-scatters-BOTH-AOCS}
 \end{center}
 \end{figure}
 
-\subsection{Gene enrichment raw results}
-\label{tab-go-enrichment-results}
-TODO
+\FloatBarrier
 
-\label{sec-software-versions}
+\subsection{Access to gene enrichment analysis table}
+\label{tab-go-enrichment-results}
+
+The table of GEA results is too large to conveniently include here.   If required it can be obtained from my github repository at \url{https://github.com/ipoole/HgsocTromics/blob/master/Results/combined_gea_fdr.tsv}.
 
 
 \end{document}
