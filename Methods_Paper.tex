@@ -1,18 +1,18 @@
 % MSc Dissertation on pattern expression in Ovarian Cancer
 
-\documentclass[tikz, 12pt,a4paper,oneside,fleqn]{article}
+\documentclass[tikz, 11pt,a4paper,oneside,fleqn]{article}
 
-%\usepackage[margin=1.5cm]{geometry}
-\usepackage
-[
-        left=3cm,
-        right=2cm,
-        top=2cm,
-        bottom=3cm,
-        % use vmargin=2cm to make vertical margins equal to 2cm.
-        % us  hmargin=3cm to make horizontal margins equal to 3cm.
-        % use margin=3cm to make all margins  equal to 3cm.
-]{geometry}
+\usepackage[margin=2.5cm]{geometry}
+%\usepackage
+%[
+%        left=3cm,
+%        right=2cm,
+%        top=2cm,
+%        bottom=3cm,
+%        % use vmargin=2cm to make vertical margins equal to 2cm.
+%        % us  hmargin=3cm to make horizontal margins equal to 3cm.
+%        % use margin=3cm to make all margins  equal to 3cm.
+%]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -53,95 +53,16 @@
 \newcommand{\etal}{{\em et al\/}}
 \newcommand{\comment}[1]{\marginpar{{\tiny\singlespacing #1 \par}}}
 
-\linespread{1.5}
-% This sets Arial font (bit ugly!)
-\usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault}
-\setlength{\parindent}{2em}
-\setlength{\parskip}{1em}
-\renewcommand{\baselinestretch}{1.5}
 
-\usepackage{titlesec}
-\titleformat{\subsubsection}
-   {\itshape\normalsize}{\thesubsubsection}{1em}{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Start of paper for real %%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SUBMISSION PAGE %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\thispagestyle{empty}
-
-\title{Disentangling patterns of gene expression in high grade serous ovarian cancer by matrix factorization}
-\author{}
+\title{MF Methods paper}
+\author{Ian Poole and Ailith Ewing}
+\date{January 2021}
 
 \begin{document}
 
-%%%%%% Assesment Title Page
-\begin{center}
-\begin{center}
-\includegraphics[scale=0.3]{images/UoE_SBO_logo.png}
-\end{center}
-
-\vspace{0.3in}
-
-\begin{mdframed}
-\begin{center}
-\Large
-\vspace{0.3in}
-\bf
-Disentangling patterns of gene expression in high grade serous ovarian cancer by matrix factorization
-\vspace{0.2in}
-\end{center}
-\vspace{0.2in}
-\end{mdframed}
-
-\vspace{0.3in}
-
-\begin{mdframed}
-\begin{center}
-\large
-\vspace{0.2in}
-Ian Poole \\
-Student Examination Number: \bf{B156476}
-\vspace{0.2in}
-\end{center}
-\end{mdframed}
-
-\vspace{0.3in}
-
-\begin{mdframed}
-\begin{center}
-\large
-\vspace{0.2in}
-In partial fulfilment of the requirement for the Degree of
-Master of Science in Systems and Synthetic Biology at the
-University of Edinburgh,
-2019 / 2020
-\vspace{0.2in}
-\end{center}
-\end{mdframed}
-
-\vspace{0.3in}
-
-\begin{mdframed}
-\begin{center}
-\large
-\vspace{0.2in}
-
-Disssertation Supervisor:  Dr. Ailith Ewing
-\vspace{0.2in}
-\end{center}
-\end{mdframed}
-\end{center}
-
-\newpage
-\setcounter{page}{1}
-%\pagestyle{headings}
-
-\setlength{\parskip}{0em}
-\tableofcontents
-\setlength{\parskip}{1em}
-\newpage
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%% Start of report for real %%%%%%%%%%%%%%%%%%%
+\maketitle
 
 \begin{abstract}
 Gene expression analysis -- transcriptomics -- of a set biopsied tumour tissues can identify genes whose expression is linked to the pathological processes of the tumour.  In contrast to supervised contrastive approaches unsupervised techniques work with datasets of mixed and unknown tumour status.   Matrix factorization (MF) methods have become a popular means of reducing and ``disentangling'' the salient components of variation in such datasets, known as metagenes.  From these metagenes the most influential genes can be identified, and when subjected to gene enrichment analysis against the Gene Ontology (GO) can provide insights into the underlying biological processes in play.
@@ -153,6 +74,8 @@ Three MF methods are applied and compared: non-negative matrix factorization (NM
 An integrative analysis of the GO enrichment results, survival analysis, genomic feature correlations and metagene similarity allows some tentative biological findings to be suggested and corroboration sought in the literature.  The main methodological findings are that MF is effective in identifying and removing technical batch effects, but to beware of instability due to sampling error when applying MF to small datasets.   The question of which of the three methods -- NMF, ICA or PCA -- is most effective for these purposes is considered but no clear conclusion can be drawn.
 
 \end{abstract}
+
+\maketitle
 \newpage
 
 
